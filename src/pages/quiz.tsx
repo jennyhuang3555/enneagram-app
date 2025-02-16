@@ -8,8 +8,12 @@ import QuizResults from "@/components/QuizResults";
 import UserInfoForm from "@/components/UserInfoForm";
 import { supabase } from "@/lib/supabase";
 import { QuestionResponse } from "@/types/quiz";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
+import SignUpForm from "@/components/SignUpForm";
 
-type Step = "landing" | "introduction" | "questions" | "user-info" | "results";
+type Step = "introduction" | "questions" | "signup" | "results";
 
 // Sample quiz data - in a real app, this would come from your backend
 const sampleQuiz = {
@@ -53,6 +57,8 @@ const Quiz = () => {
   const [dominantType, setDominantType] = useState<string>('');
   const [secondType, setSecondType] = useState<string>('');
   const [thirdType, setThirdType] = useState<string>('');
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const handleQuizComplete = (
     newScores: { [key: string]: number }, 
@@ -74,90 +80,74 @@ const Quiz = () => {
     setSecondType(sortedTypes[1]);
     setThirdType(sortedTypes[2]);
     
-    setStep("user-info");
+    // If user is already logged in, save results directly
+    if (user) {
+      handleSaveResults();
+    } else {
+      setStep("signup");
+    }
   };
 
-  const handleUserInfoSubmit = async (userInfo: { name: string; email: string }) => {
-    console.log('Types before submission:', {
-      dominant: dominantType,
-      second: secondType,
-      third: thirdType
-    });
-
-    const payload = {
-      name: userInfo.name,
-      email: userInfo.email,
-      scores: scores || {},
-      responses: responses,
-      dominant_type: dominantType?.replace('type', '') || '',  // Will now correctly be just the number
-      second_type: secondType?.replace('type', '') || '',      // Will now correctly be just the number
-      third_type: thirdType?.replace('type', '') || '',        // Will now correctly be just the number
-      created_at: new Date().toISOString()
-    };
-
-    console.log('Submitting payload:', JSON.stringify(payload, null, 2));
+  const handleSaveResults = async () => {
+    if (!scores || !user) return;
 
     try {
-      const { data, error } = await supabase
+      const payload = {
+        user_id: user.id,
+        scores: scores,
+        responses: responses,
+        dominant_type: dominantType?.replace('type', '') || '',
+        second_type: secondType?.replace('type', '') || '',
+        third_type: thirdType?.replace('type', '') || '',
+        created_at: new Date().toISOString()
+      };
+
+      const { error } = await supabase
         .from('quiz_results')
-        .insert([payload])
-        .select();
+        .insert([payload]);
 
-      if (error) {
-        console.error('Supabase Error:', {
-          message: error.message,
-          details: error.details,
-          hint: error.hint
-        });
-        throw error;
-      }
+      if (error) throw error;
 
-      console.log('Successfully saved results:', data);
       setStep('results');
     } catch (error) {
-      console.error('Error submitting results:', error);
+      console.error('Error saving results:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save your results. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleSignUpSuccess = async () => {
+    await handleSaveResults();
+  };
+
+  const renderStep = () => {
+    switch (step) {
+      case "introduction":
+        return <TestIntroduction onStart={() => setStep("questions")} onBack={() => navigate("/")} />;
+      case "questions":
+        return <Questions onComplete={handleQuizComplete} onBack={() => setStep("introduction")} />;
+      case "signup":
+        return <SignUpForm onSuccess={handleSignUpSuccess} />;
+      case "results":
+        return scores ? (
+          <QuizResults 
+            quiz={sampleQuiz} 
+            scores={scores} 
+            responses={responses}
+            onClose={() => navigate("/")} 
+          />
+        ) : null;
+      default:
+        return null;
     }
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="absolute inset-0 bg-gradient-to-b from-[#E5DEFF] via-[#FDE1D3] to-[#D3E4FD]/20">
-        <div 
-          className="absolute inset-0 opacity-[0.03] pointer-events-none"
-          style={{
-            backgroundImage: `url('data:image/svg+xml,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,10 61,35 88,35 67,52 76,77 50,63 24,77 33,52 12,35 39,35" fill="currentColor"/></svg>')`,
-            backgroundSize: '400px',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-          }}
-        />
-      </div>
-
-      <div className="relative z-10">
-        {step === "introduction" && (
-          <TestIntroduction 
-            onStart={() => setStep("questions")} 
-            onBack={() => setStep("introduction")} 
-          />
-        )}
-        {step === "questions" && (
-          <Questions
-            onComplete={handleQuizComplete}
-            onBack={() => setStep("introduction")}
-          />
-        )}
-        {step === "user-info" && (
-          <UserInfoForm onSubmit={handleUserInfoSubmit} />
-        )}
-        {step === "results" && scores && (
-          <QuizResults
-            quiz={sampleQuiz}
-            scores={scores}
-            responses={responses}
-            onClose={() => setStep("introduction")}
-          />
-        )}
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
+      {renderStep()}
     </div>
   );
 };

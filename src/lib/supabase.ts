@@ -7,4 +7,17 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables')
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey) 
+console.log('Supabase URL:', supabaseUrl);
+console.log('Initializing Supabase client...');
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    detectSessionInUrl: false,
+    autoRefreshToken: true,
+    storage: window.localStorage,
+    storageKey: 'quiz-auth-token',
+    flowType: 'pkce',
+    debug: true
+  }
+}) 
