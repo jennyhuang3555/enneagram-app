@@ -1,151 +1,90 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import LandingPage from "@/components/LandingPage";
-import TestIntroduction from "@/components/TestIntroduction";
-import Questions from "@/components/Questions";
-import QuizResults from "@/components/QuizResults";
-import UserInfoForm from "@/components/UserInfoForm";
-import { supabase } from "@/lib/supabase";
-import { QuestionResponse } from "@/types/quiz";
+import { useNavigate } from "react-router-dom";
 
-type Step = "landing" | "introduction" | "questions" | "user-info" | "results";
-
-// Sample quiz data - in a real app, this would come from your backend
-const sampleQuiz = {
-  id: "1",
-  title: "Enneagram Test",
-  description: "Discover your Enneagram type",
-  questions: [],
-  resultRanges: [
-    {
-      id: "1",
-      category: "type1",
-      minScore: 0,
-      maxScore: 25,
-      title: "Type 1: The Reformer",
-      description: "Principled, purposeful, self-controlled, and perfectionistic"
-    },
-    {
-      id: "2",
-      category: "type2",
-      minScore: 0,
-      maxScore: 25,
-      title: "Type 2: The Helper",
-      description: "Generous, demonstrative, people-pleasing, and possessive"
-    },
-    // Add more types as needed
-  ]
-};
-
-// Add this interface
-interface UserResult {
-  name: string;
-  email: string;
-  scores: { [key: string]: number };
-  timestamp: string;
-}
-
-const Index = () => {
-  const [step, setStep] = useState<Step>("landing");
-  const [scores, setScores] = useState<{ [key: string]: number } | null>(null);
-  const [responses, setResponses] = useState<QuestionResponse[]>([]);
-  const [dominantType, setDominantType] = useState<string>('');
-  const [secondType, setSecondType] = useState<string>('');
-  const [thirdType, setThirdType] = useState<string>('');
-
-  const handleQuizComplete = (
-    newScores: { [key: string]: number }, 
-    quizResponses: QuestionResponse[]
-  ) => {
-    setScores(newScores);
-    setResponses(quizResponses);
-    
-    // Sort by score values (highest to lowest)
-    const sortedTypes = Object.entries(newScores)
-      .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
-      .map(([type]) => type);
-
-    console.log('Sorted scores:', Object.entries(newScores)
-      .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
-      .map(([type, score]) => `${type}: ${score}`));
-    
-    setDominantType(sortedTypes[0]);
-    setSecondType(sortedTypes[1]);
-    setThirdType(sortedTypes[2]);
-    
-    setStep("user-info");
-  };
-
-  const handleUserInfoSubmit = async (userInfo: { name: string; email: string }) => {
-    console.log('Types before submission:', {
-      dominant: dominantType,
-      second: secondType,
-      third: thirdType
-    });
-
-    const payload = {
-      name: userInfo.name,
-      email: userInfo.email,
-      scores: scores || {},
-      responses: responses,
-      dominant_type: dominantType?.replace('type', '') || '',  // Will now correctly be just the number
-      second_type: secondType?.replace('type', '') || '',      // Will now correctly be just the number
-      third_type: thirdType?.replace('type', '') || '',        // Will now correctly be just the number
-      created_at: new Date().toISOString()
-    };
-
-    console.log('Submitting payload:', JSON.stringify(payload, null, 2));
-
-    try {
-      const { data, error } = await supabase
-        .from('quiz_results')
-        .insert([payload])
-        .select();
-
-      if (error) {
-        console.error('Supabase Error:', {
-          message: error.message,
-          details: error.details,
-          hint: error.hint
-        });
-        throw error;
-      }
-
-      console.log('Successfully saved results:', data);
-      setStep('results');
-    } catch (error) {
-      console.error('Error submitting results:', error);
-    }
-  };
+const HomeMain = () => {
+  const navigate = useNavigate();
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {step === "landing" && (
-        <LandingPage onStart={() => setStep("introduction")} />
-      )}
-      {step === "introduction" && (
-        <TestIntroduction onStart={() => setStep("questions")} />
-      )}
-      {step === "questions" && (
-        <Questions
-          onComplete={handleQuizComplete}
-          onBack={() => setStep("introduction")}
+    <div className="min-h-screen bg-white overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-[#E5DEFF] via-[#FDE1D3] to-[#D3E4FD]/20">
+        <div 
+          className="absolute inset-0 opacity-[0.03] pointer-events-none"
+          style={{
+            backgroundImage: `url('data:image/svg+xml,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,10 61,35 88,35 67,52 76,77 50,63 24,77 33,52 12,35 39,35" fill="currentColor"/></svg>')`,
+            backgroundSize: '400px',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
         />
-      )}
-      {step === "user-info" && (
-        <UserInfoForm onSubmit={handleUserInfoSubmit} />
-      )}
-      {step === "results" && scores && (
-        <QuizResults
-          quiz={sampleQuiz}
-          scores={scores}
-          responses={responses}
-          onClose={() => setStep("landing")}
-        />
-      )}
+      </div>
+
+      <nav className="absolute top-6 right-6 z-50">
+        <Button 
+          className="bg-white hover:bg-gray-900 hover:text-white transition-colors text-gray-900 shadow-sm"
+          onClick={() => navigate('/signin')}
+        >
+          Sign in
+        </Button>
+      </nav>
+
+      <div className="min-h-screen flex flex-col items-center justify-center p-4">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/30 backdrop-blur-sm mb-8 border border-white/40">
+          <img 
+            src="/lovable-uploads/d6cccfc5-2a9b-4e74-bb4e-9394fc534f2b.png" 
+            alt="Enneagram Symbol"
+            className="w-12 h-12 object-contain"
+          />
+        </div>
+
+        <div className="bg-white rounded-3xl shadow-xl max-w-[1000px] mx-auto w-full p-12 relative">
+          <div className="max-w-2xl mx-auto text-center space-y-10 animate-fadeIn">
+            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-gray-900">
+              Welcome!
+            </h1>
+
+            <p className="text-base sm:text-lg text-gray-700 max-w-xl mx-auto leading-relaxed">
+              To begin working with your AI coach, let's first tailor your experience by uncovering the unique mix of patterns and worldview that drive you
+            </p>
+
+            <div className="flex justify-center pt-5">
+              <Button
+                className="w-[322px] sm:w-auto py-6 group transition-all duration-300 hover:translate-y-[-4px] text-white flex items-center justify-center shadow-lg rounded-[20px] bg-gradient-to-r from-[#9747FF] to-[#FF3BBB] hover:opacity-90"
+                onClick={() => navigate('/quiz')}
+              >
+                <div className="flex flex-col items-center justify-center">
+                  <span className="text-base sm:text-xl font-semibold text-center whitespace-normal px-4">Discover my Enneagram profile</span>
+                </div>
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </div>
+
+            <div className="space-y-4 text-left max-w-xl mx-auto">
+              <p className="flex items-start gap-3 text-gray-700">
+                <span className="text-2xl">🔍</span>
+                <span>Uncover hidden drivers behind your decisions, reactions, and emotions</span>
+              </p>
+              <p className="flex items-start gap-3 text-gray-700">
+                <span className="text-2xl">🔄</span>
+                <span>Recognize patterns and triggers and learn how to shift them</span>
+              </p>
+              <p className="flex items-start gap-3 text-gray-700">
+                <span className="text-2xl">✨</span>
+                <span>Gain personalized insights to grow, thrive, and harness your unique gifts</span>
+              </p>
+            </div>
+
+            <div className="pt-4">
+              <p className="text-gray-600 italic">
+                "The purpose of the Enneagram is not to put you in a box, but to show you the box you are already in—and how to get out of it."
+              </p>
+              <p className="text-gray-500 mt-2">- Don Riso</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Index;
+export default HomeMain;

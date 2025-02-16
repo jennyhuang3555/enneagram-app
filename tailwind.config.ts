@@ -7,6 +7,7 @@ export default {
 		"./components/**/*.{ts,tsx}",
 		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
+		"./enneaboost/**/*.{ts,tsx}"
 	],
 	prefix: "",
 	theme: {
@@ -52,6 +53,17 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				enneagram: {
+					1: "#E63946",
+					2: "#F4A261",
+					3: "#2A9D8F",
+					4: "#E9C46A",
+					5: "#264653",
+					6: "#457B9D",
+					7: "#A8DADC",
+					8: "#8338EC",
+					9: "#06D6A0",
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -84,11 +96,21 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+				slideIn: {
+					'0%': { transform: 'translateY(20px)', opacity: '0' },
+					'100%': { transform: 'translateY(0)', opacity: '1' },
+				},
+				fadeIn: {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' },
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				slideIn: 'slideIn 0.5s ease-out forwards',
+				fadeIn: 'fadeIn 0.5s ease-out forwards'
 			}
 		}
 	},
