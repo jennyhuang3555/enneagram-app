@@ -1,5 +1,4 @@
-
-import { ArrowRight, Sparkles, Zap, Shuffle } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Shuffle, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";

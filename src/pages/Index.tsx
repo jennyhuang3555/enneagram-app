@@ -7,7 +7,7 @@ const HomeMain = () => {
 
   return (
     <div className="min-h-screen bg-white overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-[#E5DEFF] via-[#FDE1D3] to-[#D3E4FD]/20">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#E5DEFF] from-40% via-[#FDE1D3] via-80% to-[#D3E4FD]/20">
         <div 
           className="absolute inset-0 opacity-[0.03] pointer-events-none"
           style={{
@@ -22,7 +22,7 @@ const HomeMain = () => {
       <nav className="absolute top-6 right-6 z-50">
         <Button 
           className="bg-white hover:bg-gray-900 hover:text-white transition-colors text-gray-900 shadow-sm"
-          onClick={() => navigate('/signin')}
+          onClick={() => navigate('/login')}
         >
           Sign in
         </Button>
@@ -31,7 +31,7 @@ const HomeMain = () => {
       <div className="min-h-screen flex flex-col items-center justify-center p-4">
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/30 backdrop-blur-sm mb-8 border border-white/40">
           <img 
-            src="/lovable-uploads/d6cccfc5-2a9b-4e74-bb4e-9394fc534f2b.png" 
+            src="/images/enneagram-logo.png" 
             alt="Enneagram Symbol"
             className="w-12 h-12 object-contain"
           />

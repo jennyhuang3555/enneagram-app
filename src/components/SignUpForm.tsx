@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
+import { useNavigate } from "react-router-dom";
 
 interface SignUpFormProps {
   onSuccess: () => void;
@@ -19,15 +20,11 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSubmitDisabled) return;
-    
-    console.log('Starting signup process with:', { email, name });
     setIsLoading(true);
-    setIsSubmitDisabled(true);
     setError(null);
 
     try {
@@ -35,22 +32,37 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
         throw new Error('Please fill in all fields');
       }
 
-      console.log('Calling signUp function...');
-      const result = await signUp(email, password, name);
-      console.log('SignUp function completed:', result);
+      // Get stored session_id
+      const session_id = localStorage.getItem('quiz_session_id');
+      
+      if (session_id) {
+        // Update quiz_profile with name and email
+        const { data, error: updateError } = await supabase
+          .from('quiz_profile')
+          .update({ name, email })
+          .eq('session_id', session_id)
+          .select()
+          .single();
+
+        if (updateError) {
+          console.error('Error updating profile:', updateError);
+          throw new Error('Failed to update profile');
+        }
+
+        console.log('Updated profile:', data); // For debugging
+      }
+
+      const user = await signUp(email, password, name);
       
       toast({
-        title: "Account created!",
-        description: "Please check your email to confirm your account.",
+        title: "Check your email",
+        description: "We've sent you a verification link.",
+        duration: 5000,
       });
-      onSuccess();
+
+      navigate('/verify-email', { state: { email } });
     } catch (err: any) {
-      console.error('Sign up error details:', {
-        message: err.message,
-        code: err.code,
-        details: err.details,
-        stack: err.stack
-      });
+      console.error('Sign up error:', err);
       setError(err.message || 'An error occurred during sign up');
       toast({
         title: "Error",
@@ -59,8 +71,6 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
       });
     } finally {
       setIsLoading(false);
-      // Re-enable submit after 60 seconds
-      setTimeout(() => setIsSubmitDisabled(false), 60000);
     }
   };
 
@@ -104,12 +114,10 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
           />
           <Button 
             type="submit"
-            disabled={isLoading || isSubmitDisabled}
+            disabled={isLoading}
             className="w-full text-xl py-6 bg-gradient-to-r from-purple-500 to-pink-500 text-white"
           >
-            {isLoading ? "Creating Account..." : 
-             isSubmitDisabled ? "Please wait..." : 
-             "Create Account"}
+            {isLoading ? "Creating Account..." : "Create Account"}
           </Button>
         </form>
       </Card>

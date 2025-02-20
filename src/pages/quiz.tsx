@@ -9,11 +9,11 @@ import UserInfoForm from "@/components/UserInfoForm";
 import { supabase } from "@/lib/supabase";
 import { QuestionResponse } from "@/types/quiz";
 import { useAuth } from "@/contexts/AuthContext";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import SignUpForm from "@/components/SignUpForm";
 
-type Step = "introduction" | "questions" | "signup" | "results";
+type Step = "introduction" | "questions" | "signup" | "results" | "user-info";
 
 // Sample quiz data - in a real app, this would come from your backend
 const sampleQuiz = {
@@ -54,37 +54,55 @@ const Quiz = () => {
   const [step, setStep] = useState<Step>("introduction");
   const [scores, setScores] = useState<{ [key: string]: number } | null>(null);
   const [responses, setResponses] = useState<QuestionResponse[]>([]);
-  const [dominantType, setDominantType] = useState<string>('');
-  const [secondType, setSecondType] = useState<string>('');
-  const [thirdType, setThirdType] = useState<string>('');
   const { user } = useAuth();
+  const { toast } = useToast();
   const navigate = useNavigate();
 
-  const handleQuizComplete = (
+  const handleQuizComplete = async (
     newScores: { [key: string]: number }, 
     quizResponses: QuestionResponse[]
   ) => {
-    setScores(newScores);
-    setResponses(quizResponses);
-    
-    // Sort by score values (highest to lowest)
-    const sortedTypes = Object.entries(newScores)
-      .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
-      .map(([type]) => type);
+    try {
+      const session_id = crypto.randomUUID();
+      
+      const sortedTypes = Object.entries(newScores)
+        .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
+        .map(([type]) => type);
 
-    console.log('Sorted scores:', Object.entries(newScores)
-      .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
-      .map(([type, score]) => `${type}: ${score}`));
-    
-    setDominantType(sortedTypes[0]);
-    setSecondType(sortedTypes[1]);
-    setThirdType(sortedTypes[2]);
-    
-    // If user is already logged in, save results directly
-    if (user) {
-      handleSaveResults();
-    } else {
-      setStep("signup");
+      const resultsToStore = {
+        session_id,
+        scores: newScores,
+        responses: quizResponses,
+        dominant_type: sortedTypes[0]?.replace('type', '') || '',
+        second_type: sortedTypes[1]?.replace('type', '') || '',
+        third_type: sortedTypes[2]?.replace('type', '') || '',
+        created_at: new Date().toISOString(),
+        ...(user ? { 
+          user_id: user.id,
+          name: user.user_metadata?.name,
+          email: user.email 
+        } : {})
+      };
+
+      const { data, error } = await supabase
+        .from('quiz_profile')
+        .insert([resultsToStore])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      // Store session_id for later linking
+      localStorage.setItem('quiz_session_id', session_id);
+      
+      setStep(user ? 'results' : 'signup');
+    } catch (error) {
+      console.error('Error saving results:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save your results. Please try again.",
+        variant: "destructive"
+      });
     }
   };
 
@@ -103,7 +121,7 @@ const Quiz = () => {
       };
 
       const { error } = await supabase
-        .from('quiz_results')
+        .from('quiz_profile')
         .insert([payload]);
 
       if (error) throw error;
@@ -120,7 +138,19 @@ const Quiz = () => {
   };
 
   const handleSignUpSuccess = async () => {
-    await handleSaveResults();
+    if (!scores || !responses) return;
+    
+    try {
+        await handleSaveResults();
+        setStep('results');
+    } catch (error) {
+        console.error('Error saving quiz results:', error);
+        toast({
+            title: "Error",
+            description: "Failed to save your results",
+            variant: "destructive"
+        });
+    }
   };
 
   const renderStep = () => {
@@ -140,6 +170,14 @@ const Quiz = () => {
             onClose={() => navigate("/")} 
           />
         ) : null;
+      case 'user-info':
+        return (
+          <UserInfoForm
+            onSubmit={({ name, email }) => {
+              handleQuizComplete(scores!, responses);
+            }}
+          />
+        );
       default:
         return null;
     }

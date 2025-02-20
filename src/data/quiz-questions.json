@@ -1,49 +1,19 @@
 {
   "questions": [
     {
-      "id": "b7cda9f9-7088-4159-a8b8-268465775169",
+      "id": "c30a0eec-3002-4388-95d6-b481177aad11",
       "text": "\"I find it difficult to relax when I see something that needs improvement or fixing.\"",
       "category": 1
     },
     {
-      "id": "b2d1aecb-ed70-4c8e-8145-09fc3cf87da1",
+      "id": "b016846c-bf92-4f0d-b437-f612e126f17c",
       "text": "\"I feel strongly that fairness and justice should be upheld as a matter of principle.\"",
       "category": 2
     },
     {
-      "id": "8ad228f8-03fd-492f-8e92-5ad86d2b183f",
+      "id": "7b908941-9269-4cda-9d53-10fde039d02c",
       "text": "\"I tend to feel a moral obligation to meet higher standards than I expect from others.\"",
       "category": 3
-    },
-    {
-      "id": "8cea65b6-cbe3-4f76-8daf-6341b83ee5ee",
-      "text": "\"I feel unsettled when things don’t meet my standards of order and correctness.\"",
-      "category": 4
-    },
-    {
-      "id": "e32d73d6-5e8c-4c77-a243-aeff968e7d6e",
-      "text": "\"I feel an inner pressure to improve things and hold myself to a higher standard than I expect from others, even when no one is watching.\"",
-      "category": 5
-    },
-    {
-      "id": "dc95d70f-3e2d-408d-9950-7cc98e138878",
-      "text": "\"I feel frustrated when things or people don’t live up to the standards I hold.\"",
-      "category": 6
-    },
-    {
-      "id": "b6b939b6-d826-48df-af03-383d32655cfd",
-      "text": "\"I constantly notice flaws, inefficiencies, and ways things could be improved, and I feel a responsibility to fix them. It frustrates me when others don't seem to care about doing things the right way.\"",
-      "category": 7
-    },
-    {
-      "id": "4caec355-23e3-4e27-a8a5-58cf26dc274f",
-      "text": "\"I often neglect my own needs because I feel fulfilled when I’m making others feel loved and supported.\"",
-      "category": 8
-    },
-    {
-      "id": "3d528814-d841-46ad-aee8-5eed0835af7e",
-      "text": "\"I often neglect my own needs because I feel fulfilled when I’m making others feel loved and supported.\"",
-      "category": 9
     }
   ],
   "resultRanges": [

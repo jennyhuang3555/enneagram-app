@@ -16,6 +16,7 @@ import { typeDescriptions } from '@/data/typeDescriptions';
 import { QuestionResponse } from '@/types/quiz';
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface QuizResultsProps {
   quiz: Quiz;
@@ -62,6 +63,30 @@ interface TypeDescription {
 }
 
 const QuizResults = ({ quiz, scores, responses, onClose }: QuizResultsProps) => {
+  const { user } = useAuth();
+  const [savedResult, setSavedResult] = useState(null);
+
+  useEffect(() => {
+    const loadSavedResult = async () => {
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('quiz_profile')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
+
+      if (error) {
+        console.error('Error loading saved result:', error);
+        return;
+      }
+
+      setSavedResult(data);
+    };
+
+    loadSavedResult();
+  }, [user]);
+
   // At the top of the component, calculate the actual order by scores
   const typesByScore = Object.entries(scores)
     .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
