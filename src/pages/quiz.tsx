@@ -160,7 +160,14 @@ const Quiz = () => {
       case "questions":
         return <Questions onComplete={handleQuizComplete} onBack={() => setStep("introduction")} />;
       case "signup":
-        return <SignUpForm onSuccess={handleSignUpSuccess} />;
+        return (
+          <div className="max-w-md mx-auto">
+            <SignUpForm 
+              onSuccess={() => setStep('results')} 
+              quizScores={scores}
+            />
+          </div>
+        );
       case "results":
         return scores ? (
           <QuizResults 
@@ -170,14 +177,6 @@ const Quiz = () => {
             onClose={() => navigate("/")} 
           />
         ) : null;
-      case 'user-info':
-        return (
-          <UserInfoForm
-            onSubmit={({ name, email }) => {
-              handleQuizComplete(scores!, responses);
-            }}
-          />
-        );
       default:
         return null;
     }
