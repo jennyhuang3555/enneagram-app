@@ -72,147 +72,89 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#E5DEFF] from-40% via-[#FDE1D3] via-80% to-[#D3E4FD]/20" />
+    <div className="min-h-screen bg-white overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#E5DEFF] from-40% via-[#FDE1D3] via-80% to-[#D3E4FD]/20">
+        <div 
+          className="absolute inset-0 opacity-[0.03] pointer-events-none"
+          style={{
+            backgroundImage: `url('data:image/svg+xml,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,10 61,35 88,35 67,52 76,77 50,63 24,77 33,52 12,35 39,35" fill="currentColor"/></svg>')`,
+            backgroundSize: '400px',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        />
+      </div>
 
-      <div className="container mx-auto p-8">
+      {/* Main content */}
+      <div className="relative min-h-screen flex flex-col items-center justify-center p-4">
+        {/* Top logo section - matches index.tsx */}
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/30 backdrop-blur-sm mb-8 border border-white/40">
+          <img 
+            src="/images/enneagram-logo.png" 
+            alt="Enneagram Symbol"
+            className="w-12 h-12 object-contain"
+          />
+        </div>
+
+        {/* Welcome message and type info */}
+        <h1 className="text-2xl sm:text-2xl font-bold tracking-tight text-gray-900 mb-8">
+          Welcome back, {user?.user_metadata?.name || 'User'}!
+        </h1>
+
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-center mb-4 bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
-            Welcome back, {userProfile?.name || 'User'}!
-          </h1>
-          <p className="text-xl text-gray-600">
-            View your quiz history and track your progress
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
+            YOUR ENNEAGRAM TYPE
+          </h2>
+          <h3 className="text-3xl font-bold text-gray-900 mb-2">
+            Type {userProfile?.dominant_type}: {TYPE_NAMES[`type${userProfile?.dominant_type}`]}
+          </h3>
+          <p className="text-base sm:text-lg text-gray-700 max-w-xl mx-auto leading-relaxed">
+            {TYPE_DESCRIPTIONS[`type${userProfile?.dominant_type}`]}
           </p>
         </div>
 
-        <div className="relative px-4 py-8 space-y-8">
-          <section className="text-center space-y-6 max-w-2xl mx-auto">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/30 backdrop-blur-sm mb-4 border border-white/40">
-              <img 
-                src="/lovable-uploads/d6cccfc5-2a9b-4e74-bb4e-9394fc534f2b.png" 
-                alt="Enneagram Symbol"
-                className="w-12 h-12 object-contain"
-              />
-            </div>
-            <div className="space-y-3">
-              <h4 className="text-sm font-medium text-gray-800/70 tracking-wide">YOUR ENNEAGRAM TYPE</h4>
-              <h2 className="text-2xl font-semibold text-gray-800">
-                Type {userProfile?.dominant_type}: {TYPE_NAMES[`type${userProfile?.dominant_type}`]}
-              </h2>
-              <p className="text-gray-700 max-w-md mx-auto text-base">
-                {TYPE_DESCRIPTIONS[`type${userProfile?.dominant_type}`]}
-              </p>
-            </div>
-          </section>
+        {/* Main action button */}
+        <Button
+          className="w-[322px] sm:w-auto py-6 group transition-all duration-300 hover:translate-y-[-4px] text-white flex items-center justify-center shadow-lg rounded-[20px] bg-gradient-to-r from-[#9747FF] to-[#FF3BBB] hover:opacity-90 mb-12"
+          onClick={handleAIChat}
+        >
+          <div className="flex flex-col items-center justify-center">
+            <span className="text-base sm:text-xl font-semibold text-center whitespace-normal px-4">
+              Chat with AI Coach
+            </span>
+          </div>
+          <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+        </Button>
 
-          <section className="text-center max-w-2xl mx-auto">
-            <Button
-              className="w-[322px] py-6 group transition-all duration-300 hover:translate-y-[-4px] text-white flex items-center justify-center shadow-lg rounded-[20px] bg-gradient-to-r from-[#9747FF] to-[#FF3BBB] hover:opacity-90 mx-auto"
-              onClick={() => navigate('/explore')}
-            >
-              <div className="flex flex-col items-center justify-center">
-                <span className="text-base sm:text-xl font-semibold text-center whitespace-normal px-4">
-                  Learn about my type
-                  <ArrowRight className="inline-block ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </div>
-            </Button>
-          </section>
-
-          <div className="bg-white rounded-3xl shadow-xl max-w-[1000px] mx-auto w-full p-12 relative">
-            <h2 className="text-2xl font-bold text-gray-900 text-center mb-12">
+        {/* White container section */}
+        <div className="bg-white rounded-3xl shadow-xl max-w-[1000px] mx-auto w-full p-12 relative">
+          <div className="max-w-2xl mx-auto text-center space-y-10">
+            <h3 className="text-xl font-semibold mb-6">
               Explore your inner world with guided AI coaching sessions
-            </h2>
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors">
+                <div className="mb-4">✨</div>
+                <h4 className="font-semibold mb-2">Core Motivation</h4>
+                <p className="text-sm text-gray-600">How does this drive your behavior?</p>
+                <div className="mt-4">→</div>
+              </Card>
 
-            <section className="space-y-4">
-              <h2 className="text-lg font-semibold text-gray-900">Explore Your Type</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {[
-                  {
-                    title: "Core Motivation",
-                    description: "How does this drive your behavior?",
-                    href: "/motivation",
-                    gradient: "from-[#E5DEFF]/60 to-[#D3E4FD]/60",
-                    icon: Sparkles,
-                  },
-                  {
-                    title: "Harness Your Strengths",
-                    description: "Tap into your natural gifts",
-                    href: "/strengths",
-                    gradient: "from-[#FDE1D3]/60 to-[#FEC6A1]/60",
-                    icon: Sparkles,
-                  },
-                  {
-                    title: "Growth Path",
-                    description: "Your journey of transformation",
-                    href: "/growth",
-                    gradient: "from-[#D3E4FD]/60 to-[#E5DEFF]/60",
-                    icon: Zap,
-                  },
-                ].map((card) => (
-                  <Card 
-                    key={card.title}
-                    className={`relative p-6 cursor-pointer hover:translate-y-[-4px] transition-all duration-300 overflow-hidden bg-gradient-to-br ${card.gradient} backdrop-blur-md border border-white/40 shadow-lg rounded-[20px]`}
-                    style={{
-                      aspectRatio: isMobile ? '1.67/1' : '1/1',
-                    }}
-                    onClick={() => navigate(card.href)}
-                  >
-                    <div className="h-full flex flex-col justify-between relative z-10">
-                      <div className="space-y-4">
-                        <div className="w-12 h-12 rounded-xl bg-white/80 backdrop-blur-sm flex items-center justify-center border border-white/40">
-                          <card.icon className="w-6 h-6 text-gray-800" />
-                        </div>
-                        <div>
-                          <h3 className="font-medium text-lg mb-2 text-gray-900">{card.title}</h3>
-                          <p className="text-sm text-gray-700">{card.description}</p>
-                        </div>
-                      </div>
-                      <ArrowRight className="w-5 h-5 text-gray-700 self-end" />
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            </section>
+              <Card className="p-6 bg-pink-50 hover:bg-pink-100 transition-colors">
+                <div className="mb-4">🎯</div>
+                <h4 className="font-semibold mb-2">Harness Your Strengths</h4>
+                <p className="text-sm text-gray-600">Tap into your natural gifts</p>
+                <div className="mt-4">→</div>
+              </Card>
 
-            <section className="space-y-4 mt-12">
-              <h2 className="text-lg font-semibold text-gray-900">Need immediate guidance?</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {[
-                  { 
-                    icon: Sparkles, 
-                    label: "Resolve Stuck Feelings",
-                    gradient: "from-[#D3E4FD]/60 to-[#E5DEFF]/60",
-                  },
-                  { 
-                    icon: Zap, 
-                    label: "Work with a Pattern",
-                    gradient: "from-[#FDE1D3]/60 to-[#FEC6A1]/60",
-                  },
-                  { 
-                    icon: Shuffle, 
-                    label: "Make a Decision",
-                    gradient: "from-[#F2FCE2]/60 to-[#E5DEFF]/60",
-                  },
-                ].map(({ icon: Icon, label, gradient }) => (
-                  <Card
-                    key={label}
-                    className={`p-6 cursor-pointer hover:translate-y-[-4px] transition-all duration-300 bg-gradient-to-br ${gradient} backdrop-blur-md border border-white/40 shadow-lg rounded-[20px]`}
-                    onClick={handleAIChat}
-                  >
-                    <div className="h-full flex flex-col justify-between">
-                      <div className="space-y-4">
-                        <div className="w-12 h-12 rounded-xl bg-white/80 backdrop-blur-sm flex items-center justify-center border border-white/40">
-                          <Icon className="w-6 h-6 text-gray-800" />
-                        </div>
-                        <p className="text-base font-medium text-gray-800">{label}</p>
-                      </div>
-                      <ArrowRight className="w-5 h-5 text-gray-700 self-end" />
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            </section>
+              <Card className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors">
+                <div className="mb-4">⚡</div>
+                <h4 className="font-semibold mb-2">Growth Path</h4>
+                <p className="text-sm text-gray-600">Your journey of transformation</p>
+                <div className="mt-4">→</div>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
