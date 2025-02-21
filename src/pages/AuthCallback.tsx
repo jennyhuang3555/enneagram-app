@@ -59,7 +59,7 @@ const AuthCallback = () => {
           if (!session) throw new Error('No session found');
 
           // Link quiz results to user
-          const session_id = localStorage.getItem('quiz_session_id');
+          const session_id = sessionStorage.getItem('quiz_session_id');
           if (session_id) {
             console.log("Updating quiz profile with session_id:", session_id);
             const { error: updateError } = await supabase
@@ -75,7 +75,7 @@ const AuthCallback = () => {
               console.error('Error linking results:', updateError);
               throw updateError;
             }
-            localStorage.removeItem('quiz_session_id');
+            sessionStorage.removeItem('quiz_session_id');
           }
 
           toast({

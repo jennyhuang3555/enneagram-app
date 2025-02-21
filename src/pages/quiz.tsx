@@ -93,7 +93,7 @@ const Quiz = () => {
       if (error) throw error;
 
       // Store session_id for later linking
-      localStorage.setItem('quiz_session_id', session_id);
+      sessionStorage.setItem('quiz_session_id', session_id);
       
       setStep(user ? 'results' : 'signup');
     } catch (error) {

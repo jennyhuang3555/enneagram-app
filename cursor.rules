@@ -1,0 +1,77 @@
+You are an expert full-stack developer proficient in TypeScript, React, Vite, and modern UI/UX frameworks (e.g., Tailwind CSS, Shadcn UI). Your task is to produce a simple, functional, and maintainable React application, focusing on a smooth user experience and seamless integration with Supabase for authentication.
+
+## Objective
+- Create a Vite + React application that works reliably with Supabase for user signup, login, and dashboard experience.
+- Prioritize simplicity and maintainability, focusing on user authentication and navigation.
+
+## Code Style and Structure
+- Write clear and simple TypeScript code with accurate examples.
+- Use functional components and React Hooks (e.g., `useState`, `useEffect`); avoid classes.
+- Use descriptive variable names (e.g., `isLoading`, `userData`).
+- Organize files in a straightforward way:
+  - `components/` for reusable UI components
+  - `pages/` for main views (e.g., `Signup`, `Login`, `Dashboard`)
+  - `services/` for Supabase client setup and API calls
+
+## Routing and Navigation
+- Use React Router for client-side navigation.
+- Keep routing simple and readable:
+  - `"/"` → Home
+  - `"/signup"` → Signup page
+  - `"/login"` → Login page
+  - `"/dashboard"` → Dashboard (protected route)
+
+## Supabase Integration
+- Set up Supabase authentication for:
+  - Email signup and login
+  - Persistent sessions
+- Store user sessions securely using `sessionStorage`.
+- Redirect users to the dashboard after successful signup or login.
+- Protect routes:
+  - Redirect unauthenticated users trying to access protected routes (e.g., Dashboard) to the login page.
+  - Redirect authenticated users from signup/login to the dashboard.
+- Give me the changes I need to make in supabase as sql queries.
+
+## State Management
+- Use React's built-in state management with `useState` and `useEffect`.
+- Avoid using external state management libraries like Zustand for now.
+
+## Error Handling and Validation
+- Keep error handling simple:
+  - Display user-friendly error messages for authentication errors.
+  - Use basic input validation (e.g., check if email and password are filled).
+  - Handle loading states (e.g., "Loading..." or spinner during API requests).
+
+## UI and Styling
+- Use Tailwind CSS for styling components with utility classes.
+- Keep the UI simple and consistent with a mobile-first design approach.
+- Ensure a good user experience by providing feedback (e.g., success or error messages).
+
+## Security and Performance
+- Store sensitive data like session tokens in `sessionStorage` instead of `localStorage`.
+- Do not log sensitive information (e.g., Supabase keys, user tokens) in the console.
+- Redirect authenticated users to the dashboard to protect protected routes.
+
+## Testing and Documentation (Optional for Now)
+- Focus on manually testing user flows (signup, login, logout, navigation).
+- Write clear comments to explain complex logic or functions.
+
+## Methodology and Process
+1. **Keep It Simple:** Focus on getting the basic authentication flow working.
+2. **One Step at a Time:** Implement features step by step (e.g., start with signup, then move to login, then dashboard).
+3. **Test As You Go:** Manually test each feature before moving to the next.
+4. **Refactor Gradually:** Only refactor when the app is working and you understand the code.
+
+## Development Process:
+1. **Planning:** Refer to the readme.md file for the app functionality and follow it closely to ensure the correct user experience.
+2. **Implementation:** 
+    - Start with Supabase client setup and environment variables.
+    - Implement Signup and Login pages.
+    - Protect routes and implement redirections.
+    - Build the Dashboard to display user-specific data.
+3. **Review and Improve:** 
+    - Check for bugs and fix them as you test each flow.
+    - Keep the code clean and simple.
+4. **Finalization:**
+    - Ensure the signup, login, logout, and dashboard flows are working.
+    - Test manually to confirm a smooth user experience.

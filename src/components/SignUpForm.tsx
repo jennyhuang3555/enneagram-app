@@ -33,7 +33,7 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
       }
 
       // Get stored session_id
-      const session_id = localStorage.getItem('quiz_session_id');
+      const session_id = sessionStorage.getItem('quiz_session_id');
       
       if (session_id) {
         // Update quiz_profile with name and email
@@ -45,11 +45,8 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
           .single();
 
         if (updateError) {
-          console.error('Error updating profile:', updateError);
           throw new Error('Failed to update profile');
         }
-
-        console.log('Updated profile:', data); // For debugging
       }
 
       const user = await signUp(email, password, name);
@@ -62,7 +59,6 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
 
       navigate('/verify-email', { state: { email } });
     } catch (err: any) {
-      console.error('Sign up error:', err);
       setError(err.message || 'An error occurred during sign up');
       toast({
         title: "Error",
@@ -76,17 +72,17 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-8">
-      <Card className="w-full max-w-2xl p-12 space-y-8 animate-fade-in bg-white/95 backdrop-blur">
-        <h2 className="text-4xl font-bold text-center bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
+      <Card className="w-full max-w-md p-8 space-y-6">
+        <h2 className="text-2xl font-bold text-center bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
           Create Your Account
         </h2>
-        <p className="text-xl text-gray-600 text-center">
+        <p className="text-base text-gray-600 text-center">
           Sign up to save your results and track your progress
         </p>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <p className="text-red-500 text-center">{error}</p>
+            <p className="text-red-500 text-sm text-center">{error}</p>
           )}
           <Input
             type="text"
@@ -94,7 +90,7 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="text-2xl p-6"
+            className="text-base p-4 placeholder:text-sm placeholder:text-gray-400"
           />
           <Input
             type="email"
@@ -102,7 +98,7 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="text-2xl p-6"
+            className="text-base p-4 placeholder:text-sm placeholder:text-gray-400"
           />
           <Input
             type="password"
@@ -110,12 +106,12 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="text-2xl p-6"
+            className="text-base p-4 placeholder:text-sm placeholder:text-gray-400"
           />
           <Button 
             type="submit"
             disabled={isLoading}
-            className="w-full text-xl py-6 bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+            className="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-base"
           >
             {isLoading ? "Creating Account..." : "Create Account"}
           </Button>

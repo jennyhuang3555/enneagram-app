@@ -15,9 +15,9 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     persistSession: true,
     detectSessionInUrl: false,
     autoRefreshToken: true,
-    storage: window.localStorage,
+    storage: window.sessionStorage,
     storageKey: 'quiz-auth-token',
     flowType: 'pkce',
-    debug: true
+    debug: false
   }
 }) 
