@@ -5,6 +5,32 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
+
+const TYPE_NAMES = {
+  type1: "The Reformer",
+  type2: "The Helper",
+  type3: "The Achiever",
+  type4: "The Individualist",
+  type5: "The Investigator",
+  type6: "The Loyalist",
+  type7: "The Enthusiast",
+  type8: "The Challenger",
+  type9: "The Peacemaker"
+};
+
+const TYPE_DESCRIPTIONS = {
+  type1: "Principled, purposeful, self-controlled, and perfectionistic",
+  type2: "Generous, demonstrative, people-pleasing, and possessive",
+  type3: "Adaptable, excelling, driven, and image-conscious",
+  type4: "Expressive, dramatic, self-absorbed, and temperamental",
+  type5: "Perceptive, innovative, secretive, and isolated",
+  type6: "Engaging, responsible, anxious, and suspicious",
+  type7: "Spontaneous, versatile, acquisitive, and scattered",
+  type8: "Self-confident, decisive, willful, and confrontational",
+  type9: "Receptive, reassuring, complacent, and resigned"
+};
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -12,6 +38,31 @@ const Dashboard = () => {
   const userType = 4;
   const isMobile = useIsMobile();
   const { user } = useAuth();
+  const [userProfile, setUserProfile] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!user) return;
+      
+      const { data, error } = await supabase
+        .from('quiz_results')
+        .select('*')
+        .or(`user_id.eq.${user.id},email.eq.${user.email}`)
+        .single();
+
+      if (error) {
+        console.error('Error fetching user profile:', error);
+        return;
+      }
+
+      setUserProfile({
+        ...data,
+        name: user.user_metadata?.name || 'User'
+      });
+    };
+
+    fetchUserProfile();
+  }, [user]);
 
   const handleAIChat = () => {
     toast({
@@ -21,21 +72,13 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#E5DEFF] from-40% via-[#FDE1D3] via-80% to-[#D3E4FD]/20">
-        <div 
-          className="absolute inset-0 opacity-[0.03] pointer-events-none"
-          style={{
-            backgroundImage: `url('data:image/svg+xml,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,10 61,35 88,35 67,52 76,77 50,63 24,77 33,52 12,35 39,35" fill="currentColor"/></svg>')`,
-            backgroundSize: '24px',
-          }}
-        />
-      </div>
+    <div className="min-h-screen bg-white">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#E5DEFF] from-40% via-[#FDE1D3] via-80% to-[#D3E4FD]/20" />
 
       <div className="container mx-auto p-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-center mb-4 bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
-            Welcome back, {user?.user_metadata?.name}
+            Welcome back, {userProfile?.name || 'User'}!
           </h1>
           <p className="text-xl text-gray-600">
             View your quiz history and track your progress
@@ -53,9 +96,11 @@ const Dashboard = () => {
             </div>
             <div className="space-y-3">
               <h4 className="text-sm font-medium text-gray-800/70 tracking-wide">YOUR ENNEAGRAM TYPE</h4>
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900">Type {userType}: The Individualist</h1>
+              <h2 className="text-2xl font-semibold text-gray-800">
+                Type {userProfile?.dominant_type}: {TYPE_NAMES[`type${userProfile?.dominant_type}`]}
+              </h2>
               <p className="text-gray-700 max-w-md mx-auto text-base">
-                Creative, sensitive, and expressive, you seek authenticity and depth in life's experiences.
+                {TYPE_DESCRIPTIONS[`type${userProfile?.dominant_type}`]}
               </p>
             </div>
           </section>

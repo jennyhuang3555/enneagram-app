@@ -32,23 +32,6 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
         throw new Error('Please fill in all fields');
       }
 
-      // Get stored session_id
-      const session_id = sessionStorage.getItem('quiz_session_id');
-      
-      if (session_id) {
-        // Update quiz_profile with name and email
-        const { data, error: updateError } = await supabase
-          .from('quiz_profile')
-          .update({ name, email })
-          .eq('session_id', session_id)
-          .select()
-          .single();
-
-        if (updateError) {
-          throw new Error('Failed to update profile');
-        }
-      }
-
       const user = await signUp(email, password, name);
       
       toast({

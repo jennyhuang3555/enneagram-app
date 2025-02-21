@@ -71,9 +71,9 @@ const QuizResults = ({ quiz, scores, responses, onClose }: QuizResultsProps) => 
       if (!user) return;
 
       const { data, error } = await supabase
-        .from('quiz_profile')
+        .from('quiz_results')
         .select('*')
-        .eq('user_id', user.id)
+        .or(`user_id.eq.${user.id},email.eq.${user.email}`)
         .single();
 
       if (error) {

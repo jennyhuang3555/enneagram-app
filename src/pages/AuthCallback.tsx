@@ -59,23 +59,22 @@ const AuthCallback = () => {
           if (!session) throw new Error('No session found');
 
           // Link quiz results to user
-          const session_id = sessionStorage.getItem('quiz_session_id');
-          if (session_id) {
-            console.log("Updating quiz profile with session_id:", session_id);
+          const temp_id = localStorage.getItem('temp_id');
+          if (temp_id) {
+            console.log("Linking quiz results with temp_id:", temp_id);
             const { error: updateError } = await supabase
-              .from('quiz_profile')
+              .from('quiz_results')
               .update({ 
                 user_id: session.user.id,
-                name: session.user.user_metadata?.name,
-                email: session.user.email
+                email: session.user.email 
               })
-              .eq('session_id', session_id);
+              .eq('temp_id', temp_id);
 
             if (updateError) {
               console.error('Error linking results:', updateError);
               throw updateError;
             }
-            sessionStorage.removeItem('quiz_session_id');
+            localStorage.removeItem('temp_id');
           }
 
           toast({
@@ -99,10 +98,13 @@ const AuthCallback = () => {
     }, [navigate, toast]);
   
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="p-8">
-          <p>Verifying your email...</p>
-        </Card>
+      <div className="min-h-screen bg-white">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#E5DEFF] from-40% via-[#FDE1D3] via-80% to-[#D3E4FD]/20" />
+        <div className="min-h-screen flex items-center justify-center">
+          <Card className="p-8">
+            <p>Verifying your email...</p>
+          </Card>
+        </div>
       </div>
     );
   };

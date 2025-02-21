@@ -7,7 +7,7 @@ const VerifyEmail = () => {
     const email = location.state?.email;
   
     return (
-      <div className="min-h-screen bg-white overflow-hidden">
+      <div className="min-h-screen bg-white">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#E5DEFF] from-40% via-[#FDE1D3] via-80% to-[#D3E4FD]/20">
           <div 
             className="absolute inset-0 opacity-[0.03] pointer-events-none"

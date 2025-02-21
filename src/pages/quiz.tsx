@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import LandingPage from "@/components/LandingPage";
@@ -58,42 +58,40 @@ const Quiz = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Generate temp_id when quiz starts
+    if (!localStorage.getItem('temp_id')) {
+      localStorage.setItem('temp_id', crypto.randomUUID());
+    }
+  }, []);
+
   const handleQuizComplete = async (
     newScores: { [key: string]: number }, 
     quizResponses: QuestionResponse[]
   ) => {
     try {
-      const session_id = crypto.randomUUID();
+      const temp_id = localStorage.getItem('temp_id');
       
       const sortedTypes = Object.entries(newScores)
         .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
         .map(([type]) => type);
 
       const resultsToStore = {
-        session_id,
+        temp_id,
         scores: newScores,
         responses: quizResponses,
         dominant_type: sortedTypes[0]?.replace('type', '') || '',
         second_type: sortedTypes[1]?.replace('type', '') || '',
         third_type: sortedTypes[2]?.replace('type', '') || '',
         created_at: new Date().toISOString(),
-        ...(user ? { 
-          user_id: user.id,
-          name: user.user_metadata?.name,
-          email: user.email 
-        } : {})
+        user_id: user?.id || null
       };
 
-      const { data, error } = await supabase
-        .from('quiz_profile')
-        .insert([resultsToStore])
-        .select()
-        .single();
+      const { error } = await supabase
+        .from('quiz_results')
+        .insert([resultsToStore]);
 
       if (error) throw error;
-
-      // Store session_id for later linking
-      sessionStorage.setItem('quiz_session_id', session_id);
       
       setStep(user ? 'results' : 'signup');
     } catch (error) {
@@ -183,8 +181,11 @@ const Quiz = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
-      {renderStep()}
+    <div className="min-h-screen bg-white relative">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#E5DEFF] from-40% via-[#FDE1D3] via-80% to-[#D3E4FD]/20" />
+      <div className="relative z-10">
+        {renderStep()}
+      </div>
     </div>
   );
 };
