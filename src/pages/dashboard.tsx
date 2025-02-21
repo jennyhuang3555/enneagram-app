@@ -96,22 +96,48 @@ const Dashboard = () => {
           />
         </div>
 
-        {/* Welcome message and type info */}
-        <h1 className="text-2xl sm:text-2xl font-bold tracking-tight text-gray-900 mb-8">
+        {/* Welcome message and subtitle */}
+        <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-8">
           Welcome back, {user?.user_metadata?.name || 'User'}!
         </h1>
+        <h3 className="text-xl font-semibold mb-8">
+          Explore your dominant types
+        </h3>
 
-        <div className="text-center mb-12">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
-            YOUR ENNEAGRAM TYPE
-          </h2>
-          <h3 className="text-3xl font-bold text-gray-900 mb-2">
-            Type {userProfile?.dominant_type}: {TYPE_NAMES[`type${userProfile?.dominant_type}`]}
-          </h3>
-          <p className="text-base sm:text-lg text-gray-700 max-w-xl mx-auto leading-relaxed">
-            {TYPE_DESCRIPTIONS[`type${userProfile?.dominant_type}`]}
-          </p>
+        {/* Type information cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 w-full max-w-[1000px]">
+          <Card className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors">
+            <div className="mb-4">🎯</div>
+            <h4 className="font-semibold mb-2">Primary Type</h4>
+            <p className="text-sm text-gray-600">
+              {userProfile?.dominant_type}: {TYPE_NAMES[`type${userProfile?.dominant_type}`]}
+            </p>
+            <div className="mt-4">→</div>
+          </Card>
+
+          <Card className="p-6 bg-pink-50 hover:bg-pink-100 transition-colors">
+            <div className="mb-4">💫</div>
+            <h4 className="font-semibold mb-2">Secondary Type</h4>
+            <p className="text-sm text-gray-600">
+              Type {userProfile?.secondary_type || '?'}
+            </p>
+            <div className="mt-4">→</div>
+          </Card>
+
+          <Card className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors">
+            <div className="mb-4">✨</div>
+            <h4 className="font-semibold mb-2">Third Type</h4>
+            <p className="text-sm text-gray-600">
+              Type {userProfile?.tertiary_type || '?'}
+            </p>
+            <div className="mt-4">→</div>
+          </Card>
         </div>
+
+        {/* Description */}
+        <p className="text-base sm:text-lg text-gray-700 max-w-xl mx-auto leading-relaxed mb-8 text-center">
+          {TYPE_DESCRIPTIONS[`type${userProfile?.dominant_type}`]}
+        </p>
 
         {/* Main action button */}
         <Button
