@@ -57,7 +57,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="text-2xl p-6"
+              className="text-lg p-4 placeholder:text-base placeholder:text-gray-400"
             />
             <Input
               type="password"
@@ -65,7 +65,7 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="text-2xl p-6"
+              className="text-lg p-4 placeholder:text-base placeholder:text-gray-400"
             />
             <Button 
               type="submit"

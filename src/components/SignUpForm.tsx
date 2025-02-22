@@ -11,7 +11,8 @@ interface SignUpFormProps {
 }
 
 const SignUpForm = ({ onSuccess }: SignUpFormProps) => {
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { signUp } = useAuth();
@@ -25,26 +26,20 @@ const SignUpForm = ({ onSuccess }: SignUpFormProps) => {
     setIsLoading(true);
 
     try {
-      // Validate inputs
-      if (!email || !password || !name) {
+      if (!email || !password || !firstName || !lastName) {
         throw new Error('Please fill in all fields');
       }
 
-      // Create user in auth.users
-      const user = await signUp(email, password, name);
-      console.log('User created:', user);
-
-      // Show success message
+      const fullName = `${firstName} ${lastName}`;
+      const user = await signUp(email, password, fullName);
+      
       toast({
         title: "Account Created",
         description: "Please check your email to confirm your account.",
         duration: 5000,
       });
 
-      // Navigate to login page
       navigate('/login');
-      
-      // Call onSuccess if provided
       if (onSuccess) onSuccess();
 
     } catch (error: any) {
@@ -60,39 +55,46 @@ const SignUpForm = ({ onSuccess }: SignUpFormProps) => {
   };
 
   return (
-    <Card className="w-full max-w-md p-6">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
+    <Card className="w-full max-w-md p-8 mx-auto">
+      <form onSubmit={handleSubmit} className="space-y-4 flex flex-col items-center">
+        <div className="flex gap-4 w-full">
           <Input
             type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            placeholder="First name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             disabled={isLoading}
+            className="text-lg p-4 placeholder:text-base placeholder:text-gray-400"
           />
-        </div>
-        <div>
           <Input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            placeholder="Last name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
             disabled={isLoading}
+            className="text-lg p-4 placeholder:text-base placeholder:text-gray-400"
           />
         </div>
-        <div>
-          <Input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            disabled={isLoading}
-          />
-        </div>
+        <Input
+          type="email"
+          placeholder="Your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          disabled={isLoading}
+          className="text-lg p-4 placeholder:text-base placeholder:text-gray-400 w-full"
+        />
+        <Input
+          type="password"
+          placeholder="Your password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          disabled={isLoading}
+          className="text-lg p-4 placeholder:text-base placeholder:text-gray-400 w-full"
+        />
         <Button 
           type="submit" 
-          className="w-full"
           disabled={isLoading}
+          className="w-3/4 text-lg py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:opacity-90 transition-opacity mt-2"
         >
           {isLoading ? "Creating Account..." : "Sign Up"}
         </Button>
