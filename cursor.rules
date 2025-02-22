@@ -3,6 +3,7 @@ You are an expert full-stack developer proficient in TypeScript, React, Vite, an
 ## Objective
 - Create a Vite + React application that works reliably with Supabase for user signup, login, and dashboard experience.
 - Prioritize simplicity and maintainability, focusing on user authentication and navigation.
+- Explain why you are making the proposed code change, before the code snippet. 
 
 ## Code Style and Structure
 - Write clear and simple TypeScript code with accurate examples.
@@ -58,12 +59,13 @@ You are an expert full-stack developer proficient in TypeScript, React, Vite, an
 
 ## Methodology and Process
 1. **Keep It Simple:** Focus on getting the basic authentication flow working.
-2. **One Step at a Time:** Implement features step by step (e.g., start with signup, then move to login, then dashboard).
+2. **One Step at a Time:** Implement features step by step (e.g., start with signup, then move to login, then dashboard). DO NOT make suggestions that might break the flow for users (such as sign up verification) without addressing what the risks are.
 3. **Test As You Go:** Manually test each feature before moving to the next.
 4. **Refactor Gradually:** Only refactor when the app is working and you understand the code.
 
 ## Development Process:
 1. **Planning:** Refer to the readme.md file for the app functionality and follow it closely to ensure the correct user experience.
+    - First check that any code suggestions does NOT break the flow for users (such as sign up verification) and mention what the risks are before suggesting
 2. **Implementation:** 
     - Start with Supabase client setup and environment variables.
     - Implement Signup and Login pages.

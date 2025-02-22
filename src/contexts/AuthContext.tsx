@@ -1,6 +1,13 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
-import { User } from '@supabase/supabase-js';
+import { 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword,
+  signOut as firebaseSignOut,
+  onAuthStateChanged,
+  updateProfile,
+  User 
+} from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 interface AuthContextType {
   user: User | null;
@@ -17,64 +24,26 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check active sessions
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
       setLoading(false);
     });
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
+    return unsubscribe;
   }, []);
 
   const signUp = async (email: string, password: string, name: string) => {
-    try {
-      // Create auth user
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: { name },
-          emailRedirectTo: `${window.location.origin}/auth/callback`
-        }
-      });
-
-      if (authError) throw authError;
-      if (!authData.user) throw new Error('No user returned from signup');
-
-      // Create user profile
-      const { error: profileError } = await supabase
-        .from('users')
-        .insert([{ 
-          id: authData.user.id, 
-          email,
-          name
-        }]);
-
-      if (profileError) throw profileError;
-
-      return authData.user;
-    } catch (error: any) {
-      console.error('Signup error:', error);
-      throw error;
-    }
+    const { user } = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(user, { displayName: name });
+    return user;
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) throw error;
+    await signInWithEmailAndPassword(auth, email, password);
   };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+    await firebaseSignOut(auth);
   };
 
   return (
@@ -86,8 +55,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
+  if (!context) throw new Error('useAuth must be used within an AuthProvider');
   return context;
 }; 

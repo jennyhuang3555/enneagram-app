@@ -1,51 +1,57 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { useAuth } from "@/contexts/AuthContext";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/lib/supabase";
-import { useNavigate } from "react-router-dom";
 
 interface SignUpFormProps {
-  onSuccess: () => void;
-  quizScores?: { [key: string]: number };
+  onSuccess?: () => void;
 }
 
-const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
+const SignUpForm = ({ onSuccess }: SignUpFormProps) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { signUp } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading) return;
     setIsLoading(true);
-    setError(null);
 
     try {
+      // Validate inputs
       if (!email || !password || !name) {
         throw new Error('Please fill in all fields');
       }
 
+      // Create user in auth.users
       const user = await signUp(email, password, name);
-      
+      console.log('User created:', user);
+
+      // Show success message
       toast({
-        title: "Check your email",
-        description: "We've sent you a verification link.",
+        title: "Account Created",
+        description: "Please check your email to confirm your account.",
         duration: 5000,
       });
 
-      navigate('/verify-email', { state: { email } });
-    } catch (err: any) {
-      setError(err.message || 'An error occurred during sign up');
+      // Navigate to login page
+      navigate('/login');
+      
+      // Call onSuccess if provided
+      if (onSuccess) onSuccess();
+
+    } catch (error: any) {
+      console.error('Signup error:', error);
       toast({
         title: "Error",
-        description: err.message || 'An error occurred during sign up',
+        description: error.message || 'An error occurred during sign up',
         variant: "destructive",
       });
     } finally {
@@ -54,53 +60,44 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-8">
-      <Card className="w-full max-w-md p-8 space-y-6">
-        <h2 className="text-2xl font-bold text-center bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">
-          Create Your Account
-        </h2>
-        <p className="text-base text-gray-600 text-center">
-          Sign up to save your results and track your progress
-        </p>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <p className="text-red-500 text-sm text-center">{error}</p>
-          )}
+    <Card className="w-full max-w-md p-6">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
           <Input
             type="text"
-            placeholder="Your name"
+            placeholder="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            required
-            className="text-base p-4 placeholder:text-sm placeholder:text-gray-400"
+            disabled={isLoading}
           />
+        </div>
+        <div>
           <Input
             type="email"
-            placeholder="Your email"
+            placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
-            className="text-base p-4 placeholder:text-sm placeholder:text-gray-400"
+            disabled={isLoading}
           />
+        </div>
+        <div>
           <Input
             type="password"
-            placeholder="Choose a password"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
-            className="text-base p-4 placeholder:text-sm placeholder:text-gray-400"
-          />
-          <Button 
-            type="submit"
             disabled={isLoading}
-            className="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-base"
-          >
-            {isLoading ? "Creating Account..." : "Create Account"}
-          </Button>
-        </form>
-      </Card>
-    </div>
+          />
+        </div>
+        <Button 
+          type="submit" 
+          className="w-full"
+          disabled={isLoading}
+        >
+          {isLoading ? "Creating Account..." : "Sign Up"}
+        </Button>
+      </form>
+    </Card>
   );
 };
 

@@ -6,12 +6,12 @@ import TestIntroduction from "@/components/TestIntroduction";
 import Questions from "@/components/Questions";
 import QuizResults from "@/components/QuizResults";
 import UserInfoForm from "@/components/UserInfoForm";
-import { supabase } from "@/lib/supabase";
 import { QuestionResponse } from "@/types/quiz";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import SignUpForm from "@/components/SignUpForm";
+import { saveQuizResults } from "@/lib/firestore";
 
 type Step = "introduction" | "questions" | "signup" | "results" | "user-info";
 
@@ -70,7 +70,8 @@ const Quiz = () => {
     quizResponses: QuestionResponse[]
   ) => {
     try {
-      const temp_id = localStorage.getItem('temp_id');
+      const temp_id = localStorage.getItem('temp_id') || crypto.randomUUID();
+      localStorage.setItem('temp_id', temp_id);
       
       const sortedTypes = Object.entries(newScores)
         .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
@@ -83,48 +84,11 @@ const Quiz = () => {
         dominant_type: sortedTypes[0]?.replace('type', '') || '',
         second_type: sortedTypes[1]?.replace('type', '') || '',
         third_type: sortedTypes[2]?.replace('type', '') || '',
-        created_at: new Date().toISOString(),
-        user_id: user?.id || null
+        userId: user?.uid || null
       };
 
-      const { error } = await supabase
-        .from('quiz_results')
-        .insert([resultsToStore]);
-
-      if (error) throw error;
-      
+      await saveQuizResults(resultsToStore);
       setStep(user ? 'results' : 'signup');
-    } catch (error) {
-      console.error('Error saving results:', error);
-      toast({
-        title: "Error",
-        description: "Failed to save your results. Please try again.",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const handleSaveResults = async () => {
-    if (!scores || !user) return;
-
-    try {
-      const payload = {
-        user_id: user.id,
-        scores: scores,
-        responses: responses,
-        dominant_type: dominantType?.replace('type', '') || '',
-        second_type: secondType?.replace('type', '') || '',
-        third_type: thirdType?.replace('type', '') || '',
-        created_at: new Date().toISOString()
-      };
-
-      const { error } = await supabase
-        .from('quiz_profile')
-        .insert([payload]);
-
-      if (error) throw error;
-
-      setStep('results');
     } catch (error) {
       console.error('Error saving results:', error);
       toast({
@@ -139,7 +103,7 @@ const Quiz = () => {
     if (!scores || !responses) return;
     
     try {
-        await handleSaveResults();
+        await handleQuizComplete(scores, responses);
         setStep('results');
     } catch (error) {
         console.error('Error saving quiz results:', error);

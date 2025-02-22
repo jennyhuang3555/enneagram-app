@@ -6,7 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import { app } from "@/lib/firebase";
 
 const TYPE_NAMES = {
   type1: "The Reformer",
@@ -32,6 +33,8 @@ const TYPE_DESCRIPTIONS = {
   type9: "Receptive, reassuring, complacent, and resigned"
 };
 
+const db = getFirestore(app);
+
 const Dashboard = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -44,21 +47,21 @@ const Dashboard = () => {
     const fetchUserProfile = async () => {
       if (!user) return;
       
-      const { data, error } = await supabase
-        .from('quiz_results')
-        .select('*')
-        .or(`user_id.eq.${user.id},email.eq.${user.email}`)
-        .single();
-
-      if (error) {
+      try {
+        const quizResults = collection(db, 'quiz_results');
+        const q = query(quizResults, where('userId', '==', user.uid));
+        const querySnapshot = await getDocs(q);
+        
+        if (!querySnapshot.empty) {
+          const data = querySnapshot.docs[0].data();
+          setUserProfile({
+            ...data,
+            name: user.displayName || 'User'
+          });
+        }
+      } catch (error) {
         console.error('Error fetching user profile:', error);
-        return;
       }
-
-      setUserProfile({
-        ...data,
-        name: user.user_metadata?.name || 'User'
-      });
     };
 
     fetchUserProfile();
@@ -98,7 +101,7 @@ const Dashboard = () => {
 
         {/* Welcome message and subtitle */}
         <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-8">
-          Welcome back, {user?.user_metadata?.name || 'User'}!
+          Welcome back, {user?.displayName || 'User'}!
         </h1>
         <h3 className="text-xl font-semibold mb-8">
           Explore your dominant types

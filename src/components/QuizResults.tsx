@@ -17,6 +17,8 @@ import { QuestionResponse } from '@/types/quiz';
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from "@/lib/firebase";
 
 interface QuizResultsProps {
   quiz: Quiz;
@@ -70,18 +72,17 @@ const QuizResults = ({ quiz, scores, responses, onClose }: QuizResultsProps) => 
     const loadSavedResult = async () => {
       if (!user) return;
 
-      const { data, error } = await supabase
-        .from('quiz_results')
-        .select('*')
-        .or(`user_id.eq.${user.id},email.eq.${user.email}`)
-        .single();
-
-      if (error) {
+      try {
+        const quizResults = collection(db, 'quiz_results');
+        const q = query(quizResults, where('userId', '==', user.uid));
+        const querySnapshot = await getDocs(q);
+        
+        if (!querySnapshot.empty) {
+          setSavedResult(querySnapshot.docs[0].data());
+        }
+      } catch (error) {
         console.error('Error loading saved result:', error);
-        return;
       }
-
-      setSavedResult(data);
     };
 
     loadSavedResult();
