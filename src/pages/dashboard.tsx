@@ -8,18 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import { app } from "@/lib/firebase";
-
-const TYPE_NAMES = {
-  type1: "The Reformer",
-  type2: "The Helper",
-  type3: "The Achiever",
-  type4: "The Individualist",
-  type5: "The Investigator",
-  type6: "The Loyalist",
-  type7: "The Enthusiast",
-  type8: "The Challenger",
-  type9: "The Peacemaker"
-};
+import { TYPE_NAMES } from "@/lib/constants";
 
 const TYPE_DESCRIPTIONS = {
   type1: "Principled, purposeful, self-controlled, and perfectionistic",
@@ -42,9 +31,10 @@ const Dashboard = () => {
   const isMobile = useIsMobile();
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [quizResults, setQuizResults] = useState<any>(null);
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    const fetchQuizResults = async () => {
       if (!user) return;
       
       try {
@@ -53,18 +43,14 @@ const Dashboard = () => {
         const querySnapshot = await getDocs(q);
         
         if (!querySnapshot.empty) {
-          const data = querySnapshot.docs[0].data();
-          setUserProfile({
-            ...data,
-            name: user.displayName || 'User'
-          });
+          setQuizResults(querySnapshot.docs[0].data());
         }
       } catch (error) {
-        console.error('Error fetching user profile:', error);
+        console.error('Error fetching quiz results:', error);
       }
     };
 
-    fetchUserProfile();
+    fetchQuizResults();
   }, [user]);
 
   const handleAIChat = () => {
@@ -72,6 +58,16 @@ const Dashboard = () => {
       title: "Coming Soon",
       description: "AI chat functionality will be available soon!",
     });
+  };
+
+  const formatTypeNumber = (typeNumber: string | undefined) => {
+    if (!typeNumber) return '...';
+    return `Type ${typeNumber}`;
+  };
+
+  const formatTypeName = (typeNumber: string | undefined) => {
+    if (!typeNumber) return '...';
+    return TYPE_NAMES[typeNumber as keyof typeof TYPE_NAMES];
   };
 
   return (
@@ -112,28 +108,34 @@ const Dashboard = () => {
           <Card className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors">
             <div className="mb-4">🎯</div>
             <h4 className="font-semibold mb-2">Primary Type</h4>
-            <p className="text-sm text-gray-600">
-              {userProfile?.dominant_type}: {TYPE_NAMES[`type${userProfile?.dominant_type}`]}
+            <p className="text-3xl font-bold text-purple-600 mb-1">
+              {formatTypeNumber(quizResults?.dominant_type)}
             </p>
-            <div className="mt-4">→</div>
+            <p className="text-xl text-purple-500">
+              {formatTypeName(quizResults?.dominant_type)}
+            </p>
           </Card>
 
           <Card className="p-6 bg-pink-50 hover:bg-pink-100 transition-colors">
             <div className="mb-4">💫</div>
             <h4 className="font-semibold mb-2">Secondary Type</h4>
-            <p className="text-sm text-gray-600">
-              Type {userProfile?.secondary_type || '?'}
+            <p className="text-3xl font-bold text-pink-600 mb-1">
+              {formatTypeNumber(quizResults?.second_type)}
             </p>
-            <div className="mt-4">→</div>
+            <p className="text-xl text-pink-500">
+              {formatTypeName(quizResults?.second_type)}
+            </p>
           </Card>
 
           <Card className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors">
             <div className="mb-4">✨</div>
             <h4 className="font-semibold mb-2">Third Type</h4>
-            <p className="text-sm text-gray-600">
-              Type {userProfile?.tertiary_type || '?'}
+            <p className="text-3xl font-bold text-indigo-600 mb-1">
+              {formatTypeNumber(quizResults?.third_type)}
             </p>
-            <div className="mt-4">→</div>
+            <p className="text-xl text-indigo-500">
+              {formatTypeName(quizResults?.third_type)}
+            </p>
           </Card>
         </div>
 

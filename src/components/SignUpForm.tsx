@@ -5,12 +5,14 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { linkQuizResultsToUser } from "@/lib/firestore";
 
 interface SignUpFormProps {
   onSuccess?: () => void;
+  quizScores?: { [key: string]: number };
 }
 
-const SignUpForm = ({ onSuccess }: SignUpFormProps) => {
+const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -33,14 +35,20 @@ const SignUpForm = ({ onSuccess }: SignUpFormProps) => {
       const fullName = `${firstName} ${lastName}`;
       const user = await signUp(email, password, fullName);
       
+      // Link quiz results to the new user
+      const temp_id = localStorage.getItem('temp_id');
+      if (temp_id && user.uid) {
+        await linkQuizResultsToUser(temp_id, user.uid);
+      }
+
       toast({
         title: "Account Created",
         description: "Please check your email to confirm your account.",
         duration: 5000,
       });
 
-      navigate('/login');
       if (onSuccess) onSuccess();
+      navigate('/dashboard');
 
     } catch (error: any) {
       console.error('Signup error:', error);

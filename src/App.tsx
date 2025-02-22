@@ -7,6 +7,7 @@ import SignUp from '@/pages/signup';
 import Dashboard from '@/pages/dashboard';
 import Index from '@/pages/index';
 import { useAuth } from '@/contexts/AuthContext';
+import Logout from '@/pages/logout';
 
 // Protected Route wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
           <Route 
             path="/dashboard" 
             element={

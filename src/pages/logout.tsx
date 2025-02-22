@@ -32,10 +32,15 @@ const Logout = () => {
   }, [signOut, navigate, toast]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <Card className="p-8">
-        <p>Logging you out...</p>
-      </Card>
+    <div className="min-h-screen bg-white relative">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#E5DEFF] from-40% via-[#FDE1D3] via-80% to-[#D3E4FD]/20" />
+      
+      <div className="min-h-screen flex items-center justify-center p-8">
+        <Card className="w-full max-w-md p-8 space-y-4 animate-fade-in bg-white/95 backdrop-blur">
+          <h2 className="text-2xl font-semibold text-center">Logging you out...</h2>
+          <p className="text-gray-600 text-center">Please wait</p>
+        </Card>
+      </div>
     </div>
   );
 };

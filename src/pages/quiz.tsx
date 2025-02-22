@@ -88,7 +88,12 @@ const Quiz = () => {
       };
 
       await saveQuizResults(resultsToStore);
-      setStep(user ? 'results' : 'signup');
+      
+      if (user) {
+        setStep('results');
+      } else {
+        navigate('/signup');
+      }
     } catch (error) {
       console.error('Error saving results:', error);
       toast({
