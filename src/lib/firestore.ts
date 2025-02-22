@@ -11,15 +11,18 @@ interface QuizResult {
   third_type: string;
   userId: string | null;
   createdAt: string;
+  userName?: string;
+  userEmail?: string;
 }
 
 export const saveQuizResults = async (results: Partial<QuizResult>) => {
   try {
-    // Remove undefined values and ensure userId is null if not present
     const cleanResults = {
       ...results,
       userId: results.userId || null,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      userName: results.userName || null,
+      userEmail: results.userEmail || null
     };
 
     const quizResults = collection(db, 'quiz_results');
@@ -31,17 +34,23 @@ export const saveQuizResults = async (results: Partial<QuizResult>) => {
   }
 };
 
-export const linkQuizResultsToUser = async (tempId: string, userId: string) => {
+export const linkQuizResultsToUser = async (tempId: string, userId: string, userName?: string, userEmail?: string) => {
   try {
     const quizResults = collection(db, 'quiz_results');
     const q = query(quizResults, where('temp_id', '==', tempId));
     const querySnapshot = await getDocs(q);
     
-    querySnapshot.forEach(async (doc) => {
-      await updateDoc(doc.ref, {
-        userId: userId
-      });
-    });
+    // Use Promise.all to wait for all updates to complete
+    const updatePromises = querySnapshot.docs.map(doc => 
+      updateDoc(doc.ref, {
+        userId: userId,
+        userName: userName || null,
+        userEmail: userEmail || null,
+        updatedAt: new Date().toISOString() // Add timestamp for tracking
+      })
+    );
+    
+    await Promise.all(updatePromises);
   } catch (error) {
     console.error('Error linking results:', error);
     throw error;

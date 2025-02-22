@@ -32,21 +32,34 @@ const Dashboard = () => {
   const { user } = useAuth();
   const [userProfile, setUserProfile] = useState<any>(null);
   const [quizResults, setQuizResults] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchQuizResults = async () => {
       if (!user) return;
       
       try {
+        setIsLoading(true);
         const quizResults = collection(db, 'quiz_results');
         const q = query(quizResults, where('userId', '==', user.uid));
         const querySnapshot = await getDocs(q);
         
         if (!querySnapshot.empty) {
-          setQuizResults(querySnapshot.docs[0].data());
+          const data = querySnapshot.docs[0].data();
+          console.log('Fetched quiz results:', data); // Debug log
+          setQuizResults(data);
+        } else {
+          console.log('No quiz results found for user:', user.uid); // Debug log
         }
       } catch (error) {
         console.error('Error fetching quiz results:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load your quiz results. Please refresh the page.",
+          variant: "destructive"
+        });
+      } finally {
+        setIsLoading(false);
       }
     };
 

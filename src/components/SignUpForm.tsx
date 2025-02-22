@@ -35,10 +35,12 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
       const fullName = `${firstName} ${lastName}`;
       const user = await signUp(email, password, fullName);
       
-      // Link quiz results to the new user
+      // Link quiz results to the new user with full info
       const temp_id = localStorage.getItem('temp_id');
       if (temp_id && user.uid) {
-        await linkQuizResultsToUser(temp_id, user.uid);
+        await linkQuizResultsToUser(temp_id, user.uid, fullName, email);
+        // Clear temp_id after successful linking
+        localStorage.removeItem('temp_id');
       }
 
       toast({
@@ -48,7 +50,12 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
       });
 
       if (onSuccess) onSuccess();
-      navigate('/dashboard');
+      
+      // Small delay to ensure Firestore update completes
+      setTimeout(() => {
+        navigate('/dashboard');
+        window.location.reload();
+      }, 1000);
 
     } catch (error: any) {
       console.error('Signup error:', error);

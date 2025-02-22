@@ -84,7 +84,9 @@ const Quiz = () => {
         dominant_type: sortedTypes[0]?.replace('type', '') || '',
         second_type: sortedTypes[1]?.replace('type', '') || '',
         third_type: sortedTypes[2]?.replace('type', '') || '',
-        userId: user?.uid || null
+        userId: user?.uid || null,
+        userName: user?.displayName || null,
+        userEmail: user?.email || null
       };
 
       await saveQuizResults(resultsToStore);
