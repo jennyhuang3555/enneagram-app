@@ -23,19 +23,24 @@ export default async function handler(req, res) {
 
   try {
     const { message } = req.body;
-    console.log('Received message:', message);
+    const parsedMessage = JSON.parse(message);
     
+    const systemPrompt = `You are an AI coach helping users understand their Enneagram journey. 
+    The user's primary type is Type ${parsedMessage.userTypes.dominant}, 
+    with Type ${parsedMessage.userTypes.secondary} and Type ${parsedMessage.userTypes.tertiary} influences.
+    Keep responses concise, personal, and focused on their specific type combination.
+    Frame your responses through the lens of their core three types.`;
+
     const response = await client.messages.create({
       model: "claude-3-sonnet-20240229",
       max_tokens: 1024,
-      messages: [{ role: "user", content: message }],
-      system: "You are an AI coach helping users understand their Enneagram type and personal growth journey. Keep responses concise and focused on personal development."
+      messages: [{ role: "user", content: parsedMessage.message }],
+      system: systemPrompt
     });
 
-    console.log('Claude API response:', response);
     return res.status(200).json({ response: response.content[0].text });
   } catch (error) {
-    console.error('Error in API handler:', error);
+    console.error('Error:', error);
     return res.status(500).json({ error: 'Failed to process request' });
   }
 } 

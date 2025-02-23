@@ -1,14 +1,21 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 import { sendMessageToClaude } from "@/lib/claude-api";
 import { useToast } from "@/hooks/use-toast";
+import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 
 interface Message {
   role: "user" | "assistant";
   content: string;
+}
+
+interface QuizResults {
+  dominant_type: string;
+  second_type: string;
+  third_type: string;
 }
 
 const TypingIndicator = () => (
@@ -28,6 +35,12 @@ const AIChatScreen = () => {
   const [streamingText, setStreamingText] = useState("");
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { user } = useAuth();
+  const [quizResults, setQuizResults] = useState<QuizResults | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [currentStreamedText, setCurrentStreamedText] = useState("");
+  const streamIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -36,6 +49,28 @@ const AIChatScreen = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages, streamingText]);
+
+  useEffect(() => {
+    const fetchQuizResults = async () => {
+      if (!user) return;
+      
+      try {
+        const db = getFirestore();
+        const quizResults = collection(db, 'quiz_results');
+        const q = query(quizResults, where('userId', '==', user.uid));
+        const querySnapshot = await getDocs(q);
+        
+        if (!querySnapshot.empty) {
+          const data = querySnapshot.docs[0].data();
+          setQuizResults(data as QuizResults);
+        }
+      } catch (error) {
+        console.error('Error fetching quiz results:', error);
+      }
+    };
+
+    fetchQuizResults();
+  }, [user]);
 
   const conversationStarters = [
     {
@@ -58,20 +93,52 @@ const AIChatScreen = () => {
 
   const simulateStreaming = (text: string) => {
     let index = 0;
-    setStreamingText("");
+    setIsStreaming(true);
+    setCurrentStreamedText("");
     
-    const interval = setInterval(() => {
+    const streamNextChar = () => {
       if (index < text.length) {
-        setStreamingText(prev => prev + text[index]);
+        setCurrentStreamedText(prev => prev + text[index]);
         index++;
+        streamIntervalRef.current = setTimeout(streamNextChar, 30);
       } else {
-        clearInterval(interval);
-        setStreamingText("");
+        clearInterval(streamIntervalRef.current!);
+        streamIntervalRef.current = null;
+        setCurrentStreamedText("");
         setMessages(prev => [...prev, { role: "assistant", content: text }]);
         setIsLoading(false);
+        setIsStreaming(false);
+        setIsPaused(false);
       }
-    }, 30);
+    };
+
+    streamIntervalRef.current = setTimeout(streamNextChar, 30);
   };
+
+  const togglePause = () => {
+    if (!streamIntervalRef.current) return;
+
+    if (isPaused) {
+      // Resume streaming
+      simulateStreaming(currentStreamedText + messages[messages.length - 1].content.slice(currentStreamedText.length));
+    } else {
+      // Pause streaming and save current progress
+      clearTimeout(streamIntervalRef.current);
+      setMessages(prev => [...prev, { role: "assistant", content: currentStreamedText }]);
+      setIsLoading(false);
+      setIsStreaming(false);
+    }
+    setIsPaused(!isPaused);
+  };
+
+  // Add cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (streamIntervalRef.current) {
+        clearTimeout(streamIntervalRef.current);
+      }
+    };
+  }, []);
 
   const handleSendMessage = async (content: string) => {
     try {
@@ -81,7 +148,17 @@ const AIChatScreen = () => {
       const userMessage: Message = { role: "user", content };
       setMessages(prev => [...prev, userMessage]);
       
-      const response = await sendMessageToClaude(content);
+      // Include user's Enneagram types in the context
+      const contextualizedMessage = {
+        message: content,
+        userTypes: {
+          dominant: quizResults?.dominant_type,
+          secondary: quizResults?.second_type,
+          tertiary: quizResults?.third_type
+        }
+      };
+      
+      const response = await sendMessageToClaude(JSON.stringify(contextualizedMessage));
       simulateStreaming(response);
       
       setInputMessage("");
@@ -130,17 +207,12 @@ const AIChatScreen = () => {
         {messages.map((message, index) => (
           <div
             key={index}
-            className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} items-start`}
+            className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
-            {message.role === 'assistant' && (
-              <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-2">
-                <span className="text-sm">🤖</span>
-              </div>
-            )}
             <div
               className={`max-w-[80%] px-4 py-2 rounded-lg ${
                 message.role === 'user'
-                  ? 'bg-purple-600 text-white ml-2'
+                  ? 'bg-purple-600 text-white'
                   : 'bg-white text-gray-800'
               }`}
             >
@@ -149,22 +221,19 @@ const AIChatScreen = () => {
           </div>
         ))}
         
-        {isLoading && streamingText && (
-          <div className="flex items-start">
-            <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-2">
-              <span className="text-sm">🤖</span>
-            </div>
+        {isStreaming && (
+          <div className="flex justify-start">
             <div className="max-w-[80%] bg-white text-gray-800 px-4 py-2 rounded-lg">
-              {streamingText}
+              {currentStreamedText}
               <span className="ml-1 animate-pulse">▊</span>
             </div>
           </div>
         )}
-        {isLoading && !streamingText && <TypingIndicator />}
+        
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area */}
+      {/* Modified Input Area */}
       <div className="p-4 border-t bg-white">
         <form 
           onSubmit={(e) => {
@@ -181,15 +250,30 @@ const AIChatScreen = () => {
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="Ask anything..."
             className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            disabled={isLoading}
+            disabled={isStreaming && !isPaused}
           />
-          <Button 
-            type="submit"
-            disabled={isLoading || !inputMessage.trim()}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-6 rounded-lg"
-          >
-            Send
-          </Button>
+          
+          {isStreaming ? (
+            <Button 
+              type="button"
+              onClick={togglePause}
+              className={`w-24 transition-colors ${
+                isPaused 
+                  ? 'bg-green-600 hover:bg-green-700' 
+                  : 'bg-yellow-600 hover:bg-yellow-700'
+              } text-white px-6 rounded-lg`}
+            >
+              {isPaused ? 'Resume' : 'Pause'}
+            </Button>
+          ) : (
+            <Button 
+              type="submit"
+              disabled={!inputMessage.trim()}
+              className="bg-purple-600 hover:bg-purple-700 text-white px-6 rounded-lg"
+            >
+              Send
+            </Button>
+          )}
         </form>
       </div>
     </div>
