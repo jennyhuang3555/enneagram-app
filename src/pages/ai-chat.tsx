@@ -6,6 +6,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { sendMessageToClaude } from "@/lib/claude-api";
 import { useToast } from "@/hooks/use-toast";
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface Message {
   role: "user" | "assistant";
@@ -37,7 +39,6 @@ const AIChatScreen = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const [quizResults, setQuizResults] = useState<QuizResults | null>(null);
-  const [isPaused, setIsPaused] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const [currentStreamedText, setCurrentStreamedText] = useState("");
   const streamIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -108,47 +109,22 @@ const AIChatScreen = () => {
         setMessages(prev => [...prev, { role: "assistant", content: text }]);
         setIsLoading(false);
         setIsStreaming(false);
-        setIsPaused(false);
       }
     };
 
     streamIntervalRef.current = setTimeout(streamNextChar, 30);
   };
 
-  const togglePause = () => {
-    if (!streamIntervalRef.current) return;
-
-    if (isPaused) {
-      // Resume streaming
-      simulateStreaming(currentStreamedText + messages[messages.length - 1].content.slice(currentStreamedText.length));
-    } else {
-      // Pause streaming and save current progress
-      clearTimeout(streamIntervalRef.current);
-      setMessages(prev => [...prev, { role: "assistant", content: currentStreamedText }]);
-      setIsLoading(false);
-      setIsStreaming(false);
-    }
-    setIsPaused(!isPaused);
-  };
-
-  // Add cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (streamIntervalRef.current) {
-        clearTimeout(streamIntervalRef.current);
-      }
-    };
-  }, []);
-
   const handleSendMessage = async (content: string) => {
     try {
+      setInputMessage("");
       setIsLoading(true);
+      setIsStreaming(true);
       setChatStarted(true);
       
       const userMessage: Message = { role: "user", content };
       setMessages(prev => [...prev, userMessage]);
       
-      // Include user's Enneagram types in the context
       const contextualizedMessage = {
         message: content,
         userTypes: {
@@ -159,9 +135,9 @@ const AIChatScreen = () => {
       };
       
       const response = await sendMessageToClaude(JSON.stringify(contextualizedMessage));
-      simulateStreaming(response);
+      const cleanResponse = response.trim();
+      simulateStreaming(cleanResponse);
       
-      setInputMessage("");
     } catch (error) {
       toast({
         title: "Error",
@@ -169,6 +145,19 @@ const AIChatScreen = () => {
         variant: "destructive"
       });
       setIsLoading(false);
+      setIsStreaming(false);
+    }
+  };
+
+  const handlePause = () => {
+    if (streamIntervalRef.current) {
+      clearTimeout(streamIntervalRef.current);
+      streamIntervalRef.current = null;
+      // When paused, add current progress to messages and reset streaming
+      setMessages(prev => [...prev, { role: "assistant", content: currentStreamedText }]);
+      setStreamingText("");
+      setIsLoading(false);
+      setIsStreaming(false);
     }
   };
 
@@ -216,7 +205,11 @@ const AIChatScreen = () => {
                   : 'bg-white text-gray-800'
               }`}
             >
-              {message.content}
+              <div className="prose prose-sm max-w-none dark:prose-invert">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {message.content}
+                </ReactMarkdown>
+              </div>
             </div>
           </div>
         ))}
@@ -224,7 +217,11 @@ const AIChatScreen = () => {
         {isStreaming && (
           <div className="flex justify-start">
             <div className="max-w-[80%] bg-white text-gray-800 px-4 py-2 rounded-lg">
-              {currentStreamedText}
+              <div className="prose prose-sm max-w-none dark:prose-invert">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {currentStreamedText}
+                </ReactMarkdown>
+              </div>
               <span className="ml-1 animate-pulse">▊</span>
             </div>
           </div>
@@ -250,26 +247,22 @@ const AIChatScreen = () => {
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="Ask anything..."
             className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            disabled={isStreaming && !isPaused}
+            disabled={isStreaming}
           />
           
           {isStreaming ? (
             <Button 
               type="button"
-              onClick={togglePause}
-              className={`w-24 transition-colors ${
-                isPaused 
-                  ? 'bg-green-600 hover:bg-green-700' 
-                  : 'bg-yellow-600 hover:bg-yellow-700'
-              } text-white px-6 rounded-lg`}
+              onClick={handlePause}
+              className="bg-yellow-600 hover:bg-yellow-700 text-white px-6 rounded-lg w-24"
             >
-              {isPaused ? 'Resume' : 'Pause'}
+              Pause
             </Button>
           ) : (
             <Button 
               type="submit"
               disabled={!inputMessage.trim()}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-6 rounded-lg"
+              className="bg-purple-600 hover:bg-purple-700 text-white px-6 rounded-lg w-24"
             >
               Send
             </Button>
