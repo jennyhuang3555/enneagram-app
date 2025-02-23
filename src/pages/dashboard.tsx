@@ -118,7 +118,10 @@ const Dashboard = () => {
 
         {/* Type information cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 w-full max-w-[1000px]">
-          <Card className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors">
+          <Card 
+            className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors cursor-pointer"
+            onClick={() => navigate(`/type-deepdive/type${quizResults?.dominant_type}`)}
+          >
             <div className="mb-4">🎯</div>
             <h4 className="font-semibold mb-2">Primary Type</h4>
             <p className="text-3xl font-bold text-purple-600 mb-1">
@@ -129,7 +132,10 @@ const Dashboard = () => {
             </p>
           </Card>
 
-          <Card className="p-6 bg-pink-50 hover:bg-pink-100 transition-colors">
+          <Card 
+            className="p-6 bg-pink-50 hover:bg-pink-100 transition-colors cursor-pointer"
+            onClick={() => navigate(`/type-deepdive/${quizResults?.second_type}`)}
+          >
             <div className="mb-4">💫</div>
             <h4 className="font-semibold mb-2">Secondary Type</h4>
             <p className="text-3xl font-bold text-pink-600 mb-1">
@@ -140,7 +146,10 @@ const Dashboard = () => {
             </p>
           </Card>
 
-          <Card className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors">
+          <Card 
+            className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors cursor-pointer"
+            onClick={() => navigate(`/type-deepdive/${quizResults?.third_type}`)}
+          >
             <div className="mb-4">✨</div>
             <h4 className="font-semibold mb-2">Third Type</h4>
             <p className="text-3xl font-bold text-indigo-600 mb-1">

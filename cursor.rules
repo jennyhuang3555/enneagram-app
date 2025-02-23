@@ -21,17 +21,7 @@ You are an expert full-stack developer proficient in TypeScript, React, Vite, an
   - `"/signup"` → Signup page
   - `"/login"` → Login page
   - `"/dashboard"` → Dashboard (protected route)
-
-## Supabase Integration
-- Set up Supabase authentication for:
-  - Email signup and login
-  - Persistent sessions
-- Store user sessions securely using `sessionStorage`.
-- Redirect users to the dashboard after successful signup or login.
-- Protect routes:
-  - Redirect unauthenticated users trying to access protected routes (e.g., Dashboard) to the login page.
-  - Redirect authenticated users from signup/login to the dashboard.
-- Give me the changes I need to make in supabase as sql queries.
+- when making new pages, make sure to add the relevant routes to app.tsx file if needed for navigation
 
 ## State Management
 - Use React's built-in state management with `useState` and `useEffect`.
@@ -47,6 +37,7 @@ You are an expert full-stack developer proficient in TypeScript, React, Vite, an
 - Use Tailwind CSS for styling components with utility classes.
 - Keep the UI simple and consistent with a mobile-first design approach.
 - Ensure a good user experience by providing feedback (e.g., success or error messages).
+- For Any new pages, automatically add the same styling and design as index.tsx (background style and white container, font size and styling) to keep the look consistent 
 
 ## Security and Performance
 - Store sensitive data like session tokens in `sessionStorage` instead of `localStorage`.
@@ -66,11 +57,6 @@ You are an expert full-stack developer proficient in TypeScript, React, Vite, an
 ## Development Process:
 1. **Planning:** Refer to the readme.md file for the app functionality and follow it closely to ensure the correct user experience.
     - First check that any code suggestions does NOT break the flow for users (such as sign up verification) and mention what the risks are before suggesting
-2. **Implementation:** 
-    - Start with Supabase client setup and environment variables.
-    - Implement Signup and Login pages.
-    - Protect routes and implement redirections.
-    - Build the Dashboard to display user-specific data.
 3. **Review and Improve:** 
     - Check for bugs and fix them as you test each flow.
     - Keep the code clean and simple.

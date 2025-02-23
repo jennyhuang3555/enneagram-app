@@ -8,6 +8,8 @@ import Dashboard from '@/pages/dashboard';
 import Index from '@/pages/index';
 import { useAuth } from '@/contexts/AuthContext';
 import Logout from '@/pages/logout';
+import TypeDeepDive from './pages/type-deepdive';
+import QuizProfile from '@/pages/quiz-profile';
 
 // Protected Route wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -34,6 +36,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route path="/type-deepdive/:typeNumber" element={<TypeDeepDive />} />
+          <Route 
+            path="/profile" 
+            element={
+              <ProtectedRoute>
+                <QuizProfile />
               </ProtectedRoute>
             } 
           />
