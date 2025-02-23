@@ -44,6 +44,7 @@ You are an expert full-stack developer proficient in TypeScript, React, Vite, an
 - Store sensitive data like session tokens in `sessionStorage` instead of `localStorage`.
 - Do not log sensitive information (e.g., Supabase keys, user tokens) in the console.
 - Redirect authenticated users to the dashboard to protect protected routes.
+- Always remind me to put .env and other sensitive API keys in the .gitignore file
 
 ## Testing and Documentation (Optional for Now)
 - Focus on manually testing user flows (signup, login, logout, navigation).
