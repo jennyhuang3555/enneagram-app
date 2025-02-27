@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import QuizQuestion from "./QuizQuestion";
-import quizData from '@/data/quiz-questions.json';
 import { QuestionResponse } from "@/types/quiz";
 
 interface QuestionsProps {
@@ -31,10 +30,18 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 const Questions = ({ onComplete, onBack }: QuestionsProps) => {
-  const [questions] = useState(() => shuffleArray(quizData.questions));
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [scores, setScores] = useState<{ [key: string]: number }>(INITIAL_SCORES);
   const [responses, setResponses] = useState<QuestionResponse[]>([]);
+  const [quizData, setQuizData] = useState(null);
+
+  useEffect(() => {
+    fetch('/data/quiz-questions.json')
+      .then(res => res.json())
+      .then(setQuizData)
+      .catch(err => console.error('Error loading quiz data:', err));
+  }, []);
+
+  const [scores, setScores] = useState<{ [key: string]: number }>(INITIAL_SCORES);
 
   // Helper function to convert score to answer text
   const getAnswerText = (score: number): string => {
@@ -49,7 +56,7 @@ const Questions = ({ onComplete, onBack }: QuestionsProps) => {
   };
 
   const handleNext = (score: number) => {
-    const currentType = `type${questions[currentQuestion].category}`;
+    const currentType = `type${quizData[currentQuestion].category}`;
     const newScores = { 
       ...scores,
       [currentType]: (scores[currentType] || 0) + score
@@ -57,9 +64,9 @@ const Questions = ({ onComplete, onBack }: QuestionsProps) => {
     
     // Store individual question response
     const response: QuestionResponse = {
-      questionId: questions[currentQuestion].id,
-      questionText: questions[currentQuestion].text,
-      category: questions[currentQuestion].category,
+      questionId: quizData[currentQuestion].id,
+      questionText: quizData[currentQuestion].text,
+      category: quizData[currentQuestion].category,
       score: score,
       answerText: getAnswerText(score)
     };
@@ -68,7 +75,7 @@ const Questions = ({ onComplete, onBack }: QuestionsProps) => {
     setResponses(newResponses);
     setScores(newScores);
 
-    if (currentQuestion === questions.length - 1) {
+    if (currentQuestion === quizData.length - 1) {
       console.log('Completing quiz with:', {
         scores: newScores,
         responses: newResponses
@@ -83,7 +90,7 @@ const Questions = ({ onComplete, onBack }: QuestionsProps) => {
     if (currentQuestion === 0) {
       onBack();
     } else {
-      const prevType = questions[currentQuestion - 1].category;
+      const prevType = quizData[currentQuestion - 1].category;
       const prevScore = scores[prevType] || 0;
       const lastScore = scores[prevType] - (scores[prevType] % 1 || 1);
       
@@ -97,9 +104,9 @@ const Questions = ({ onComplete, onBack }: QuestionsProps) => {
 
   return (
     <QuizQuestion
-      question={questions[currentQuestion].text}
+      question={quizData[currentQuestion].text}
       currentQuestion={currentQuestion}
-      totalQuestions={questions.length}
+      totalQuestions={quizData.length}
       onNext={handleNext}
       onPrevious={handlePrevious}
     />

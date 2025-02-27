@@ -1,0 +1,385 @@
+{
+  "triadRound1": [
+    {
+      "id": "29828093-1de6-428c-b976-c252ba596a9c",
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "4b49bc6f-f385-4123-96ba-48d02eace038",
+          "text": "I value integrity, honesty, and doing the right thing",
+          "type": null
+        },
+        {
+          "id": "def60792-d5c7-4590-8a32-afdbc8b354f9",
+          "text": "I value authenticity, originality, and emotional depth",
+          "type": null
+        },
+        {
+          "id": "0fecce9d-0c01-47f1-858b-689c8e2bbc43",
+          "text": "I value freedom, adventure and possibilities.",
+          "type": null
+        }
+      ]
+    },
+    {
+      "id": "e846cdec-7e74-4df5-bc6a-f96703a8202a",
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "3077d490-e0e1-482f-8c32-ed9f1d5358a3",
+          "text": "I value kindness, generosity and connection.",
+          "type": null
+        },
+        {
+          "id": "bd28f889-6206-4733-b4ec-56b2423206fa",
+          "text": "I value knowledge, privacy and self-reliance ",
+          "type": null
+        },
+        {
+          "id": "a27774b2-fcd3-474d-ad4e-cedf579c94c3",
+          "text": "I value strength, resilience and assertiveness",
+          "type": null
+        }
+      ]
+    },
+    {
+      "id": "f4ae299d-bbf7-478a-99fa-fc5f370e5dc2",
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "d34affd1-eb5d-48f1-b155-bf9849937efb",
+          "text": "I value ambition, efficiency and success.",
+          "type": null
+        },
+        {
+          "id": "d841f319-548b-4dbc-910b-e1b018503d20",
+          "text": "I value loyalty, dependability, and being prepared",
+          "type": null
+        },
+        {
+          "id": "38b2c32d-0a8d-4182-ae2f-b44d07c05629",
+          "text": "I value harmony, peace and comfort.",
+          "type": null
+        }
+      ]
+    },
+    {
+      "id": "f89fe33b-1ea9-4cee-83c2-812fc4e9e198",
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "c5ec9150-82f1-48d9-8374-8d789487f1fa",
+          "text": "I am conscientious and feel responsible for doing things the right way.",
+          "type": null
+        },
+        {
+          "id": "bec32132-c051-4386-94b9-2bdb8087de96",
+          "text": "I am caring, empathetic and naturally attentive to others’ needs.",
+          "type": null
+        },
+        {
+          "id": "7b7e0899-1601-4ed5-a767-a9423e030891",
+          "text": "I am loyal and dependable to those I trust.",
+          "type": null
+        }
+      ]
+    },
+    {
+      "id": "ef08de1b-4646-4118-b6e8-66e7e7b68c04",
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "703630cd-ad33-4435-9a89-66b5982447a1",
+          "text": "I seek the deeper emotional truth in every experience because raw, unfiltered feeling is what makes life meaningful",
+          "type": null
+        },
+        {
+          "id": "12983803-babb-448b-bda6-a9b8fe418737",
+          "text": "I seek clear boundaries to maintain my personal space and autonomy.",
+          "type": null
+        },
+        {
+          "id": "d692bdab-3b85-4325-b84f-f213a19828c3",
+          "text": "I seek harmony and avoid arguments, even if I feel differently.",
+          "type": null
+        }
+      ]
+    },
+    {
+      "id": "d6b41ade-1fd4-41fc-82f8-421dfb36fde6",
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "3ba6e1ed-d62b-498d-8f68-cb1928f91975",
+          "text": "I am adaptable and know how to make a good impression.",
+          "type": null
+        },
+        {
+          "id": "59375eb3-85ff-4511-86d5-69cab684b48b",
+          "text": "I am adventurous and love exploring new ideas and experiences.",
+          "type": null
+        },
+        {
+          "id": "547604aa-b0f9-4c61-88aa-6c946b4ff77d",
+          "text": "I am perceptive about power dynamics and who’s in control",
+          "type": null
+        }
+      ]
+    },
+    {
+      "id": "7bf5ce09-2952-440a-bda0-ee063f94ba09",
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "4d3e7786-3353-41b1-9146-d503bba6ca4d",
+          "text": "I am principled and have a strong sense of right and wrong.",
+          "type": null
+        },
+        {
+          "id": "420464e5-3ba8-4c5c-96e5-1262acbfab23",
+          "text": "I am most alive when I express my unique identity and emotional depth.",
+          "type": null
+        },
+        {
+          "id": "1284ed46-ed85-41c8-a6d6-7daad3315361",
+          "text": "I am enthusiastic, curious and a quick learner.",
+          "type": null
+        }
+      ]
+    },
+    {
+      "id": "afd41708-3a5e-4366-9dd7-9fb79a280518",
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "0561a7dc-a93f-4d45-b631-ce43a8192a26",
+          "text": "I am generous and feel fulfilled by making others feel loved.",
+          "type": null
+        },
+        {
+          "id": "402d2172-301c-486d-89a2-b015522ccc3d",
+          "text": "I am private and prefer to observe before participating.",
+          "type": null
+        },
+        {
+          "id": "314c6a29-0fe2-4c7e-80df-9e1dd6df1fc3",
+          "text": "I am action-oriented and trust my instincts to get things done.",
+          "type": null
+        }
+      ]
+    },
+    {
+      "id": "b78c8a7f-1e64-45fb-a560-3a1e000c8503",
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "3a582f76-f2a5-4660-ab6a-4ec3365aaa27",
+          "text": "I am goal-oriented and work hard to achieve my full potential.",
+          "type": null
+        },
+        {
+          "id": "7840a8ea-6052-4854-b30c-f89baca6a649",
+          "text": "I am cautious and like to be prepared for challenges.",
+          "type": null
+        },
+        {
+          "id": "0dd9185d-de9c-4a29-bc36-d9b573f47838",
+          "text": "I am calm, accepting and able to see different perspectives.",
+          "type": null
+        }
+      ]
+    },
+    {
+      "id": "68bafd24-1f25-4afb-a0e6-9d787d5713f6",
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "540f4477-0cb3-41f1-8890-9b4e7750b0f0",
+          "text": "I find it difficult to relax when I see something that needs improvement or fixing.",
+          "type": null
+        },
+        {
+          "id": "2aae87b6-85ea-4b52-bcf4-d036f64d9173",
+          "text": "I sense and anticipate others’ needs before they even ask for help.",
+          "type": null
+        },
+        {
+          "id": "bb940f50-35e2-4564-88b9-09172116c1e4",
+          "text": "I seek stability and scan for risks and things that could go wrong, so I can be prepared.",
+          "type": null
+        }
+      ]
+    },
+    {
+      "id": "848b5944-8f9d-4e4c-a05f-22a1ee3e3879",
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "292bf9d3-88c1-4deb-9906-aacbf19bf99a",
+          "text": "I am different, or misunderstood, and often feel like I don’t fully belong.",
+          "type": null
+        },
+        {
+          "id": "385a9105-53fa-43af-bdc7-ffdb1927bdb4",
+          "text": "I am analytical and enjoy understanding complex ideas.",
+          "type": null
+        },
+        {
+          "id": "92760c17-f2bc-4e17-aeaa-62b5b2143bc2",
+          "text": "I am easygoing, adaptable, and go with the flow to avoid conflict.",
+          "type": null
+        }
+      ]
+    },
+    {
+      "id": "f466ac44-03aa-43bf-8fe0-b5e7b500bab0",
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "2b7b9a80-2715-441a-841d-fa5dd7a7cb69",
+          "text": "I feel a strong sense of purpose when I’m being recognized for what I accomplish.",
+          "type": null
+        },
+        {
+          "id": "6934a1df-696e-45fa-8e4c-bfb1a4ce7585",
+          "text": "I crave new experiences and feel stifled by the same routine - I want variety and stimulation.",
+          "type": null
+        },
+        {
+          "id": "b00ed647-37ec-4c0a-b908-756d7b861b70",
+          "text": "I take charge in situations where I feel things are out of control, to protect myself and others.",
+          "type": null
+        }
+      ]
+    }
+  ],
+  "triadRound2": [],
+  "tieBreakers": [
+    {
+      "id": "a97f112b-f636-4a16-a43b-72491563d771",
+      "text": "Select which statement you most agree with",
+      "options": [
+        {
+          "text": "The world is imperfect, and it’s my responsibility to improve it.",
+          "type": null
+        },
+        {
+          "text": "The world is better when people feel valued and appreciated.",
+          "type": null
+        },
+        {
+          "text": "The world is full of opportunities for those who work hard and excel.",
+          "type": null
+        },
+        {
+          "text": "The world is full of beauty, but also a sense of longing and incompleteness.",
+          "type": null
+        },
+        {
+          "text": "The world is demanding, so resources must be protected.",
+          "type": null
+        },
+        {
+          "text": "The world is unpredictable, and security comes from being prepared.",
+          "type": null
+        },
+        {
+          "text": "The world is full of exciting possibilities to explore and enjoy.",
+          "type": null
+        },
+        {
+          "text": "The world is tough, and strength is needed to survive.",
+          "type": null
+        },
+        {
+          "text": "The world is easier when conflict and tension are avoided.",
+          "type": null
+        }
+      ]
+    },
+    {
+      "id": "3ad0cb7b-e4b5-469e-b4fd-ce7db26f09e8",
+      "text": "Select which statement you most agree with",
+      "options": [
+        {
+          "text": "What’s more important is doing things the right way.",
+          "type": null
+        },
+        {
+          "text": "What’s more important is being supportive and generous.",
+          "type": null
+        },
+        {
+          "text": "What’s more important is being productive and achieving results.",
+          "type": null
+        },
+        {
+          "text": "What’s more important is being authentic and unique.",
+          "type": null
+        },
+        {
+          "text": "What’s more important is being competent and understanding how things work.",
+          "type": null
+        },
+        {
+          "text": "What’s more important is having guidance and clear expectations.",
+          "type": null
+        },
+        {
+          "text": "What’s more important is maintaining freedom and flexibility.",
+          "type": null
+        },
+        {
+          "text": "What's more important is respecting strength over weakness or vulnerability.",
+          "type": null
+        },
+        {
+          "text": "What’s more important is staying connected and avoiding tension and disagreemeent.",
+          "type": null
+        }
+      ]
+    },
+    {
+      "id": "3fcafbbd-1e7c-4650-9d75-d7ce34630c01",
+      "text": "Select which statement you most agree with",
+      "options": [
+        {
+          "text": "What’s more important is being responsible and ethical.",
+          "type": null
+        },
+        {
+          "text": "What’s more important is maintaining close, meaningful relationships.",
+          "type": null
+        },
+        {
+          "text": "What’s more important is appearing competent and accomplished.",
+          "type": null
+        },
+        {
+          "text": "What’s more important is emotional depth, intense feelings and genuine connections.",
+          "type": null
+        },
+        {
+          "text": "What’s more important is protecting my energy and personal space.",
+          "type": null
+        },
+        {
+          "text": "What’s more important is finding loyalty and people and systems that I can trust.",
+          "type": null
+        },
+        {
+          "text": "What's more important is exploring new ideas, experiences, and possibilities.",
+          "type": null
+        },
+        {
+          "text": "What’s more important is protecting myself and those I care about.",
+          "type": null
+        },
+        {
+          "text": "What’s more important is maintaining stability and harmony.",
+          "type": null
+        }
+      ]
+    }
+  ]
+}
