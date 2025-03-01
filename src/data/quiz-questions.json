@@ -1,19 +1,268 @@
 {
   "questions": [
     {
-      "id": "c30a0eec-3002-4388-95d6-b481177aad11",
-      "text": "\"I find it difficult to relax when I see something that needs improvement or fixing.\"",
-      "category": 1
+      "id": "faf4fd44-92c5-40c9-8c4d-8fad523d1782",
+      "questionNumber": 1,
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "22e650a7-81de-4c3e-a256-9e8450fb0c1d",
+          "text": "I value integrity, honesty, and doing the right thing",
+          "type": "Type 1"
+        },
+        {
+          "id": "bc0b95e3-d583-4fe5-bdd6-543347f127c6",
+          "text": "I value authenticity, originality, and emotional depth",
+          "type": "Type 4"
+        },
+        {
+          "id": "20c8a7f9-5587-499d-a1c8-7b2681b5c657",
+          "text": "I value freedom, adventure and possibilities.",
+          "type": "Type 7"
+        }
+      ]
     },
     {
-      "id": "b016846c-bf92-4f0d-b437-f612e126f17c",
-      "text": "\"I feel strongly that fairness and justice should be upheld as a matter of principle.\"",
-      "category": 2
+      "id": "85cc521b-ac60-4d10-9861-70342cd714e9",
+      "questionNumber": 2,
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "c4319e1b-2e1c-4418-950e-72ea6c7b2b08",
+          "text": "I value kindness, generosity and connection.",
+          "type": "Type 2"
+        },
+        {
+          "id": "70cd56fb-d537-4cc7-a1c5-ac0c41dab093",
+          "text": "I value knowledge, privacy and self-reliance ",
+          "type": "Type 5"
+        },
+        {
+          "id": "bf12f461-b3bd-4a17-b62f-074a299d3d56",
+          "text": "I value strength, resilience and assertiveness",
+          "type": "Type 8"
+        }
+      ]
     },
     {
-      "id": "7b908941-9269-4cda-9d53-10fde039d02c",
-      "text": "\"I tend to feel a moral obligation to meet higher standards than I expect from others.\"",
-      "category": 3
+      "id": "6737e175-715c-44aa-bba5-44cb7e0c4950",
+      "questionNumber": 3,
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "75a0be1f-90ef-411e-89f3-04e76fc70650",
+          "text": "I value ambition, efficiency and success.",
+          "type": "Type 3"
+        },
+        {
+          "id": "2bfa8999-b7b4-4a61-8904-0d5ed7b3c681",
+          "text": "I value loyalty, dependability, and being prepared",
+          "type": "Type 6"
+        },
+        {
+          "id": "ecf24091-2a52-41b5-abdb-e5974771c992",
+          "text": "I value harmony, peace and comfort.",
+          "type": "Type 9"
+        }
+      ]
+    },
+    {
+      "id": "800d4949-9ee8-4434-a38c-18e7f14df072",
+      "questionNumber": 4,
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "8fc4dcc3-69f1-4654-8fbc-8c8bcc34beb4",
+          "text": "I am conscientious and feel responsible for doing things the right way.",
+          "type": "Type 1"
+        },
+        {
+          "id": "841360a0-9e77-4bd1-8fb7-e5354e7b4b73",
+          "text": "I am caring, empathetic and naturally attentive to others’ needs.",
+          "type": "Type 2"
+        },
+        {
+          "id": "e3c294a5-ac8a-4054-94e1-4f9c1f0e084e",
+          "text": "I am loyal and dependable to those I trust.",
+          "type": "Type 6"
+        }
+      ]
+    },
+    {
+      "id": "f600e6c9-6657-44ae-a9e7-936b01945890",
+      "questionNumber": 5,
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "c7387765-7bcd-4fff-ae7d-9457a5fb2a54",
+          "text": "I seek the deeper emotional truth in every experience because raw, unfiltered feeling is what makes life meaningful",
+          "type": "Type 4"
+        },
+        {
+          "id": "02e14985-84e5-4694-8bf1-934939fa0431",
+          "text": "I seek clear boundaries to maintain my personal space and autonomy.",
+          "type": "Type 5"
+        },
+        {
+          "id": "e37c6684-0be4-4cc7-a452-c88b47261fa9",
+          "text": "I seek harmony and avoid arguments, even if I feel differently.",
+          "type": "Type 9"
+        }
+      ]
+    },
+    {
+      "id": "7d612e6c-223a-4914-9ad4-b176471a9109",
+      "questionNumber": 6,
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "c02e15d8-54ae-429a-a4c2-a1b0402d0dcc",
+          "text": "I am adaptable and know how to make a good impression.",
+          "type": "Type 3"
+        },
+        {
+          "id": "f7069f89-cb06-4f04-a8db-a62930bbef00",
+          "text": "I am adventurous and love exploring new ideas and experiences.",
+          "type": "Type 7"
+        },
+        {
+          "id": "cdf008b5-3740-4489-8a36-effd11139b2d",
+          "text": "I am perceptive about power dynamics and who’s in control",
+          "type": "Type 8"
+        }
+      ]
+    },
+    {
+      "id": "0b0f1b04-85f0-41a2-827e-3e740eeb4d3d",
+      "questionNumber": 7,
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "ccc546c4-7bc0-4dd7-9654-26b80cec3b4d",
+          "text": "I am principled and have a strong sense of right and wrong.",
+          "type": "Type 1"
+        },
+        {
+          "id": "ab33dcb3-a337-4d8d-b4ba-007245b1cf2b",
+          "text": "I am most alive when I express my unique identity and emotional depth.",
+          "type": "Type 4"
+        },
+        {
+          "id": "558a731c-3cea-47eb-a278-c5ae7a68eabb",
+          "text": "I am enthusiastic, curious and a quick learner.",
+          "type": "Type 7"
+        }
+      ]
+    },
+    {
+      "id": "39f2d080-413c-4595-bbc1-a715dbf62859",
+      "questionNumber": 8,
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "6119a86e-5720-4eb9-88a3-02a1a0289964",
+          "text": "I am generous and feel fulfilled by making others feel loved.",
+          "type": "Type 2"
+        },
+        {
+          "id": "40a3ec6e-d5d2-41d6-beac-3551f20c3236",
+          "text": "I am private and prefer to observe before participating.",
+          "type": "Type 5"
+        },
+        {
+          "id": "2fa0c978-de89-40cd-a9f5-79cc69c3c7db",
+          "text": "I am action-oriented and trust my instincts to get things done.",
+          "type": "Type 8"
+        }
+      ]
+    },
+    {
+      "id": "22bfddbb-f9df-4305-a7f2-4eeecd195355",
+      "questionNumber": 9,
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "b4687974-31d3-47f3-b4e3-9ce7697d8798",
+          "text": "I am goal-oriented and work hard to achieve my full potential.",
+          "type": "Type 3"
+        },
+        {
+          "id": "6c7baffb-e969-49c6-94c1-a4e0564aeef8",
+          "text": "I am cautious and like to be prepared for challenges.",
+          "type": "Type 6"
+        },
+        {
+          "id": "84373f6a-28cc-4a9e-a6d0-2899b663b051",
+          "text": "I am calm, accepting and able to see different perspectives.",
+          "type": "Type 9"
+        }
+      ]
+    },
+    {
+      "id": "be575a0c-0de9-4b75-8f68-e8787424564c",
+      "questionNumber": 10,
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "7c1ca124-c620-4d24-897d-9e51821cccd5",
+          "text": "I find it difficult to relax when I see something that needs improvement or fixing.",
+          "type": "Type 1"
+        },
+        {
+          "id": "29ab336b-94bb-4977-b660-f1f8db7876a2",
+          "text": "I sense and anticipate others’ needs before they even ask for help.",
+          "type": "Type 2"
+        },
+        {
+          "id": "de318eeb-4bd1-4076-9cfe-f197636eec2f",
+          "text": "I seek stability and scan for risks and things that could go wrong, so I can be prepared.",
+          "type": "Type 6"
+        }
+      ]
+    },
+    {
+      "id": "9db3a630-7d44-4e7f-8bbf-3e68d0ad2a7a",
+      "questionNumber": 11,
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "97e0e59f-0cb2-40e3-ac54-2fd3ca199816",
+          "text": "I am different, or misunderstood, and often feel like I don’t fully belong.",
+          "type": "Type 4"
+        },
+        {
+          "id": "e727cf74-1500-42f7-a13e-5dfbbbab7285",
+          "text": "I am analytical and enjoy understanding complex ideas.",
+          "type": "Type 5"
+        },
+        {
+          "id": "6fa76caf-42ec-4e89-9883-2b325d68a5c2",
+          "text": "I am easygoing, adaptable, and go with the flow to avoid conflict.",
+          "type": "Type 9"
+        }
+      ]
+    },
+    {
+      "id": "e19a6bef-8819-4089-a87c-25238a0e8044",
+      "questionNumber": 12,
+      "text": "Select in order of what you most agree with",
+      "options": [
+        {
+          "id": "f1c05d89-9259-43a7-86ba-b5f61ece15fc",
+          "text": "I feel a strong sense of purpose when I’m being recognized for what I accomplish.",
+          "type": "Type 3"
+        },
+        {
+          "id": "59cedb21-3362-4812-bfc0-c836214fefeb",
+          "text": "I crave new experiences and feel stifled by the same routine - I want variety and stimulation.",
+          "type": "Type 7"
+        },
+        {
+          "id": "95b28465-3033-498b-9980-0665d6179755",
+          "text": "I take charge in situations where I feel things are out of control, to protect myself and others.",
+          "type": "Type 8"
+        }
+      ]
     }
   ],
   "resultRanges": [
@@ -21,9 +270,9 @@
       "id": "1",
       "category": "type1",
       "minScore": 0,
-      "maxScore": 25,
-      "title": "Result 1",
-      "description": "Description for result 1"
+      "maxScore": 36,
+      "title": "Type 1",
+      "description": "The Perfectionist"
     }
   ]
 }

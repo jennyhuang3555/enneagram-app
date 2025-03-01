@@ -73,7 +73,7 @@ Remember to:
 
     const response = await client.messages.create({
       model: "claude-3-7-sonnet-20250219",
-      max_tokens: 500,
+      max_tokens: 250,
       temperature: 0.8,
       top_p: 0.8,
       messages: [{ 
