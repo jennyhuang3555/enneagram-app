@@ -67,7 +67,9 @@ const Quiz = () => {
 
   const handleQuizComplete = async (
     newScores: { [key: string]: number }, 
-    quizResponses: QuestionResponse[]
+    quizResponses: QuestionResponse[],
+    round1TopThree: string[],
+    round2TopTwo: string[]
   ) => {
     try {
       const temp_id = localStorage.getItem('temp_id') || crypto.randomUUID();
@@ -81,12 +83,15 @@ const Quiz = () => {
         temp_id,
         scores: newScores,
         responses: quizResponses,
+        round1_top_three: round1TopThree,
+        round2_top_two: round2TopTwo,
         dominant_type: sortedTypes[0]?.replace('type', '') || '',
         second_type: sortedTypes[1]?.replace('type', '') || '',
         third_type: sortedTypes[2]?.replace('type', '') || '',
         userId: user?.uid || null,
         userName: user?.displayName || null,
-        userEmail: user?.email || null
+        userEmail: user?.email || null,
+        createdAt: Date.now()
       };
 
       await saveQuizResults(resultsToStore);
@@ -110,7 +115,7 @@ const Quiz = () => {
     if (!scores || !responses) return;
     
     try {
-        await handleQuizComplete(scores, responses);
+        await handleQuizComplete(scores, responses, [], []);
         setStep('results');
     } catch (error) {
         console.error('Error saving quiz results:', error);

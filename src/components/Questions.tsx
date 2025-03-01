@@ -5,7 +5,12 @@ import quizData from '@/data/quiz-questions.json';
 import { QuestionResponse } from "@/types/quiz";
 
 interface QuestionsProps {
-  onComplete: (scores: { [key: string]: number }, responses: QuestionResponse[]) => void;
+  onComplete: (
+    scores: { [key: string]: number }, 
+    responses: QuestionResponse[],
+    round1TopThree: string[],
+    round2TopTwo: string[]
+  ) => void;
   onBack: () => void;
 }
 
@@ -154,10 +159,17 @@ const Questions = ({ onComplete, onBack }: QuestionsProps) => {
         questionId: currentQ.id,
         questionNumber: currentQ.questionNumber,
         round: currentRound,
-        selections: newSelectedOptions.map((id, index) => ({
-          optionId: id,
-          points: pointsSystem[index]
-        }))
+        questionText: currentQ.text,
+        selections: newSelectedOptions.map((id, index) => {
+          const option = currentQ.options.find(opt => opt.id === id);
+          return {
+            optionId: id,
+            optionText: option?.text || '',
+            type: option?.type || '',
+            points: pointsSystem[index]
+          };
+        }),
+        timestamp: Date.now()
       };
 
       setResponses([...responses, response]);
@@ -187,8 +199,8 @@ const Questions = ({ onComplete, onBack }: QuestionsProps) => {
       setCurrentQuestion(0);
       setSelectedOptions([]);
     } else if (currentRound === 3 && currentQuestion === round3Questions.length - 1) {
-      // Complete quiz
-      onComplete(scores, responses);
+      // Complete quiz with round1 and round2 top types
+      onComplete(scores, responses, topThreeTypes, topTwoTypes);
     } else {
       // Next question
       setCurrentQuestion(currentQuestion + 1);
