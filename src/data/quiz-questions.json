@@ -2,264 +2,264 @@
   "round1": {
     "questions": [
       {
-        "id": "6e2fecbe-ab5f-49cf-aef2-3fa4cd840f88",
+        "id": "q1",
         "questionNumber": 1,
         "text": "Select in order of what you most agree with",
         "options": [
           {
-            "id": "c017533c-b321-4582-8f63-eb29b5401de6",
+            "id": "q1_opt1",
             "text": "I value integrity, honesty, and doing the right thing",
             "type": "1"
           },
           {
-            "id": "1c9f0fa5-7ab4-49da-b9be-736b09397f40",
+            "id": "q1_opt2",
             "text": "I value authenticity, originality, and emotional depth",
             "type": "4"
           },
           {
-            "id": "70b13c05-f12c-4e0a-9402-aa9808f86938",
+            "id": "q1_opt3",
             "text": "I value freedom, adventure and possibilities.",
             "type": "7"
           }
         ]
       },
       {
-        "id": "fba9ad61-9dfb-4a10-92c8-6074c981ca75",
+        "id": "q2",
         "questionNumber": 2,
         "text": "Select in order of what you most agree with",
         "options": [
           {
-            "id": "8da92884-f40e-4b11-87ad-64222056433c",
+            "id": "q2_opt1",
             "text": "I value kindness, generosity and connection.",
             "type": "2"
           },
           {
-            "id": "339ac04d-adfa-47a3-8b52-7d58357c9af1",
+            "id": "q2_opt2",
             "text": "I value knowledge, privacy and self-reliance ",
             "type": "5"
           },
           {
-            "id": "c8aa5dd9-4273-49ff-b90f-5732f16fdbe8",
+            "id": "q2_opt3",
             "text": "I value strength, resilience and assertiveness",
             "type": "8"
           }
         ]
       },
       {
-        "id": "290d222f-12e4-4f1a-b7e8-a6290bbbe669",
+        "id": "q3",
         "questionNumber": 3,
         "text": "Select in order of what you most agree with",
         "options": [
           {
-            "id": "a0ad7d5f-1346-4efa-9a19-dc9b14d7c442",
+            "id": "q3_opt1",
             "text": "I value ambition, efficiency and success.",
             "type": "3"
           },
           {
-            "id": "0a8cd764-4746-4b46-ac80-1e0718af9f78",
+            "id": "q3_opt2",
             "text": "I value loyalty, dependability, and being prepared",
             "type": "6"
           },
           {
-            "id": "bda82d55-f331-4ca1-b959-70ac9bb56463",
+            "id": "q3_opt3",
             "text": "I value harmony, peace and comfort.",
             "type": "9"
           }
         ]
       },
       {
-        "id": "52135189-6cd6-48d3-8702-6e645956b53f",
+        "id": "q4",
         "questionNumber": 4,
         "text": "Select in order of what you most agree with",
         "options": [
           {
-            "id": "b3890411-75ba-4429-952e-281de4bc9b65",
+            "id": "q4_opt1",
             "text": "I am conscientious and feel responsible for doing things the right way.",
             "type": "1"
           },
           {
-            "id": "4a0c28a0-35a1-4373-acf9-56ce8375b842",
+            "id": "q4_opt2",
             "text": "I am caring, empathetic and naturally attentive to others’ needs.",
             "type": "2"
           },
           {
-            "id": "8509135f-5738-43a1-a80f-8c557086d57b",
+            "id": "q4_opt3",
             "text": "I am loyal and dependable to those I trust.",
             "type": "6"
           }
         ]
       },
       {
-        "id": "9e5e9f54-2ffc-4236-8fb4-33c137594c37",
+        "id": "q5",
         "questionNumber": 5,
         "text": "Select in order of what you most agree with",
         "options": [
           {
-            "id": "7241875f-3be4-4661-9e43-ec9a15514f9a",
+            "id": "q5_opt1",
             "text": "I seek the deeper emotional truth in every experience because raw, unfiltered feeling is what makes life meaningful",
             "type": "4"
           },
           {
-            "id": "14f8faff-0b76-447d-9877-f002b0e4ed1a",
+            "id": "q5_opt2",
             "text": "I seek clear boundaries to maintain my personal space and autonomy.",
             "type": "5"
           },
           {
-            "id": "7ceab43b-a8c6-4578-806e-bafca023c6e8",
+            "id": "q5_opt3",
             "text": "I seek harmony and avoid arguments, even if I feel differently.",
             "type": "9"
           }
         ]
       },
       {
-        "id": "0f859a6b-d336-4f29-8349-e8a30c2e532e",
+        "id": "q6",
         "questionNumber": 6,
         "text": "Select in order of what you most agree with",
         "options": [
           {
-            "id": "889fd85b-367b-43d2-bc9a-5cd1c0256a10",
+            "id": "q6_opt1",
             "text": "I am adaptable and know how to make a good impression.",
             "type": "3"
           },
           {
-            "id": "6bac85d3-3300-462e-a22a-a057e11b5b0b",
+            "id": "q6_opt2",
             "text": "I am adventurous and love exploring new ideas and experiences.",
             "type": "7"
           },
           {
-            "id": "33764044-b75b-49b5-8f60-39800f95f92a",
+            "id": "q6_opt3",
             "text": "I am perceptive about power dynamics and who’s in control",
             "type": "8"
           }
         ]
       },
       {
-        "id": "f7c9fff4-bc90-46d0-b174-07a5c831867c",
+        "id": "q7",
         "questionNumber": 7,
         "text": "Select in order of what you most agree with",
         "options": [
           {
-            "id": "d9592ffb-a2e2-4740-804c-da71f010d998",
+            "id": "q7_opt1",
             "text": "I am principled and have a strong sense of right and wrong.",
             "type": "1"
           },
           {
-            "id": "a62cdfaf-515c-4635-a3df-bf22c151ed2c",
+            "id": "q7_opt2",
             "text": "I am most alive when I express my unique identity and emotional depth.",
             "type": "4"
           },
           {
-            "id": "ec0ac765-38a0-42ec-9ee1-bd42742a1a19",
+            "id": "q7_opt3",
             "text": "I am enthusiastic, curious and a quick learner.",
             "type": "7"
           }
         ]
       },
       {
-        "id": "5c1a06da-f19c-4bd3-b2ef-72d086a110b9",
+        "id": "q8",
         "questionNumber": 8,
         "text": "Select in order of what you most agree with",
         "options": [
           {
-            "id": "4caf1435-84d4-4c11-ab5e-b7ce034c339c",
+            "id": "q8_opt1",
             "text": "I am generous and feel fulfilled by making others feel loved.",
             "type": "2"
           },
           {
-            "id": "92c92d00-9764-425a-a558-bd530497e86b",
+            "id": "q8_opt2",
             "text": "I am private and prefer to observe before participating.",
             "type": "5"
           },
           {
-            "id": "45c3c4c9-eb5c-42fa-af05-8fdc21cdae11",
+            "id": "q8_opt3",
             "text": "I am action-oriented and trust my instincts to get things done.",
             "type": "8"
           }
         ]
       },
       {
-        "id": "039212f3-e512-44a8-8736-fedfc1d5fe54",
+        "id": "q9",
         "questionNumber": 9,
         "text": "Select in order of what you most agree with",
         "options": [
           {
-            "id": "019b5276-2e7f-4cd5-b6e5-5f42fdf27b3e",
+            "id": "q9_opt1",
             "text": "I am goal-oriented and work hard to achieve my full potential.",
             "type": "3"
           },
           {
-            "id": "ba52a6da-8042-4aed-92fb-0b1035cd597d",
+            "id": "q9_opt2",
             "text": "I am cautious and like to be prepared for challenges.",
             "type": "6"
           },
           {
-            "id": "911a54ba-4d5e-431e-b36b-746b7c529aee",
+            "id": "q9_opt3",
             "text": "I am calm, accepting and able to see different perspectives.",
             "type": "9"
           }
         ]
       },
       {
-        "id": "4dd7c850-5a28-4a2d-8fda-7f60952171a8",
+        "id": "q10",
         "questionNumber": 10,
         "text": "Select in order of what you most agree with",
         "options": [
           {
-            "id": "dcfde334-2a0b-4e53-917b-884b421b33be",
+            "id": "q10_opt1",
             "text": "I find it difficult to relax when I see something that needs improvement or fixing.",
             "type": "1"
           },
           {
-            "id": "38371125-71ec-45d1-aa70-a3c964cf4053",
+            "id": "q10_opt2",
             "text": "I sense and anticipate others’ needs before they even ask for help.",
             "type": "2"
           },
           {
-            "id": "2b9c3b3c-f326-4d18-8b76-f707abcca20e",
+            "id": "q10_opt3",
             "text": "I seek stability and scan for risks and things that could go wrong, so I can be prepared.",
             "type": "6"
           }
         ]
       },
       {
-        "id": "4047cd5e-3e1b-43a4-a454-588643343ea6",
+        "id": "q11",
         "questionNumber": 11,
         "text": "Select in order of what you most agree with",
         "options": [
           {
-            "id": "3e3c8aad-8401-4680-af61-23fea4503180",
+            "id": "q11_opt1",
             "text": "I am different, or misunderstood, and often feel like I don’t fully belong.",
             "type": "4"
           },
           {
-            "id": "86cfae95-fd2c-4c45-a25f-2061250425d9",
+            "id": "q11_opt2",
             "text": "I am analytical and enjoy understanding complex ideas.",
             "type": "5"
           },
           {
-            "id": "864ec431-3313-4c42-bcb2-9cd3c1a073be",
+            "id": "q11_opt3",
             "text": "I am easygoing, adaptable, and go with the flow to avoid conflict.",
             "type": "9"
           }
         ]
       },
       {
-        "id": "91a156d5-c2b9-421c-97cd-b1901cb77426",
+        "id": "q12",
         "questionNumber": 12,
         "text": "Select in order of what you most agree with",
         "options": [
           {
-            "id": "f9bc3183-7ace-458e-97cf-79ddc3d8d291",
+            "id": "q12_opt1",
             "text": "I feel a strong sense of purpose when I’m being recognized for what I accomplish.",
             "type": "3"
           },
           {
-            "id": "3c368c96-b121-4547-b918-19a06ec7c5b4",
+            "id": "q12_opt2",
             "text": "I crave new experiences and feel stifled by the same routine - I want variety and stimulation.",
             "type": "7"
           },
           {
-            "id": "cf6c5656-f66d-45b0-8c29-782acb386539",
+            "id": "q12_opt3",
             "text": "I take charge in situations where I feel things are out of control, to protect myself and others.",
             "type": "8"
           }
@@ -268,7 +268,7 @@
     ],
     "resultRanges": [
       {
-        "id": "5a0029ba-9887-4f27-bfc8-3d0059e15cf6",
+        "id": "type1",
         "category": "type1",
         "minScore": 0,
         "maxScore": 36,
@@ -276,7 +276,7 @@
         "description": "Type 1 Description"
       },
       {
-        "id": "9d8696d3-cd58-4885-bd42-8e5a025ee97e",
+        "id": "type2",
         "category": "type2",
         "minScore": 0,
         "maxScore": 36,
@@ -284,7 +284,7 @@
         "description": "Type 2 Description"
       },
       {
-        "id": "1e360623-ff63-4030-8b81-d8449ed5d3c0",
+        "id": "type3",
         "category": "type3",
         "minScore": 0,
         "maxScore": 36,
@@ -292,7 +292,7 @@
         "description": "Type 3 Description"
       },
       {
-        "id": "328cbee0-9809-4ee0-b481-10b0640954fc",
+        "id": "type4",
         "category": "type4",
         "minScore": 0,
         "maxScore": 36,
@@ -300,7 +300,7 @@
         "description": "Type 4 Description"
       },
       {
-        "id": "deddcbe4-fece-4597-ad1a-a9711bde589a",
+        "id": "type5",
         "category": "type5",
         "minScore": 0,
         "maxScore": 36,
@@ -308,7 +308,7 @@
         "description": "Type 5 Description"
       },
       {
-        "id": "b9cf1171-cdb0-46c9-afc4-6035a9379f36",
+        "id": "type6",
         "category": "type6",
         "minScore": 0,
         "maxScore": 36,
@@ -316,7 +316,7 @@
         "description": "Type 6 Description"
       },
       {
-        "id": "4816cdd1-7dc7-4c07-ad58-fad31954b72c",
+        "id": "type7",
         "category": "type7",
         "minScore": 0,
         "maxScore": 36,
@@ -324,7 +324,7 @@
         "description": "Type 7 Description"
       },
       {
-        "id": "7782a9ad-83b0-48b7-bc10-b6db22350c10",
+        "id": "type8",
         "category": "type8",
         "minScore": 0,
         "maxScore": 36,
@@ -332,7 +332,7 @@
         "description": "Type 8 Description"
       },
       {
-        "id": "7ec37af2-47e6-4771-ba3b-e0502a0be26b",
+        "id": "type9",
         "category": "type9",
         "minScore": 0,
         "maxScore": 36,
@@ -567,6 +567,146 @@
       {
         "Question Number": 17,
         "Statements": "I focus on keeping the peace and excel at mediating or avoiding conflicts.",
+        "Types": "Type 9"
+      }
+    ]
+  },
+  "round3": {
+    "questions": [],
+    "rawQuestions": [
+      {
+        "Question Number": 18,
+        "Statements": "The world is imperfect, and it’s my responsibility to improve it.",
+        "Types": "Type 1"
+      },
+      {
+        "Question Number": 19,
+        "Statements": "What’s more important is doing things the right way.",
+        "Types": "Type 1"
+      },
+      {
+        "Question Number": 20,
+        "Statements": "What’s more important is being responsible and ethical.",
+        "Types": "Type 1"
+      },
+      {
+        "Question Number": 18,
+        "Statements": "The world is better when people feel valued and appreciated.",
+        "Types": "Type 2"
+      },
+      {
+        "Question Number": 19,
+        "Statements": "What’s more important is being supportive and generous.",
+        "Types": "Type 2"
+      },
+      {
+        "Question Number": 20,
+        "Statements": "What’s more important is maintaining close, meaningful relationships.",
+        "Types": "Type 2"
+      },
+      {
+        "Question Number": 18,
+        "Statements": "The world is full of opportunities for those who work hard and excel.",
+        "Types": "Type 3"
+      },
+      {
+        "Question Number": 19,
+        "Statements": "What’s more important is being productive and achieving results.",
+        "Types": "Type 3"
+      },
+      {
+        "Question Number": 20,
+        "Statements": "What’s more important is appearing competent and accomplished.",
+        "Types": "Type 3"
+      },
+      {
+        "Question Number": 18,
+        "Statements": "The world is full of beauty, but also a sense of longing and incompleteness.",
+        "Types": "Type 4"
+      },
+      {
+        "Question Number": 19,
+        "Statements": "What’s more important is being authentic and unique.",
+        "Types": "Type 4"
+      },
+      {
+        "Question Number": 20,
+        "Statements": "What’s more important is emotional depth, intense feelings and genuine connections.",
+        "Types": "Type 4"
+      },
+      {
+        "Question Number": 18,
+        "Statements": "The world is demanding, so resources must be protected.",
+        "Types": "Type 5"
+      },
+      {
+        "Question Number": 19,
+        "Statements": "What’s more important is being competent and understanding how things work.",
+        "Types": "Type 5"
+      },
+      {
+        "Question Number": 20,
+        "Statements": "What’s more important is protecting my energy and personal space.",
+        "Types": "Type 5"
+      },
+      {
+        "Question Number": 18,
+        "Statements": "The world is unpredictable, and security comes from being prepared.",
+        "Types": "Type 6"
+      },
+      {
+        "Question Number": 19,
+        "Statements": "What’s more important is having guidance and clear expectations.",
+        "Types": "Type 6"
+      },
+      {
+        "Question Number": 20,
+        "Statements": "What’s more important is finding loyalty and people and systems that I can trust.",
+        "Types": "Type 6"
+      },
+      {
+        "Question Number": 18,
+        "Statements": "The world is full of exciting possibilities to explore and enjoy.",
+        "Types": "Type 7"
+      },
+      {
+        "Question Number": 19,
+        "Statements": "What’s more important is maintaining freedom and flexibility.",
+        "Types": "Type 7"
+      },
+      {
+        "Question Number": 20,
+        "Statements": "What's more important is exploring new ideas, experiences, and possibilities.",
+        "Types": "Type 7"
+      },
+      {
+        "Question Number": 18,
+        "Statements": "The world is tough, and strength is needed to survive.",
+        "Types": "Type 8"
+      },
+      {
+        "Question Number": 19,
+        "Statements": "What's more important is respecting strength over weakness or vulnerability.",
+        "Types": "Type 8"
+      },
+      {
+        "Question Number": 20,
+        "Statements": "What’s more important is protecting myself and those I care about.",
+        "Types": "Type 8"
+      },
+      {
+        "Question Number": 18,
+        "Statements": "The world is easier when conflict and tension are avoided.",
+        "Types": "Type 9"
+      },
+      {
+        "Question Number": 19,
+        "Statements": "What’s more important is staying connected and avoiding tension and disagreemeent.",
+        "Types": "Type 9"
+      },
+      {
+        "Question Number": 20,
+        "Statements": "What’s more important is maintaining stability and harmony.",
         "Types": "Type 9"
       }
     ]

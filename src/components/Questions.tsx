@@ -26,21 +26,31 @@ const ROUND2_POINTS = {
   2: 0  // Last choice
 };
 
+const ROUND3_POINTS = {
+  0: 1, // First choice
+  1: 0  // Second choice
+};
+
 const Questions = ({ onComplete, onBack }: QuestionsProps) => {
-  const [currentRound, setCurrentRound] = useState<1 | 2>(1);
+  const [currentRound, setCurrentRound] = useState<1 | 2 | 3>(1);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [scores, setScores] = useState<{ [key: string]: number }>(INITIAL_SCORES);
   const [responses, setResponses] = useState<QuestionResponse[]>([]);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [topThreeTypes, setTopThreeTypes] = useState<string[]>([]);
   const [round2Questions, setRound2Questions] = useState<any[]>([]);
+  const [round3Questions, setRound3Questions] = useState<any[]>([]);
+  const [topTwoTypes, setTopTwoTypes] = useState<string[]>([]);
 
   // Get current question based on round
   const getCurrentQuestion = () => {
     if (currentRound === 1) {
       return quizData.round1.questions[currentQuestion];
     }
-    return round2Questions[currentQuestion];
+    if (currentRound === 2) {
+      return round2Questions[currentQuestion];
+    }
+    return round3Questions[currentQuestion];
   };
 
   // Calculate top three types from round 1
@@ -83,6 +93,38 @@ const Questions = ({ onComplete, onBack }: QuestionsProps) => {
     })).sort((a, b) => a.questionNumber - b.questionNumber);
   };
 
+  // Filter and prepare round 3 questions
+  const prepareRound3Questions = (topTypes: string[]) => {
+    const round3Raw = quizData.round3.rawQuestions;
+    const filteredQuestions = {};
+    
+    round3Raw.forEach((row: any) => {
+      const questionNumber = row['Question Number'];
+      const type = row['Types'].replace('Type ', '');
+      
+      if (topTypes.includes(type)) {
+        if (!filteredQuestions[questionNumber]) {
+          filteredQuestions[questionNumber] = [];
+        }
+        filteredQuestions[questionNumber].push({
+          statement: row['Statements'],
+          type: type
+        });
+      }
+    });
+
+    return Object.entries(filteredQuestions).map(([questionNumber, statements]: [string, any[]]) => ({
+      id: crypto.randomUUID(),
+      questionNumber: parseInt(questionNumber),
+      text: "Select in order of what you most agree with",
+      options: statements.map(statement => ({
+        id: crypto.randomUUID(),
+        text: statement.statement,
+        type: statement.type
+      }))
+    })).sort((a, b) => a.questionNumber - b.questionNumber);
+  };
+
   const handleOptionSelect = (optionId: string) => {
     if (selectedOptions.includes(optionId)) return;
     
@@ -90,9 +132,12 @@ const Questions = ({ onComplete, onBack }: QuestionsProps) => {
     setSelectedOptions(newSelectedOptions);
 
     const currentQ = getCurrentQuestion();
-    const pointsSystem = currentRound === 1 ? ROUND1_POINTS : ROUND2_POINTS;
+    const pointsSystem = currentRound === 1 ? ROUND1_POINTS : 
+                        currentRound === 2 ? ROUND2_POINTS : 
+                        ROUND3_POINTS;
 
-    if (newSelectedOptions.length === 3) {
+    const requiredSelections = currentRound === 3 ? 2 : 3;
+    if (newSelectedOptions.length === requiredSelections) {
       const newScores = { ...scores };
       
       // Calculate points for each selected option
@@ -121,7 +166,7 @@ const Questions = ({ onComplete, onBack }: QuestionsProps) => {
   };
 
   const handleNext = () => {
-    if (selectedOptions.length !== 3) return;
+    if (selectedOptions.length !== (currentRound === 3 ? 2 : 3)) return;
 
     if (currentRound === 1 && currentQuestion === quizData.round1.questions.length - 1) {
       // Complete round 1
@@ -133,6 +178,15 @@ const Questions = ({ onComplete, onBack }: QuestionsProps) => {
       setCurrentQuestion(0);
       setSelectedOptions([]);
     } else if (currentRound === 2 && currentQuestion === round2Questions.length - 1) {
+      // Complete round 2 and prepare round 3
+      const topTypes = calculateTopTwoTypes(scores);
+      setTopTwoTypes(topTypes);
+      const round3Qs = prepareRound3Questions(topTypes);
+      setRound3Questions(round3Qs);
+      setCurrentRound(3);
+      setCurrentQuestion(0);
+      setSelectedOptions([]);
+    } else if (currentRound === 3 && currentQuestion === round3Questions.length - 1) {
       // Complete quiz
       onComplete(scores, responses);
     } else {
@@ -142,10 +196,18 @@ const Questions = ({ onComplete, onBack }: QuestionsProps) => {
     }
   };
 
+  // Calculate top two types function
+  const calculateTopTwoTypes = (roundScores: { [key: string]: number }) => {
+    return Object.entries(roundScores)
+      .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
+      .slice(0, 2)
+      .map(([type]) => type.replace('type', ''));
+  };
+
   const currentQ = getCurrentQuestion();
   const totalQuestions = currentRound === 1 
     ? quizData.round1.questions.length 
-    : round2Questions.length;
+    : currentRound === 2 ? round2Questions.length : round3Questions.length;
   const progress = ((currentQuestion + 1) / totalQuestions) * 100;
 
   return (
@@ -184,7 +246,7 @@ const Questions = ({ onComplete, onBack }: QuestionsProps) => {
         </Button>
         <Button 
           onClick={handleNext}
-          disabled={selectedOptions.length !== 3}
+          disabled={selectedOptions.length !== (currentRound === 3 ? 2 : 3)}
         >
           Next
         </Button>

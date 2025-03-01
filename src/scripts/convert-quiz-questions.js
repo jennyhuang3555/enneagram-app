@@ -3,36 +3,37 @@ import { writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
-import crypto from 'crypto';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 function convertQuizQuestions() {
   try {
-    // Read first quiz file
+    // Read all quiz files
     const excelPath1 = join(__dirname, '../../Quiz-triad-1.xlsx');
-    const workbook1 = xlsx.readFile(excelPath1);
-    const worksheet1 = workbook1.Sheets[workbook1.SheetNames[0]];
-    const jsonData1 = xlsx.utils.sheet_to_json(worksheet1);
-
-    // Process first round questions
-    const round1Questions = processRound1Questions(jsonData1);
-
-    // Read second quiz file
     const excelPath2 = join(__dirname, '../../Quiz-triad-2.xlsx');
+    const excelPath3 = join(__dirname, '../../quiz-tiebreaker.xlsx');
+
+    const workbook1 = xlsx.readFile(excelPath1);
     const workbook2 = xlsx.readFile(excelPath2);
-    const worksheet2 = workbook2.Sheets[workbook2.SheetNames[0]];
-    const jsonData2 = xlsx.utils.sheet_to_json(worksheet2);
+    const workbook3 = xlsx.readFile(excelPath3);
+
+    const jsonData1 = xlsx.utils.sheet_to_json(workbook1.Sheets[workbook1.SheetNames[0]]);
+    const jsonData2 = xlsx.utils.sheet_to_json(workbook2.Sheets[workbook2.SheetNames[0]]);
+    const jsonData3 = xlsx.utils.sheet_to_json(workbook3.Sheets[workbook3.SheetNames[0]]);
 
     const quizData = {
       round1: {
-        questions: round1Questions,
+        questions: processRound1Questions(jsonData1),
         resultRanges: createResultRanges()
       },
       round2: {
-        questions: [], // Will be populated dynamically based on round 1 results
-        rawQuestions: jsonData2 // Store raw data for filtering later
+        questions: [], // Populated dynamically
+        rawQuestions: jsonData2
+      },
+      round3: {
+        questions: [], // Populated dynamically
+        rawQuestions: jsonData3
       }
     };
 
@@ -66,11 +67,11 @@ function processRound1Questions(jsonData) {
   });
 
   return Object.entries(questionGroups).map(([questionNumber, statements]) => ({
-    id: crypto.randomUUID(),
+    id: `q${questionNumber}`,
     questionNumber: parseInt(questionNumber),
     text: "Select in order of what you most agree with",
-    options: statements.map(statement => ({
-      id: crypto.randomUUID(),
+    options: statements.map((statement, index) => ({
+      id: `q${questionNumber}_opt${index + 1}`,
       text: statement.statement,
       type: statement.type.replace('Type ', '')
     }))
@@ -79,7 +80,7 @@ function processRound1Questions(jsonData) {
 
 function createResultRanges() {
   return Array.from({ length: 9 }, (_, i) => ({
-    id: crypto.randomUUID(),
+    id: `type${i + 1}`,
     category: `type${i + 1}`,
     minScore: 0,
     maxScore: 36,

@@ -28,7 +28,7 @@ export interface Quiz {
 export interface QuestionResponse {
   questionId: string;
   questionNumber: number;
-  round: 1 | 2;
+  round: 1 | 2 | 3;
   selections: {
     optionId: string;
     points: number;
