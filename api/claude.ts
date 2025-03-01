@@ -72,9 +72,9 @@ Remember to:
 • Reference relevant Diamond Approach teachings`;
 
     const response = await client.messages.create({
-      model: "claude-3-sonnet-20240229",
-      max_tokens: 300,
-      temperature: 0.7,
+      model: "claude-3-7-sonnet-20250219",
+      max_tokens: 500,
+      temperature: 0.8,
       top_p: 0.8,
       messages: [{ 
         role: "user", 
