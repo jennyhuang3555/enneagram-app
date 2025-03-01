@@ -14,17 +14,74 @@ const INITIAL_SCORES = {
   type5: 0, type6: 0, type7: 0, type8: 0, type9: 0
 };
 
-const POINTS_FOR_POSITION = {
+const ROUND1_POINTS = {
   0: 3, // First choice
   1: 2, // Second choice
-  2: 1  // Third choice
+  2: 1  // Last choice
+};
+
+const ROUND2_POINTS = {
+  0: 2, // First choice
+  1: 1, // Second choice
+  2: 0  // Last choice
 };
 
 const Questions = ({ onComplete, onBack }: QuestionsProps) => {
+  const [currentRound, setCurrentRound] = useState<1 | 2>(1);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [scores, setScores] = useState<{ [key: string]: number }>(INITIAL_SCORES);
   const [responses, setResponses] = useState<QuestionResponse[]>([]);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [topThreeTypes, setTopThreeTypes] = useState<string[]>([]);
+  const [round2Questions, setRound2Questions] = useState<any[]>([]);
+
+  // Get current question based on round
+  const getCurrentQuestion = () => {
+    if (currentRound === 1) {
+      return quizData.round1.questions[currentQuestion];
+    }
+    return round2Questions[currentQuestion];
+  };
+
+  // Calculate top three types from round 1
+  const calculateTopThreeTypes = (roundScores: { [key: string]: number }) => {
+    return Object.entries(roundScores)
+      .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
+      .slice(0, 3)
+      .map(([type]) => type.replace('type', ''));
+  };
+
+  // Filter and prepare round 2 questions
+  const prepareRound2Questions = (topTypes: string[]) => {
+    const round2Raw = quizData.round2.rawQuestions;
+    const filteredQuestions = {};
+    
+    round2Raw.forEach((row: any) => {
+      const questionNumber = row['Question Number'];
+      const type = row['Types'].replace('Type ', '');
+      
+      if (topTypes.includes(type)) {
+        if (!filteredQuestions[questionNumber]) {
+          filteredQuestions[questionNumber] = [];
+        }
+        filteredQuestions[questionNumber].push({
+          statement: row['Statements'],
+          type: type
+        });
+      }
+    });
+
+    return Object.entries(filteredQuestions).map(([questionNumber, statements]: [string, any[]]) => ({
+      id: crypto.randomUUID(),
+      questionNumber: parseInt(questionNumber),
+      text: "Select in order of what you most agree with",
+      options: statements.map(statement => ({
+        id: crypto.randomUUID(),
+        text: statement.statement,
+        type: statement.type
+      }))
+    })).sort((a, b) => a.questionNumber - b.questionNumber);
+  };
 
   const handleOptionSelect = (optionId: string) => {
     if (selectedOptions.includes(optionId)) return;
@@ -32,49 +89,76 @@ const Questions = ({ onComplete, onBack }: QuestionsProps) => {
     const newSelectedOptions = [...selectedOptions, optionId];
     setSelectedOptions(newSelectedOptions);
 
+    const currentQ = getCurrentQuestion();
+    const pointsSystem = currentRound === 1 ? ROUND1_POINTS : ROUND2_POINTS;
+
     if (newSelectedOptions.length === 3) {
-      const question = quizData.questions[currentQuestion];
       const newScores = { ...scores };
       
       // Calculate points for each selected option
       newSelectedOptions.forEach((selectedId, index) => {
-        const option = question.options.find(opt => opt.id === selectedId);
+        const option = currentQ.options.find(opt => opt.id === selectedId);
         if (option) {
-          const points = POINTS_FOR_POSITION[index];
+          const points = pointsSystem[index];
           newScores[`type${option.type}`] = (newScores[`type${option.type}`] || 0) + points;
         }
       });
 
       // Store response
       const response: QuestionResponse = {
-        questionId: question.id,
-        questionNumber: question.questionNumber,
+        questionId: currentQ.id,
+        questionNumber: currentQ.questionNumber,
+        round: currentRound,
         selections: newSelectedOptions.map((id, index) => ({
           optionId: id,
-          points: POINTS_FOR_POSITION[index]
+          points: pointsSystem[index]
         }))
       };
 
       setResponses([...responses, response]);
       setScores(newScores);
-
-      // Move to next question or complete
-      if (currentQuestion === quizData.questions.length - 1) {
-        onComplete(newScores, responses);
-      } else {
-        setTimeout(() => {
-          setCurrentQuestion(currentQuestion + 1);
-          setSelectedOptions([]);
-        }, 500);
-      }
     }
   };
 
-  const currentQ = quizData.questions[currentQuestion];
-  const progress = ((currentQuestion + 1) / quizData.questions.length) * 100;
+  const handleNext = () => {
+    if (selectedOptions.length !== 3) return;
+
+    if (currentRound === 1 && currentQuestion === quizData.round1.questions.length - 1) {
+      // Complete round 1
+      const topTypes = calculateTopThreeTypes(scores);
+      setTopThreeTypes(topTypes);
+      const round2Qs = prepareRound2Questions(topTypes);
+      setRound2Questions(round2Qs);
+      setCurrentRound(2);
+      setCurrentQuestion(0);
+      setSelectedOptions([]);
+    } else if (currentRound === 2 && currentQuestion === round2Questions.length - 1) {
+      // Complete quiz
+      onComplete(scores, responses);
+    } else {
+      // Next question
+      setCurrentQuestion(currentQuestion + 1);
+      setSelectedOptions([]);
+    }
+  };
+
+  const currentQ = getCurrentQuestion();
+  const totalQuestions = currentRound === 1 
+    ? quizData.round1.questions.length 
+    : round2Questions.length;
+  const progress = ((currentQuestion + 1) / totalQuestions) * 100;
 
   return (
     <Card className="max-w-2xl mx-auto p-6">
+      <div className="mb-4">
+        <h3 className="text-xl font-semibold mb-2">Round {currentRound}</h3>
+        <div className="flex justify-between text-sm text-gray-600">
+          <span>Question {currentQuestion + 1} of {totalQuestions}</span>
+          <span>{Math.round(progress)}% Complete</span>
+        </div>
+        <progress value={progress} max={100} className="w-full" />
+      </div>
+
       <h3 className="text-xl font-semibold mb-4">{currentQ.text}</h3>
       <div className="space-y-4">
         {currentQ.options.map((option) => (
@@ -89,9 +173,21 @@ const Questions = ({ onComplete, onBack }: QuestionsProps) => {
           </Button>
         ))}
       </div>
-      <div className="mt-4">
-        <p>Question {currentQuestion + 1} of {quizData.questions.length}</p>
-        <progress value={progress} max={100} className="w-full" />
+
+      <div className="mt-6 flex justify-between">
+        <Button 
+          variant="outline" 
+          onClick={onBack}
+          disabled={currentQuestion === 0 && currentRound === 1}
+        >
+          Back
+        </Button>
+        <Button 
+          onClick={handleNext}
+          disabled={selectedOptions.length !== 3}
+        >
+          Next
+        </Button>
       </div>
     </Card>
   );

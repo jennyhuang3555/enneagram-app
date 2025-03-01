@@ -27,8 +27,10 @@ export interface Quiz {
 
 export interface QuestionResponse {
   questionId: string;
-  questionText: string;
-  category: number;
-  score: number;
-  answerText: string;
+  questionNumber: number;
+  round: 1 | 2;
+  selections: {
+    optionId: string;
+    points: number;
+  }[];
 }
