@@ -225,8 +225,24 @@ const AIChatScreen = () => {
                   : 'bg-white text-gray-800'
               }`}
             >
-              <div className="prose prose-sm max-w-none dark:prose-invert">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:font-bold prose-headings:text-gray-900 prose-p:mb-4 prose-ul:my-4 prose-li:my-1 prose-strong:text-gray-900">
+                <ReactMarkdown 
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    strong: ({node, ...props}) => (
+                      <span className="font-bold text-gray-900" {...props} />
+                    ),
+                    p: ({node, ...props}) => (
+                      <p className="mb-4" {...props} />
+                    ),
+                    ul: ({node, ...props}) => (
+                      <ul className="my-4 ml-4 list-disc space-y-2" {...props} />
+                    ),
+                    li: ({node, ...props}) => (
+                      <li className="my-1 pl-1" {...props} />
+                    ),
+                  }}
+                >
                   {message.content}
                 </ReactMarkdown>
               </div>
@@ -234,11 +250,27 @@ const AIChatScreen = () => {
           </div>
         ))}
         
-        {isStreaming && (
+        {isStreaming && currentStreamedText && (
           <div className="flex justify-start">
             <div className="max-w-[80%] bg-white text-gray-800 px-4 py-2 rounded-lg">
-              <div className="prose prose-sm max-w-none dark:prose-invert">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:font-bold prose-headings:text-gray-900 prose-p:mb-4 prose-ul:my-4 prose-li:my-1 prose-strong:text-gray-900">
+                <ReactMarkdown 
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    strong: ({node, ...props}) => (
+                      <span className="font-bold text-gray-900" {...props} />
+                    ),
+                    p: ({node, ...props}) => (
+                      <p className="mb-4" {...props} />
+                    ),
+                    ul: ({node, ...props}) => (
+                      <ul className="my-4 ml-4 list-disc space-y-2" {...props} />
+                    ),
+                    li: ({node, ...props}) => (
+                      <li className="my-1 pl-1" {...props} />
+                    ),
+                  }}
+                >
                   {currentStreamedText}
                 </ReactMarkdown>
               </div>

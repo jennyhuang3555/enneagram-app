@@ -253,7 +253,7 @@ const Dashboard = () => {
                 <Button
                   variant="ghost"
                   className="group"
-                  onClick={() => navigate(`/type-deepdive/type${quizResults?.[`${center}_type`]}`)}
+                  onClick={() => navigate(`/centres/${quizResults?.[`${center}_type`]}`)}
                 >
                   Learn more 
                   <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />

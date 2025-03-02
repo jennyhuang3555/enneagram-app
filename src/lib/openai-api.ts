@@ -1,5 +1,6 @@
 import OpenAI from 'openai';
-import { getSystemPrompt } from './contexts/diamond-approach';
+import { aiChatPrompt } from './contexts/ai-chat-prompt';
+import { diamondApproachContext } from './contexts/diamond-approach';
 
 const openai = new OpenAI({
   apiKey: import.meta.env.VITE_OPENAI_API_KEY,
@@ -17,7 +18,15 @@ export const sendMessageToOpenAI = async (messages: ChatMessage[], userTypes: an
   try {
     const systemMessage = {
       role: 'system',
-      content: getSystemPrompt(userTypes)
+      content: `${aiChatPrompt}
+
+ADDITIONAL CONTEXT:
+${diamondApproachContext}
+
+The user's Enneagram profile shows:
+- Primary Type ${userTypes.dominant}
+- Secondary Type ${userTypes.secondary}
+- Tertiary Type ${userTypes.tertiary}`
     };
 
     const allMessages = [systemMessage, ...messages];
@@ -37,7 +46,7 @@ export const sendMessageToOpenAI = async (messages: ChatMessage[], userTypes: an
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: allMessages,
-      temperature: 0.7,
+      temperature: 0.8,
       max_tokens: 500,
       stream: true
     });

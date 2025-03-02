@@ -20,4 +20,10 @@ export const TYPE_COLORS = {
   type7: "#28C76F", // Green
   type8: "#9FE6A0", // Light Green
   type9: "#FFE66D", // Yellow
-} as const; 
+} as const;
+
+export const TYPE_CENTERS = {
+  head: ["5", "6", "7"],
+  heart: ["2", "3", "4"],
+  body: ["8", "9", "1"]
+}; 

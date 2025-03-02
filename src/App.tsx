@@ -12,6 +12,7 @@ import TypeDeepDive from './pages/type-deepdive';
 import QuizProfile from '@/pages/quiz-profile';
 import AICoachPrep from "@/pages/ai-coach-prep";
 import AIChatScreen from '@/pages/ai-chat';
+import CentresPage from './pages/centres';
 
 // Protected Route wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -66,6 +67,7 @@ function App() {
               </ProtectedRoute>
             } 
           />
+          <Route path="/centres/:typeNumber" element={<CentresPage />} />
         </Routes>
         <Toaster />
       </AuthProvider>
