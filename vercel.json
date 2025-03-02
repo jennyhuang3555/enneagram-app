@@ -2,18 +2,8 @@
     "buildCommand": "npm run build",
     "outputDirectory": "dist",
     "framework": "vite",
-    "rewrites": [
-      { "source": "/api/(.*)", "destination": "/api/$1" }
-    ],
     "version": 2,
-    "functions": {
-      "api/*.ts": {
-        "memory": 1024,
-        "maxDuration": 10
-      }
-    },
     "env": {
-      "CLAUDE_API_KEY": "@claude_api_key",
       "VITE_OPENAI_API_KEY": "@openai_api_key"
     }
-  }
+}

@@ -47,7 +47,8 @@
 
 
 - talk with an AI coach that understands your enneagram type from your quiz results
-- billing for paid accounts 
+- for the AI chat GPT API, I am using gpt-3.5-turbo model
+ 
 
 
 # Results page

@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { getSystemPrompt } from './contexts/diamond-approach';
 
 const openai = new OpenAI({
   apiKey: import.meta.env.VITE_OPENAI_API_KEY,
@@ -10,21 +11,34 @@ interface ChatMessage {
   content: string;
 }
 
-export const sendMessageToOpenAI = async (messages: ChatMessage[]) => {
+export const sendMessageToOpenAI = async (messages: ChatMessage[], userTypes: any) => {
   const startTime = performance.now();
   
   try {
+    const systemMessage = {
+      role: 'system',
+      content: getSystemPrompt(userTypes)
+    };
+
+    const allMessages = [systemMessage, ...messages];
+
     console.log('Sending request to OpenAI:', {
       timestamp: new Date().toISOString(),
-      messageCount: messages.length,
-      lastMessage: messages[messages.length - 1]
+      messageCount: allMessages.length,
+      lastMessage: allMessages[allMessages.length - 1]
+    });
+
+    console.log('System Message Content:', {
+      timestamp: new Date().toISOString(),
+      systemPrompt: systemMessage.content,
+      userTypes
     });
 
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-      messages,
-      temperature: 0.8,
-      max_tokens: 350,
+      messages: allMessages,
+      temperature: 0.7,
+      max_tokens: 500,
       stream: true
     });
 

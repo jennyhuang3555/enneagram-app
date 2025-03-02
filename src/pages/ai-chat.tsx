@@ -125,23 +125,16 @@ const AIChatScreen = () => {
       setChatStarted(true);
       setError(null);
 
-      // Create system message with user's Enneagram type
-      const systemMessage = {
-        role: 'system',
-        content: `You are an Enneagram coach. The user's profile shows:
-          - Primary Type: ${quizResults?.dominant_type}
-          - Secondary Type: ${quizResults?.second_type}
-          - Tertiary Type: ${quizResults?.third_type}
-          
-          Provide guidance based on their type structure and patterns.`
-      };
-
       const userMessage = { role: 'user', content };
       const allMessages = [...messages, userMessage];
       
       setMessages(prev => [...prev, userMessage]);
 
-      const stream = await sendMessageToOpenAI([systemMessage, ...allMessages]);
+      const stream = await sendMessageToOpenAI([...messages, userMessage], {
+        dominant: quizResults?.dominant_type,
+        secondary: quizResults?.second_type,
+        tertiary: quizResults?.third_type
+      });
       let accumulatedResponse = '';
 
       for await (const chunk of stream) {
