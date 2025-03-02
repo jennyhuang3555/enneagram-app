@@ -8,6 +8,7 @@ import { getFirestore, collection, query, where, getDocs } from 'firebase/firest
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { sendMessageToOpenAI } from '@/lib/openai-api';
+import { VoiceRecorder } from '@/components/VoiceRecorder';
 
 interface Message {
   role: "user" | "assistant";
@@ -126,15 +127,25 @@ const AIChatScreen = () => {
       setError(null);
 
       const userMessage = { role: 'user', content };
-      const allMessages = [...messages, userMessage];
+      
+      // Keep only the last 10 messages plus the new one
+      const recentMessages = messages.slice(-10);
+      const allMessages = [...recentMessages, userMessage];
       
       setMessages(prev => [...prev, userMessage]);
 
-      const stream = await sendMessageToOpenAI([...messages, userMessage], {
+      // Include system prompt in the API call
+      const systemPrompt = {
+        role: 'system',
+        content: `You are an Enneagram coach. The user's types are: Dominant: ${quizResults?.dominant_type}, Secondary: ${quizResults?.second_type}, Tertiary: ${quizResults?.third_type}.`
+      };
+
+      const stream = await sendMessageToOpenAI([systemPrompt, ...allMessages], {
         dominant: quizResults?.dominant_type,
         secondary: quizResults?.second_type,
         tertiary: quizResults?.third_type
       });
+
       let accumulatedResponse = '';
 
       for await (const chunk of stream) {
@@ -291,16 +302,26 @@ const AIChatScreen = () => {
               handleSendMessage(inputMessage);
             }
           }}
-          className="flex gap-2 max-w-4xl mx-auto"
+          className="flex gap-2 max-w-4xl mx-auto items-center"
         >
-          <input 
-            type="text"
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            placeholder="Ask anything..."
-            className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            disabled={isStreaming}
-          />
+          <div className="flex-1 flex gap-2">
+            <input 
+              type="text"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              placeholder="Ask anything..."
+              className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              disabled={isStreaming}
+            />
+            
+            <VoiceRecorder
+              onTranscription={(text) => {
+                setInputMessage(text);
+                handleSendMessage(text);
+              }}
+              isDisabled={isStreaming}
+            />
+          </div>
           
           {isStreaming ? (
             <Button 
