@@ -6,6 +6,7 @@ import { growthPathsContent } from "@/data/growthPathsContent";
 import { useState, useRef } from "react";
 import { Send, Loader2 } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
+import { VoiceRecorder } from '@/components/VoiceRecorder';
 
 interface GrowthPathProps {
   pathType: keyof typeof growthPathsContent;
@@ -146,13 +147,25 @@ const GrowthPathPage = ({ pathType }: GrowthPathProps) => {
           </div>
 
           <form onSubmit={handleSendMessage} className="flex gap-2">
-            <input
-              type="text"
-              value={currentMessage}
-              onChange={(e) => setCurrentMessage(e.target.value)}
-              placeholder="Ask a question..."
-              className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
+            <div className="flex-1 flex gap-2">
+              <input
+                type="text"
+                value={currentMessage}
+                onChange={(e) => setCurrentMessage(e.target.value)}
+                placeholder="Ask a question..."
+                className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                disabled={isLoading}
+              />
+              
+              <VoiceRecorder
+                onTranscription={(text) => {
+                  setCurrentMessage(text);
+                  handleSendMessage(text);
+                }}
+                isDisabled={isLoading}
+              />
+            </div>
+            
             <Button 
               type="submit" 
               disabled={isLoading || !currentMessage.trim()}

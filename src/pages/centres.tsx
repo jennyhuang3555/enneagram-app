@@ -10,6 +10,7 @@ import { diamondApproachContext } from "@/lib/contexts/diamond-approach";
 import { centresChatPrompt } from "@/lib/contexts/centres-chat-prompt";
 import { sendCentresMessageToOpenAI } from "@/lib/openai-api";
 import ReactMarkdown from 'react-markdown';
+import { VoiceRecorder } from '@/components/VoiceRecorder';
 
 const CentresPage = () => {
   const { typeNumber } = useParams();
@@ -195,20 +196,36 @@ const CentresPage = () => {
             </div>
             
             <form onSubmit={handleSendMessage} className="flex gap-2">
-              <input
-                type="text"
-                value={currentMessage}
-                onChange={(e) => setCurrentMessage(e.target.value)}
-                placeholder="How do you relate to this?"
-                className="flex-1 rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="rounded-lg bg-purple-500 p-2 text-white disabled:opacity-50"
+              <div className="flex-1 flex gap-2">
+                <input
+                  type="text"
+                  value={currentMessage}
+                  onChange={(e) => setCurrentMessage(e.target.value)}
+                  placeholder="Ask a question..."
+                  className="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  disabled={isLoading}
+                />
+                
+                <VoiceRecorder
+                  onTranscription={(text) => {
+                    setCurrentMessage(text);
+                    handleSendMessage(text);
+                  }}
+                  isDisabled={isLoading}
+                />
+              </div>
+              
+              <Button 
+                type="submit" 
+                disabled={isLoading || !currentMessage.trim()}
+                className="bg-purple-600 hover:bg-purple-700 text-white"
               >
-                <Send className="h-5 w-5" />
-              </button>
+                {isLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Send className="h-4 w-4" />
+                )}
+              </Button>
             </form>
           </div>
         </Card>
