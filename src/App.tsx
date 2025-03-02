@@ -14,6 +14,9 @@ import AICoachPrep from "@/pages/ai-coach-prep";
 import AIChatScreen from '@/pages/ai-chat';
 import CentresPage from './pages/centres';
 import GrowthPathPage from '@/pages/growth-path';
+import CoreFear from '@/pages/CoreFear';
+import DeepDive from '@/pages/DeepDive';
+import Landing from '@/pages/landing';
 
 // Protected Route wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -31,6 +34,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<HomeMain />} />
+          <Route path="/landing" element={<Landing />} />
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
@@ -81,6 +85,9 @@ function App() {
             path="/growth-paths/spiritual-gift/:typeNumber" 
             element={<GrowthPathPage pathType="spiritual-gift" />} 
           />
+          <Route path="/corefear" element={<CoreFear />} />
+          <Route path="/deep-dive" element={<DeepDive />} />
+          <Route path="/deepdive" element={<DeepDive />} />
         </Routes>
         <Toaster />
       </AuthProvider>
