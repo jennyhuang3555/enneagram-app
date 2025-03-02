@@ -1,6 +1,7 @@
 import OpenAI from 'openai';
 import { aiChatPrompt } from './contexts/ai-chat-prompt';
 import { diamondApproachContext } from './contexts/diamond-approach';
+import { centresChatPrompt } from './contexts/centres-chat-prompt';
 
 const openai = new OpenAI({
   apiKey: import.meta.env.VITE_OPENAI_API_KEY,
@@ -67,4 +68,23 @@ The user's Enneagram profile shows:
     });
     throw error;
   }
+};
+
+export const sendCentresMessageToOpenAI = async (messages: ChatMessage[], typeNumber: string) => {
+  const systemMessage = {
+    role: 'system',
+    content: `${centresChatPrompt}\n\n${diamondApproachContext}\n\nThe user is exploring Type ${typeNumber}.`
+  };
+  
+  const allMessages = [systemMessage, ...messages];
+  
+  const completion = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: allMessages,
+    temperature: 0.8,
+    max_tokens: 500,
+    stream: true
+  });
+
+  return completion;
 }; 
