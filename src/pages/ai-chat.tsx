@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { sendMessageToClaude } from "@/lib/claude-api";
 import { useToast } from "@/hooks/use-toast";
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { sendMessageToOpenAI } from '@/lib/openai-api';
 
 interface Message {
   role: "user" | "assistant";
@@ -42,6 +42,8 @@ const AIChatScreen = () => {
   const [isStreaming, setIsStreaming] = useState(false);
   const [currentStreamedText, setCurrentStreamedText] = useState("");
   const streamIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -121,31 +123,56 @@ const AIChatScreen = () => {
       setIsLoading(true);
       setIsStreaming(true);
       setChatStarted(true);
-      
-      const userMessage: Message = { role: "user", content };
-      setMessages(prev => [...prev, userMessage]);
-      
-      const contextualizedMessage = {
-        message: content,
-        userTypes: {
-          dominant: quizResults?.dominant_type,
-          secondary: quizResults?.second_type,
-          tertiary: quizResults?.third_type
-        }
+      setError(null);
+
+      // Create system message with user's Enneagram type
+      const systemMessage = {
+        role: 'system',
+        content: `You are an Enneagram coach. The user's profile shows:
+          - Primary Type: ${quizResults?.dominant_type}
+          - Secondary Type: ${quizResults?.second_type}
+          - Tertiary Type: ${quizResults?.third_type}
+          
+          Provide guidance based on their type structure and patterns.`
       };
+
+      const userMessage = { role: 'user', content };
+      const allMessages = [...messages, userMessage];
       
-      const response = await sendMessageToClaude(JSON.stringify(contextualizedMessage));
-      const cleanResponse = response.trim();
-      simulateStreaming(cleanResponse);
+      setMessages(prev => [...prev, userMessage]);
+
+      const stream = await sendMessageToOpenAI([systemMessage, ...allMessages]);
+      let accumulatedResponse = '';
+
+      for await (const chunk of stream) {
+        if (chunk.choices[0]?.delta?.content) {
+          accumulatedResponse += chunk.choices[0].delta.content;
+          setCurrentStreamedText(accumulatedResponse);
+        }
+      }
+
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: accumulatedResponse 
+      }]);
+
+    } catch (error: any) {
+      console.error('Chat error:', {
+        timestamp: new Date().toISOString(),
+        error: error.message,
+        userId: user?.uid
+      });
       
-    } catch (error) {
+      setError(error.message);
       toast({
         title: "Error",
-        description: "Failed to get response from AI coach. Please try again.",
+        description: "Failed to get response. Please try again.",
         variant: "destructive"
       });
+    } finally {
       setIsLoading(false);
       setIsStreaming(false);
+      setCurrentStreamedText('');
     }
   };
 
@@ -269,6 +296,20 @@ const AIChatScreen = () => {
           )}
         </form>
       </div>
+
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+          <p className="text-red-600">Error: {error}</p>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => setError(null)}
+            className="mt-2"
+          >
+            Dismiss
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
