@@ -13,6 +13,7 @@ import QuizProfile from '@/pages/quiz-profile';
 import AICoachPrep from "@/pages/ai-coach-prep";
 import AIChatScreen from '@/pages/ai-chat';
 import CentresPage from './pages/centres';
+import GrowthPathPage from '@/pages/growth-path';
 
 // Protected Route wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -68,6 +69,18 @@ function App() {
             } 
           />
           <Route path="/centres/:typeNumber" element={<CentresPage />} />
+          <Route 
+            path="/growth-paths/core-fear/:typeNumber" 
+            element={<GrowthPathPage pathType="core-fear" />} 
+          />
+          <Route 
+            path="/growth-paths/triggers/:typeNumber" 
+            element={<GrowthPathPage pathType="triggers" />} 
+          />
+          <Route 
+            path="/growth-paths/spiritual-gift/:typeNumber" 
+            element={<GrowthPathPage pathType="spiritual-gift" />} 
+          />
         </Routes>
         <Toaster />
       </AuthProvider>

@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import { app } from "@/lib/firebase";
 import { TYPE_NAMES } from "@/lib/constants";
+import { Link } from "react-router-dom";
 
 const TYPE_DESCRIPTIONS = {
   type1: "Principled, purposeful, self-controlled, and perfectionistic",
@@ -205,31 +206,27 @@ const Dashboard = () => {
         <h3 className="text-xl font-semibold mb-2">
           Explore your centres
         </h3>
-        <p className="text-base text-gray-600 mb-8">
+        <p className="text-base text-gray-600 mb-2">Your triadic style</p>
+        <h2 className="text-4xl font-bold text-purple-600 mb-8">
           {(() => {
-            if (!quizResults) return 'Your triadic style is loading...';
+            if (!quizResults) return '...';
             
-            // Get scores for each center's type
             const headScore = quizResults.scores[`type${quizResults.head_type}`] || 0;
             const heartScore = quizResults.scores[`type${quizResults.heart_type}`] || 0;
             const bodyScore = quizResults.scores[`type${quizResults.body_type}`] || 0;
             
-            // Create array of {type, score} objects
             const centerScores = [
               { type: quizResults.head_type, score: headScore, label: 'head' },
               { type: quizResults.heart_type, score: heartScore, label: 'heart' },
               { type: quizResults.body_type, score: bodyScore, label: 'body' }
             ];
             
-            // Sort by score (highest to lowest)
             const sortedCenters = centerScores.sort((a, b) => b.score - a.score);
-            
-            // Create triadic style string
             const triadStyle = sortedCenters.map(center => center.type).join('-');
             
-            return `Your triadic style is ${triadStyle}`;
+            return triadStyle;
           })()}
-        </p>
+        </h2>
 
         {/* Centers Section */}
         <div className="w-full max-w-[1000px] space-y-6 mb-12">
@@ -267,31 +264,112 @@ const Dashboard = () => {
         <div className="bg-white rounded-3xl shadow-xl max-w-[1000px] mx-auto w-full p-12 relative">
           <div className="max-w-2xl mx-auto text-center space-y-10">
             <h3 className="text-xl font-semibold mb-6">
-              Explore your inner world with guided AI coaching sessions
+              Growth paths for your core type
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors">
-                <div className="mb-4">✨</div>
-                <h4 className="font-semibold mb-2">Core Motivation</h4>
-                <p className="text-sm text-gray-600">How does this drive your behavior?</p>
-                <div className="mt-4">→</div>
-              </Card>
+              <Link to={`/growth-paths/core-fear/${quizResults?.dominant_type}`}>
+                <Card className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors cursor-pointer">
+                  <div className="mb-4">✨</div>
+                  <h4 className="font-semibold mb-2">Core Fear</h4>
+                  <p className="text-sm text-gray-600">What drives your deepest anxieties?</p>
+                  <div className="mt-4">→</div>
+                </Card>
+              </Link>
 
-              <Card className="p-6 bg-pink-50 hover:bg-pink-100 transition-colors">
-                <div className="mb-4">🎯</div>
-                <h4 className="font-semibold mb-2">Harness Your Strengths</h4>
-                <p className="text-sm text-gray-600">Tap into your natural gifts</p>
-                <div className="mt-4">→</div>
-              </Card>
+              <Link to={`/growth-paths/triggers/${quizResults?.dominant_type}`}>
+                <Card className="p-6 bg-pink-50 hover:bg-pink-100 transition-colors cursor-pointer">
+                  <div className="mb-4">🎯</div>
+                  <h4 className="font-semibold mb-2">Key Triggers</h4>
+                  <p className="text-sm text-gray-600">Understanding your reactive patterns</p>
+                  <div className="mt-4">→</div>
+                </Card>
+              </Link>
 
-              <Card className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors">
-                <div className="mb-4">⚡</div>
-                <h4 className="font-semibold mb-2">Growth Path</h4>
-                <p className="text-sm text-gray-600">Your journey of transformation</p>
-                <div className="mt-4">→</div>
-              </Card>
+              <Link to={`/growth-paths/spiritual-gift/${quizResults?.dominant_type}`}>
+                <Card className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors cursor-pointer">
+                  <div className="mb-4">⚡</div>
+                  <h4 className="font-semibold mb-2">Spiritual Gift</h4>
+                  <p className="text-sm text-gray-600">Your unique contribution</p>
+                  <div className="mt-4">→</div>
+                </Card>
+              </Link>
             </div>
+          </div>
+        </div>
+
+        {/* Reflective Prompts Section */}
+        <div className="max-w-2xl mx-auto mt-16 space-y-6">
+          <h3 className="text-xl font-semibold mb-6 text-center">
+            Reflective Prompts
+          </h3>
+          
+          <div className="space-y-4">
+            <Card className="p-6 bg-gradient-to-r from-purple-50 to-pink-50">
+              <p className="text-sm text-purple-600 mb-2">
+                Type {quizResults?.dominant_type} Daily Reflection
+              </p>
+              <p className="text-lg text-gray-700">
+                {(() => {
+                  const prompts: Record<string, string> = {
+                    '1': "How does your inner critic influence your pursuit of improvement?",
+                    '2': "When do you find yourself prioritizing others' needs over your own?",
+                    '3': "What does success mean to you beyond external achievements?",
+                    '4': "How do you balance authenticity with belonging?",
+                    '5': "When do you choose knowledge over experience?",
+                    '6': "How does your vigilance serve and limit you?",
+                    '7': "What lies beneath your pursuit of new experiences?",
+                    '8': "When do you protect others at the cost of vulnerability?",
+                    '9': "How does your desire for peace affect your self-expression?"
+                  };
+                  return prompts[quizResults?.dominant_type] || "What patterns do you notice in your daily interactions?";
+                })()}
+              </p>
+            </Card>
+
+            <Card className="p-6 bg-gradient-to-r from-blue-50 to-purple-50">
+              <p className="text-sm text-blue-600 mb-2">
+                Growth Edge
+              </p>
+              <p className="text-lg text-gray-700">
+                {(() => {
+                  const prompts: Record<string, string> = {
+                    '1': "Where can you find peace in imperfection today?",
+                    '2': "What would it look like to put yourself first?",
+                    '3': "How can you be authentic when no one is watching?",
+                    '4': "What ordinary moments can you find beauty in?",
+                    '5': "How can you connect with your emotions today?",
+                    '6': "Where can you find certainty within yourself?",
+                    '7': "What depth can you find in the present moment?",
+                    '8': "How can you embrace vulnerability today?",
+                    '9': "Where can you assert your needs and desires?"
+                  };
+                  return prompts[quizResults?.dominant_type] || "What area of growth calls to you today?";
+                })()}
+              </p>
+            </Card>
+
+            <Card className="p-6 bg-gradient-to-r from-pink-50 to-orange-50">
+              <p className="text-sm text-pink-600 mb-2">
+                Evening Contemplation
+              </p>
+              <p className="text-lg text-gray-700">
+                {(() => {
+                  const prompts: Record<string, string> = {
+                    '1': "What moments of joy did perfectionism make you miss?",
+                    '2': "When did you honor your own needs today?",
+                    '3': "What felt genuine rather than performative today?",
+                    '4': "How did you connect with others authentically?",
+                    '5': "What experiences moved you emotionally today?",
+                    '6': "What uncertainties did you embrace today?",
+                    '7': "Where did you find depth in your experiences?",
+                    '8': "When did you allow yourself to be vulnerable?",
+                    '9': "How did you make your voice heard today?"
+                  };
+                  return prompts[quizResults?.dominant_type] || "What insights emerged from today's experiences?";
+                })()}
+              </p>
+            </Card>
           </div>
         </div>
       </div>
