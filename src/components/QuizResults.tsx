@@ -15,7 +15,6 @@ import {
 import { typeDescriptions } from '@/data/typeDescriptions';
 import { QuestionResponse } from '@/types/quiz';
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from "@/lib/firebase";

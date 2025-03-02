@@ -1,4 +1,4 @@
-import { ArrowRight, Sparkles, Zap, Shuffle, LogOut, ChevronDown } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Shuffle, LogOut, ChevronDown, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
@@ -10,6 +10,7 @@ import { getFirestore, collection, query, where, getDocs } from 'firebase/firest
 import { app } from "@/lib/firebase";
 import { TYPE_NAMES } from "@/lib/constants";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const TYPE_DESCRIPTIONS = {
   type1: "Principled, purposeful, self-controlled, and perfectionistic",
@@ -30,6 +31,13 @@ const TYPE_CENTERS = {
 };
 
 const db = getFirestore(app);
+
+const cardGradients = {
+  purple: "bg-gradient-to-br from-purple-100/80 to-purple-50/50",
+  blue: "bg-gradient-to-br from-blue-100/80 to-blue-50/50",
+  pink: "bg-gradient-to-br from-pink-100/80 to-pink-50/50",
+  yellow: "bg-gradient-to-br from-yellow-100/80 to-yellow-50/50"
+};
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -105,17 +113,15 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-white overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#E5DEFF] from-40% via-[#FDE1D3] via-80% to-[#D3E4FD]/20">
-        <div 
-          className="absolute inset-0 opacity-[0.03] pointer-events-none"
-          style={{
-            backgroundImage: `url('data:image/svg+xml,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,10 61,35 88,35 67,52 76,77 50,63 24,77 33,52 12,35 39,35" fill="currentColor"/></svg>')`,
-            backgroundSize: '400px',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-          }}
-        />
-      </div>
+      <div 
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: `url('data:image/svg+xml,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,10 61,35 88,35 67,52 76,77 50,63 24,77 33,52 12,35 39,35" fill="currentColor"/></svg>')`,
+          backgroundSize: '400px',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      />
 
       {/* Main content */}
       <div className="relative min-h-screen flex flex-col items-center justify-center p-4">
@@ -141,17 +147,15 @@ const Dashboard = () => {
 
         {/* Type information cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 w-full max-w-[1000px]">
-          <Card 
-            className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors"
-          >
+          <Card className={`p-6 ${cardGradients.purple}`}>
             <div className="flex flex-col h-full">
               <div>
                 <div className="mb-4">🎯</div>
                 <h4 className="font-semibold mb-2">Primary Type</h4>
-                <p className="text-3xl font-bold text-purple-600 mb-1">
+                <p className="text-3xl font-bold text-gray-900 mb-1">
                   {formatTypeNumber(quizResults?.dominant_type)}
                 </p>
-                <p className="text-xl text-purple-500">
+                <p className="text-xl text-gray-700 leading-relaxed">
                   {formatTypeName(quizResults?.dominant_type)}
                 </p>
               </div>
@@ -168,17 +172,15 @@ const Dashboard = () => {
             </div>
           </Card>
 
-          <Card 
-            className="p-6 bg-pink-50 hover:bg-pink-100 transition-colors"
-          >
+          <Card className={`p-6 ${cardGradients.blue}`}>
             <div className="flex flex-col h-full">
               <div>
                 <div className="mb-4">💫</div>
                 <h4 className="font-semibold mb-2">Secondary Type</h4>
-                <p className="text-3xl font-bold text-pink-600 mb-1">
+                <p className="text-3xl font-bold text-gray-900 mb-1">
                   {formatTypeNumber(quizResults?.second_type)}
                 </p>
-                <p className="text-xl text-pink-500">
+                <p className="text-xl text-gray-700 leading-relaxed">
                   {formatTypeName(quizResults?.second_type)}
                 </p>
               </div>
@@ -195,17 +197,15 @@ const Dashboard = () => {
             </div>
           </Card>
 
-          <Card 
-            className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors"
-          >
+          <Card className={`p-6 ${cardGradients.pink}`}>
             <div className="flex flex-col h-full">
               <div>
                 <div className="mb-4">✨</div>
                 <h4 className="font-semibold mb-2">Third Type</h4>
-                <p className="text-3xl font-bold text-indigo-600 mb-1">
+                <p className="text-3xl font-bold text-gray-900 mb-1">
                   {formatTypeNumber(quizResults?.third_type)}
                 </p>
-                <p className="text-xl text-indigo-500">
+                <p className="text-xl text-gray-700 leading-relaxed">
                   {formatTypeName(quizResults?.third_type)}
                 </p>
               </div>
@@ -269,23 +269,27 @@ const Dashboard = () => {
 
         {/* Centers Section */}
         <div className="w-full max-w-[1000px] space-y-6 mb-12">
-          {['head', 'heart', 'body'].map((center) => (
+          {['head', 'heart', 'body'].map((center, index) => (
             <div key={center} className="flex flex-col md:flex-row gap-6">
-              {/* Gradient Card */}
-              <div className="w-full md:w-1/3 p-6 rounded-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 backdrop-blur-sm">
+              <div className={`w-full md:w-1/3 p-6 rounded-xl ${
+                index % 3 === 0 ? cardGradients.purple :
+                index % 3 === 1 ? cardGradients.blue :
+                cardGradients.pink
+              }`}>
                 <div className="mb-4">{getCenterEmoji(center)}</div>
                 <h4 className="text-xl font-semibold mb-2">{formatCenterTitle(center)}</h4>
-                <p className="text-xl font-georgia text-gray-600">Your dominant type in this center</p>
+                <p className="text-xl font-georgia text-gray-700 leading-relaxed">
+                  Your dominant type in this center
+                </p>
               </div>
 
-              {/* Type Information */}
               <div className="w-full md:w-2/3 bg-white rounded-xl p-6 shadow-sm">
                 <div className="flex flex-col h-full">
                   <div>
                     <h4 className="text-xl font-semibold mb-2">
                       Type {quizResults?.[`${center}_type`]}: {formatTypeName(quizResults?.[`${center}_type`])}
                     </h4>
-                    <p className="text-xl font-georgia text-gray-600">
+                    <p className="text-xl font-georgia text-gray-700 leading-relaxed">
                       {TYPE_DESCRIPTIONS[`type${quizResults?.[`${center}_type`]}`]}
                     </p>
                   </div>
@@ -293,7 +297,7 @@ const Dashboard = () => {
                     <Button
                       variant="ghost"
                       className="group text-purple-500 hover:text-purple-600 transition-colors"
-                      onClick={() => navigate(`/centres/${center}`)}
+                      onClick={() => navigate(`/centres/${quizResults?.[`${center}_type`]}`)}
                     >
                       Learn more 
                       <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -314,28 +318,34 @@ const Dashboard = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <Link to={`/growth-paths/core-fear/${quizResults?.dominant_type}`}>
-                <Card className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors cursor-pointer">
+                <Card className={`p-6 ${cardGradients.purple} cursor-pointer`}>
                   <div className="mb-4">✨</div>
                   <h4 className="font-semibold mb-2">Core Fear</h4>
-                  <p className="text-xl font-georgia text-gray-600">What drives your deepest anxieties?</p>
+                  <p className="text-xl font-georgia text-gray-700 leading-relaxed">
+                    What drives your deepest anxieties?
+                  </p>
                   <div className="mt-4">→</div>
                 </Card>
               </Link>
 
               <Link to={`/growth-paths/triggers/${quizResults?.dominant_type}`}>
-                <Card className="p-6 bg-pink-50 hover:bg-pink-100 transition-colors cursor-pointer">
+                <Card className={`p-6 ${cardGradients.blue} cursor-pointer`}>
                   <div className="mb-4">🎯</div>
                   <h4 className="font-semibold mb-2">Key Triggers</h4>
-                  <p className="text-xl font-georgia text-gray-600">Understanding your reactive patterns</p>
+                  <p className="text-xl font-georgia text-gray-700 leading-relaxed">
+                    Understanding your reactive patterns
+                  </p>
                   <div className="mt-4">→</div>
                 </Card>
               </Link>
 
               <Link to={`/growth-paths/spiritual-gift/${quizResults?.dominant_type}`}>
-                <Card className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors cursor-pointer">
+                <Card className={`p-6 ${cardGradients.pink} cursor-pointer`}>
                   <div className="mb-4">⚡</div>
                   <h4 className="font-semibold mb-2">Spiritual Gift</h4>
-                  <p className="text-xl font-georgia text-gray-600">Your unique contribution</p>
+                  <p className="text-xl font-georgia text-gray-700 leading-relaxed">
+                    Your unique contribution
+                  </p>
                   <div className="mt-4">→</div>
                 </Card>
               </Link>
@@ -343,79 +353,44 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Reflective Prompts Section */}
-        <div className="max-w-2xl mx-auto mt-16 space-y-6">
-          <h3 className="text-xl font-semibold mb-6 text-center">
-            Reflective Prompts
-          </h3>
-          
-          <div className="space-y-4">
-            <Card className="p-6 bg-gradient-to-r from-purple-50 to-pink-50">
-              <p className="text-sm text-purple-600 mb-2">
-                Type {quizResults?.dominant_type} Daily Reflection
-              </p>
-              <p className="text-xl font-georgia text-gray-700">
-                {(() => {
-                  const prompts: Record<string, string> = {
-                    '1': "How does your inner critic influence your pursuit of improvement?",
-                    '2': "When do you find yourself prioritizing others' needs over your own?",
-                    '3': "What does success mean to you beyond external achievements?",
-                    '4': "How do you balance authenticity with belonging?",
-                    '5': "When do you choose knowledge over experience?",
-                    '6': "How does your vigilance serve and limit you?",
-                    '7': "What lies beneath your pursuit of new experiences?",
-                    '8': "When do you protect others at the cost of vulnerability?",
-                    '9': "How does your desire for peace affect your self-expression?"
-                  };
-                  return prompts[quizResults?.dominant_type] || "What patterns do you notice in your daily interactions?";
-                })()}
-              </p>
-            </Card>
-
-            <Card className="p-6 bg-gradient-to-r from-blue-50 to-purple-50">
-              <p className="text-sm text-blue-600 mb-2">
-                Growth Edge
-              </p>
-              <p className="text-xl font-georgia text-gray-700">
-                {(() => {
-                  const prompts: Record<string, string> = {
-                    '1': "Where can you find peace in imperfection today?",
-                    '2': "What would it look like to put yourself first?",
-                    '3': "How can you be authentic when no one is watching?",
-                    '4': "What ordinary moments can you find beauty in?",
-                    '5': "How can you connect with your emotions today?",
-                    '6': "Where can you find certainty within yourself?",
-                    '7': "What depth can you find in the present moment?",
-                    '8': "How can you embrace vulnerability today?",
-                    '9': "Where can you assert your needs and desires?"
-                  };
-                  return prompts[quizResults?.dominant_type] || "What area of growth calls to you today?";
-                })()}
-              </p>
-            </Card>
-
-            <Card className="p-6 bg-gradient-to-r from-pink-50 to-orange-50">
-              <p className="text-sm text-pink-600 mb-2">
-                Evening Contemplation
-              </p>
-              <p className="text-xl font-georgia text-gray-700">
-                {(() => {
-                  const prompts: Record<string, string> = {
-                    '1': "What moments of joy did perfectionism make you miss?",
-                    '2': "When did you honor your own needs today?",
-                    '3': "What felt genuine rather than performative today?",
-                    '4': "How did you connect with others authentically?",
-                    '5': "What experiences moved you emotionally today?",
-                    '6': "What uncertainties did you embrace today?",
-                    '7': "Where did you find depth in your experiences?",
-                    '8': "When did you allow yourself to be vulnerable?",
-                    '9': "How did you make your voice heard today?"
-                  };
-                  return prompts[quizResults?.dominant_type] || "What insights emerged from today's experiences?";
-                })()}
-              </p>
-            </Card>
-          </div>
+        {/* Reflection Prompts Section */}
+        <div className="mt-16 max-w-3xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="mb-8 rounded-2xl bg-gradient-to-br from-[#FDE1D3] to-[#FEC6A1] p-8 shadow-lg text-left relative overflow-hidden"
+          >
+            <div className="absolute top-4 right-4 bg-white/90 rounded-full p-2 shadow-md">
+              <Calendar className="w-5 h-5 text-[#F97316]" />
+            </div>
+            <h3 className="text-2xl font-georgia text-black mb-2 pr-14">
+              Daily Reflection Prompt
+            </h3>
+            <p className="text-lg text-black/80 leading-relaxed mb-6 font-georgia">
+              {(() => {
+                const prompts: Record<string, string> = {
+                  '1': "How does your inner critic influence your pursuit of improvement?",
+                  '2': "When do you find yourself prioritizing others' needs over your own?",
+                  '3': "What does success mean to you beyond external achievements?",
+                  '4': "How do you balance authenticity with belonging?",
+                  '5': "When do you choose knowledge over experience?",
+                  '6': "How does your vigilance serve and limit you?",
+                  '7': "What lies beneath your pursuit of new experiences?",
+                  '8': "When do you protect others at the cost of vulnerability?",
+                  '9': "How does your desire for peace affect your self-expression?"
+                };
+                return prompts[quizResults?.dominant_type] || "What patterns do you notice in your daily interactions?";
+              })()}
+            </p>
+            <Button 
+              className="group bg-white hover:bg-[#F97316] text-[#F97316] hover:text-white px-6 py-2 text-md h-auto font-medium shadow-md transition-all duration-300 flex items-center gap-2"
+            >
+              Journal Response
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+            </Button>
+          </motion.div>
         </div>
       </div>
     </div>
