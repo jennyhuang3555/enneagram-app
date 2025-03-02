@@ -50,6 +50,24 @@ interface UserResult {
   timestamp: string;
 }
 
+const calculateCenterTypes = (scores: { [key: string]: number }) => {
+  const headTypes = ['type5', 'type6', 'type7'];
+  const heartTypes = ['type2', 'type3', 'type4'];
+  const bodyTypes = ['type9', 'type1', 'type8'];
+
+  const getHighestInGroup = (typeGroup: string[]) => {
+    return typeGroup
+      .sort((a, b) => (scores[b] || 0) - (scores[a] || 0))[0]
+      ?.replace('type', '') || '';
+  };
+
+  return {
+    head_type: getHighestInGroup(headTypes),
+    heart_type: getHighestInGroup(heartTypes),
+    body_type: getHighestInGroup(bodyTypes)
+  };
+};
+
 const Quiz = () => {
   const [step, setStep] = useState<Step>("introduction");
   const [scores, setScores] = useState<{ [key: string]: number } | null>(null);
@@ -79,6 +97,8 @@ const Quiz = () => {
         .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
         .map(([type]) => type);
 
+      const centerTypes = calculateCenterTypes(newScores);
+
       const resultsToStore = {
         temp_id,
         scores: newScores,
@@ -88,6 +108,9 @@ const Quiz = () => {
         dominant_type: sortedTypes[0]?.replace('type', '') || '',
         second_type: sortedTypes[1]?.replace('type', '') || '',
         third_type: sortedTypes[2]?.replace('type', '') || '',
+        head_type: centerTypes.head_type,
+        heart_type: centerTypes.heart_type,
+        body_type: centerTypes.body_type,
         userId: user?.uid || null,
         userName: user?.displayName || null,
         userEmail: user?.email || null,

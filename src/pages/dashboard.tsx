@@ -22,6 +22,12 @@ const TYPE_DESCRIPTIONS = {
   type9: "Receptive, reassuring, complacent, and resigned"
 };
 
+const TYPE_CENTERS = {
+  head: ['5', '6', '7'],
+  heart: ['2', '3', '4'],
+  body: ['9', '1', '8']
+};
+
 const db = getFirestore(app);
 
 const Dashboard = () => {
@@ -83,6 +89,19 @@ const Dashboard = () => {
     return TYPE_NAMES[typeNumber as keyof typeof TYPE_NAMES];
   };
 
+  const getCenterEmoji = (center: string) => {
+    switch (center) {
+      case 'head': return '🧠';
+      case 'heart': return '💝';
+      case 'body': return '⚡';
+      default: return '✨';
+    }
+  };
+
+  const formatCenterTitle = (center: string) => {
+    return `${center.charAt(0).toUpperCase() + center.slice(1)} Centre`;
+  };
+
   return (
     <div className="min-h-screen bg-white overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#E5DEFF] from-40% via-[#FDE1D3] via-80% to-[#D3E4FD]/20">
@@ -110,11 +129,14 @@ const Dashboard = () => {
 
         {/* Welcome message and subtitle */}
         <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-gray-900 mb-8">
-          Welcome back, {user?.displayName || 'User'}!
+          Welcome to your Inner Mirror
         </h1>
-        <h3 className="text-xl font-semibold mb-8">
+        <h3 className="text-xl font-semibold mb-2">
           Explore your dominant types
         </h3>
+        <p className="text-base text-gray-600 mb-8">
+          {user?.displayName || 'User'}, your highest scoring Enneagram types are
+        </p>
 
         {/* Type information cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 w-full max-w-[1000px]">
@@ -178,6 +200,68 @@ const Dashboard = () => {
           </div>
           <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
         </Button>
+
+        {/* Centers Introduction */}
+        <h3 className="text-xl font-semibold mb-2">
+          Explore your centres
+        </h3>
+        <p className="text-base text-gray-600 mb-8">
+          {(() => {
+            if (!quizResults) return 'Your triadic style is loading...';
+            
+            // Get scores for each center's type
+            const headScore = quizResults.scores[`type${quizResults.head_type}`] || 0;
+            const heartScore = quizResults.scores[`type${quizResults.heart_type}`] || 0;
+            const bodyScore = quizResults.scores[`type${quizResults.body_type}`] || 0;
+            
+            // Create array of {type, score} objects
+            const centerScores = [
+              { type: quizResults.head_type, score: headScore, label: 'head' },
+              { type: quizResults.heart_type, score: heartScore, label: 'heart' },
+              { type: quizResults.body_type, score: bodyScore, label: 'body' }
+            ];
+            
+            // Sort by score (highest to lowest)
+            const sortedCenters = centerScores.sort((a, b) => b.score - a.score);
+            
+            // Create triadic style string
+            const triadStyle = sortedCenters.map(center => center.type).join('-');
+            
+            return `Your triadic style is ${triadStyle}`;
+          })()}
+        </p>
+
+        {/* Centers Section */}
+        <div className="w-full max-w-[1000px] space-y-6 mb-12">
+          {['head', 'heart', 'body'].map((center) => (
+            <div key={center} className="flex flex-col md:flex-row gap-6">
+              {/* Gradient Card */}
+              <div className="w-full md:w-1/3 p-6 rounded-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 backdrop-blur-sm">
+                <div className="mb-4">{getCenterEmoji(center)}</div>
+                <h4 className="text-xl font-semibold mb-2">{formatCenterTitle(center)}</h4>
+                <p className="text-sm text-gray-600">Your dominant type in this center</p>
+              </div>
+
+              {/* Type Information */}
+              <div className="w-full md:w-2/3 bg-white rounded-xl p-6 shadow-sm">
+                <h4 className="text-xl font-semibold mb-2">
+                  Type {quizResults?.[`${center}_type`]}: {formatTypeName(quizResults?.[`${center}_type`])}
+                </h4>
+                <p className="text-gray-600 mb-4">
+                  {TYPE_DESCRIPTIONS[`type${quizResults?.[`${center}_type`]}`]}
+                </p>
+                <Button
+                  variant="ghost"
+                  className="group"
+                  onClick={() => navigate(`/type-deepdive/type${quizResults?.[`${center}_type`]}`)}
+                >
+                  Learn more 
+                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
 
         {/* White container section */}
         <div className="bg-white rounded-3xl shadow-xl max-w-[1000px] mx-auto w-full p-12 relative">

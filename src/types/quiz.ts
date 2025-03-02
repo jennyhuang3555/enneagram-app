@@ -49,6 +49,9 @@ export interface QuizResult {
   dominant_type: string;
   second_type: string;
   third_type: string;
+  head_type: string;
+  heart_type: string;
+  body_type: string;
   userId: string | null;
   userName: string | null;
   userEmail: string | null;
