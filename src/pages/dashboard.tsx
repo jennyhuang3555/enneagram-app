@@ -135,7 +135,7 @@ const Dashboard = () => {
         <h3 className="text-xl font-semibold mb-2">
           Explore your dominant types
         </h3>
-        <p className="text-base text-gray-600 mb-8">
+        <p className="text-xl font-georgia text-gray-600 mb-8">
           {user?.displayName || 'User'}, your highest scoring Enneagram types are
         </p>
 
@@ -206,7 +206,7 @@ const Dashboard = () => {
         <h3 className="text-xl font-semibold mb-2">
           Explore your centres
         </h3>
-        <p className="text-base text-gray-600 mb-2">Your triadic style</p>
+        <p className="text-xl font-georgia text-gray-600 mb-2">Your triadic style</p>
         <h2 className="text-4xl font-bold text-purple-600 mb-8">
           {(() => {
             if (!quizResults) return '...';
@@ -236,7 +236,7 @@ const Dashboard = () => {
               <div className="w-full md:w-1/3 p-6 rounded-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 backdrop-blur-sm">
                 <div className="mb-4">{getCenterEmoji(center)}</div>
                 <h4 className="text-xl font-semibold mb-2">{formatCenterTitle(center)}</h4>
-                <p className="text-sm text-gray-600">Your dominant type in this center</p>
+                <p className="text-xl font-georgia text-gray-600">Your dominant type in this center</p>
               </div>
 
               {/* Type Information */}
@@ -244,7 +244,7 @@ const Dashboard = () => {
                 <h4 className="text-xl font-semibold mb-2">
                   Type {quizResults?.[`${center}_type`]}: {formatTypeName(quizResults?.[`${center}_type`])}
                 </h4>
-                <p className="text-gray-600 mb-4">
+                <p className="text-xl font-georgia text-gray-600 mb-4">
                   {TYPE_DESCRIPTIONS[`type${quizResults?.[`${center}_type`]}`]}
                 </p>
                 <Button
@@ -272,7 +272,7 @@ const Dashboard = () => {
                 <Card className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors cursor-pointer">
                   <div className="mb-4">✨</div>
                   <h4 className="font-semibold mb-2">Core Fear</h4>
-                  <p className="text-sm text-gray-600">What drives your deepest anxieties?</p>
+                  <p className="text-xl font-georgia text-gray-600">What drives your deepest anxieties?</p>
                   <div className="mt-4">→</div>
                 </Card>
               </Link>
@@ -281,7 +281,7 @@ const Dashboard = () => {
                 <Card className="p-6 bg-pink-50 hover:bg-pink-100 transition-colors cursor-pointer">
                   <div className="mb-4">🎯</div>
                   <h4 className="font-semibold mb-2">Key Triggers</h4>
-                  <p className="text-sm text-gray-600">Understanding your reactive patterns</p>
+                  <p className="text-xl font-georgia text-gray-600">Understanding your reactive patterns</p>
                   <div className="mt-4">→</div>
                 </Card>
               </Link>
@@ -290,7 +290,7 @@ const Dashboard = () => {
                 <Card className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors cursor-pointer">
                   <div className="mb-4">⚡</div>
                   <h4 className="font-semibold mb-2">Spiritual Gift</h4>
-                  <p className="text-sm text-gray-600">Your unique contribution</p>
+                  <p className="text-xl font-georgia text-gray-600">Your unique contribution</p>
                   <div className="mt-4">→</div>
                 </Card>
               </Link>
@@ -309,7 +309,7 @@ const Dashboard = () => {
               <p className="text-sm text-purple-600 mb-2">
                 Type {quizResults?.dominant_type} Daily Reflection
               </p>
-              <p className="text-lg text-gray-700">
+              <p className="text-xl font-georgia text-gray-700">
                 {(() => {
                   const prompts: Record<string, string> = {
                     '1': "How does your inner critic influence your pursuit of improvement?",
@@ -331,7 +331,7 @@ const Dashboard = () => {
               <p className="text-sm text-blue-600 mb-2">
                 Growth Edge
               </p>
-              <p className="text-lg text-gray-700">
+              <p className="text-xl font-georgia text-gray-700">
                 {(() => {
                   const prompts: Record<string, string> = {
                     '1': "Where can you find peace in imperfection today?",
@@ -353,7 +353,7 @@ const Dashboard = () => {
               <p className="text-sm text-pink-600 mb-2">
                 Evening Contemplation
               </p>
-              <p className="text-lg text-gray-700">
+              <p className="text-xl font-georgia text-gray-700">
                 {(() => {
                   const prompts: Record<string, string> = {
                     '1': "What moments of joy did perfectionism make you miss?",

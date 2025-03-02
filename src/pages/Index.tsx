@@ -21,7 +21,7 @@ const HomeMain = () => {
 
       <nav className="absolute top-6 right-6 z-50">
         <Button 
-          className="bg-white hover:bg-gray-900 hover:text-white transition-colors text-gray-900 shadow-sm"
+          className="bg-white hover:bg-gray-900 hover:text-white transition-colors text-gray-900 shadow-sm text-xl font-georgia"
           onClick={() => navigate('/login')}
         >
           Sign in
@@ -43,7 +43,7 @@ const HomeMain = () => {
               Welcome!
             </h1>
 
-            <p className="text-base sm:text-lg text-gray-700 max-w-xl mx-auto leading-relaxed">
+            <p className="text-xl font-georgia text-gray-700 max-w-xl mx-auto leading-relaxed">
               To begin working with your AI coach, let's first tailor your experience by uncovering the unique mix of patterns and worldview that drive you
             </p>
 
@@ -60,25 +60,25 @@ const HomeMain = () => {
             </div>
 
             <div className="space-y-4 text-left max-w-xl mx-auto">
-              <p className="flex items-start gap-3 text-gray-700">
+              <p className="flex items-start gap-3 text-xl font-georgia text-gray-700">
                 <span className="text-2xl">🔍</span>
                 <span>Uncover hidden drivers behind your decisions, reactions, and emotions</span>
               </p>
-              <p className="flex items-start gap-3 text-gray-700">
+              <p className="flex items-start gap-3 text-xl font-georgia text-gray-700">
                 <span className="text-2xl">🔄</span>
                 <span>Recognize patterns and triggers and learn how to shift them</span>
               </p>
-              <p className="flex items-start gap-3 text-gray-700">
+              <p className="flex items-start gap-3 text-xl font-georgia text-gray-700">
                 <span className="text-2xl">✨</span>
                 <span>Gain personalized insights to grow, thrive, and harness your unique gifts</span>
               </p>
             </div>
 
             <div className="pt-4">
-              <p className="text-gray-600 italic">
+              <p className="text-xl font-georgia italic text-gray-600">
                 "The purpose of the Enneagram is not to put you in a box, but to show you the box you are already in—and how to get out of it."
               </p>
-              <p className="text-gray-500 mt-2">- Don Riso</p>
+              <p className="text-xl font-georgia text-gray-500 mt-2">- Don Riso</p>
             </div>
           </div>
         </div>
