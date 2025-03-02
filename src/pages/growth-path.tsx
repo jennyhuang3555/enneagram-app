@@ -7,6 +7,7 @@ import { useState, useRef } from "react";
 import { Send, Loader2 } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import { VoiceRecorder } from '@/components/VoiceRecorder';
+import { sendCentresMessageToOpenAI } from '@/lib/openai-api';
 
 interface GrowthPathProps {
   pathType: keyof typeof growthPathsContent;

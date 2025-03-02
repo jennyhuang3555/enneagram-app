@@ -1,4 +1,4 @@
-import { collection, addDoc, query, where, getDocs, updateDoc } from 'firebase/firestore';
+import { collection, addDoc, query, where, getDocs, updateDoc, doc, setDoc } from 'firebase/firestore';
 import { db } from './firebase';
 import { QuestionResponse } from '@/types/quiz';
 
@@ -26,8 +26,17 @@ export const saveQuizResults = async (results: Partial<QuizResult>) => {
     };
 
     const quizResults = collection(db, 'quiz_results');
-    const docRef = await addDoc(quizResults, cleanResults);
-    return docRef.id;
+    
+    // If we have an email, use it as the document ID
+    if (results.userEmail) {
+      const docRef = doc(quizResults, results.userEmail);
+      await setDoc(docRef, cleanResults);
+      return docRef.id;
+    } else {
+      // If no email (anonymous quiz), create with auto-generated ID
+      const docRef = await addDoc(quizResults, cleanResults);
+      return docRef.id;
+    }
   } catch (error) {
     console.error('Error saving quiz results:', error);
     throw error;

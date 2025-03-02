@@ -14,7 +14,6 @@ interface SignUpFormProps {
 
 const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
   const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { signUp } = useAuth();
@@ -28,18 +27,15 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
     setIsLoading(true);
 
     try {
-      if (!email || !password || !firstName || !lastName) {
+      if (!email || !password || !firstName) {
         throw new Error('Please fill in all fields');
       }
 
-      const fullName = `${firstName} ${lastName}`;
-      const user = await signUp(email, password, fullName);
+      const user = await signUp(email, password, firstName);
       
-      // Link quiz results to the new user with full info
       const temp_id = localStorage.getItem('temp_id');
       if (temp_id && user.uid) {
-        await linkQuizResultsToUser(temp_id, user.uid, fullName, email);
-        // Clear temp_id after successful linking
+        await linkQuizResultsToUser(temp_id, user.uid, firstName, email);
         localStorage.removeItem('temp_id');
       }
 
@@ -51,7 +47,6 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
 
       if (onSuccess) onSuccess();
       
-      // Small delay to ensure Firestore update completes
       setTimeout(() => {
         navigate('/dashboard');
         window.location.reload();
@@ -72,24 +67,14 @@ const SignUpForm = ({ onSuccess, quizScores }: SignUpFormProps) => {
   return (
     <Card className="w-full max-w-md p-8 mx-auto">
       <form onSubmit={handleSubmit} className="space-y-4 flex flex-col items-center">
-        <div className="flex gap-4 w-full">
-          <Input
-            type="text"
-            placeholder="First name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            disabled={isLoading}
-            className="text-lg p-4 placeholder:text-base placeholder:text-gray-400"
-          />
-          <Input
-            type="text"
-            placeholder="Last name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            disabled={isLoading}
-            className="text-lg p-4 placeholder:text-base placeholder:text-gray-400"
-          />
-        </div>
+        <Input
+          type="text"
+          placeholder="First name"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          disabled={isLoading}
+          className="text-lg p-4 placeholder:text-base placeholder:text-gray-400 w-full"
+        />
         <Input
           type="email"
           placeholder="Your email"
