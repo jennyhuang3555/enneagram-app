@@ -1,4 +1,4 @@
-import { ArrowRight, Sparkles, Zap, Shuffle, LogOut } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Shuffle, LogOut, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
@@ -142,45 +142,84 @@ const Dashboard = () => {
         {/* Type information cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 w-full max-w-[1000px]">
           <Card 
-            className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors cursor-pointer"
-            onClick={() => navigate(`/type-deepdive/type${quizResults?.dominant_type}`)}
+            className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors"
           >
-            <div className="mb-4">🎯</div>
-            <h4 className="font-semibold mb-2">Primary Type</h4>
-            <p className="text-3xl font-bold text-purple-600 mb-1">
-              {formatTypeNumber(quizResults?.dominant_type)}
-            </p>
-            <p className="text-xl text-purple-500">
-              {formatTypeName(quizResults?.dominant_type)}
-            </p>
+            <div className="flex flex-col h-full">
+              <div>
+                <div className="mb-4">🎯</div>
+                <h4 className="font-semibold mb-2">Primary Type</h4>
+                <p className="text-3xl font-bold text-purple-600 mb-1">
+                  {formatTypeNumber(quizResults?.dominant_type)}
+                </p>
+                <p className="text-xl text-purple-500">
+                  {formatTypeName(quizResults?.dominant_type)}
+                </p>
+              </div>
+              <div className="mt-auto pt-4 flex justify-end">
+                <Button
+                  variant="ghost"
+                  className="group text-purple-500 hover:text-purple-600 transition-colors"
+                  onClick={() => navigate(`/type-deepdive/type${quizResults?.dominant_type}`)}
+                >
+                  Learn more 
+                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </div>
+            </div>
           </Card>
 
           <Card 
-            className="p-6 bg-pink-50 hover:bg-pink-100 transition-colors cursor-pointer"
-            onClick={() => navigate(`/type-deepdive/${quizResults?.second_type}`)}
+            className="p-6 bg-pink-50 hover:bg-pink-100 transition-colors"
           >
-            <div className="mb-4">💫</div>
-            <h4 className="font-semibold mb-2">Secondary Type</h4>
-            <p className="text-3xl font-bold text-pink-600 mb-1">
-              {formatTypeNumber(quizResults?.second_type)}
-            </p>
-            <p className="text-xl text-pink-500">
-              {formatTypeName(quizResults?.second_type)}
-            </p>
+            <div className="flex flex-col h-full">
+              <div>
+                <div className="mb-4">💫</div>
+                <h4 className="font-semibold mb-2">Secondary Type</h4>
+                <p className="text-3xl font-bold text-pink-600 mb-1">
+                  {formatTypeNumber(quizResults?.second_type)}
+                </p>
+                <p className="text-xl text-pink-500">
+                  {formatTypeName(quizResults?.second_type)}
+                </p>
+              </div>
+              <div className="mt-auto pt-4 flex justify-end">
+                <Button
+                  variant="ghost"
+                  className="group text-purple-500 hover:text-purple-600 transition-colors"
+                  onClick={() => navigate(`/type-deepdive/type${quizResults?.second_type}`)}
+                >
+                  Learn more 
+                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </div>
+            </div>
           </Card>
 
           <Card 
-            className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors cursor-pointer"
-            onClick={() => navigate(`/type-deepdive/${quizResults?.third_type}`)}
+            className="p-6 bg-purple-50 hover:bg-purple-100 transition-colors"
           >
-            <div className="mb-4">✨</div>
-            <h4 className="font-semibold mb-2">Third Type</h4>
-            <p className="text-3xl font-bold text-indigo-600 mb-1">
-              {formatTypeNumber(quizResults?.third_type)}
-            </p>
-            <p className="text-xl text-indigo-500">
-              {formatTypeName(quizResults?.third_type)}
-            </p>
+            <div className="flex flex-col h-full">
+              <div>
+                <div className="mb-4">✨</div>
+                <h4 className="font-semibold mb-2">Third Type</h4>
+                <p className="text-3xl font-bold text-indigo-600 mb-1">
+                  {formatTypeNumber(quizResults?.third_type)}
+                </p>
+                <p className="text-xl text-indigo-500">
+                  {formatTypeName(quizResults?.third_type)}
+                </p>
+              </div>
+              <div className="mt-auto pt-4 flex justify-end">
+                <Button
+                  variant="ghost"
+                  className="group text-purple-500 hover:text-purple-600 transition-colors"
+                  onClick={() => navigate(`/type-deepdive/type${quizResults?.third_type}`)}
+                >
+                  Learn more 
+                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </div>
+            </div>
           </Card>
         </div>
 
@@ -241,20 +280,26 @@ const Dashboard = () => {
 
               {/* Type Information */}
               <div className="w-full md:w-2/3 bg-white rounded-xl p-6 shadow-sm">
-                <h4 className="text-xl font-semibold mb-2">
-                  Type {quizResults?.[`${center}_type`]}: {formatTypeName(quizResults?.[`${center}_type`])}
-                </h4>
-                <p className="text-xl font-georgia text-gray-600 mb-4">
-                  {TYPE_DESCRIPTIONS[`type${quizResults?.[`${center}_type`]}`]}
-                </p>
-                <Button
-                  variant="ghost"
-                  className="group"
-                  onClick={() => navigate(`/centres/${quizResults?.[`${center}_type`]}`)}
-                >
-                  Learn more 
-                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                <div className="flex flex-col h-full">
+                  <div>
+                    <h4 className="text-xl font-semibold mb-2">
+                      Type {quizResults?.[`${center}_type`]}: {formatTypeName(quizResults?.[`${center}_type`])}
+                    </h4>
+                    <p className="text-xl font-georgia text-gray-600">
+                      {TYPE_DESCRIPTIONS[`type${quizResults?.[`${center}_type`]}`]}
+                    </p>
+                  </div>
+                  <div className="mt-4 flex justify-end">
+                    <Button
+                      variant="ghost"
+                      className="group text-purple-500 hover:text-purple-600 transition-colors"
+                      onClick={() => navigate(`/centres/${center}`)}
+                    >
+                      Learn more 
+                      <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
