@@ -317,7 +317,7 @@ const Dashboard = () => {
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Link to={`/growth-paths/core-fear/${quizResults?.dominant_type}`}>
+              <Link to="/corefear">
                 <Card className={`p-6 ${cardGradients.purple} cursor-pointer`}>
                   <div className="mb-4">✨</div>
                   <h4 className="font-semibold mb-2">Core Fear</h4>
