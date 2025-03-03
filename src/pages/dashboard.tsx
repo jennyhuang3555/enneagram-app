@@ -2,14 +2,13 @@ import { ArrowRight, Sparkles, Zap, Shuffle, LogOut, ChevronDown, Calendar } fro
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
 import { getFirestore, collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { app, db } from "@/lib/firebase";
 import { TYPE_NAMES } from "@/lib/constants";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const TYPE_DESCRIPTIONS = {
@@ -317,64 +316,50 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {/* White container section */}
-        <div className="bg-white rounded-3xl shadow-xl max-w-[1000px] mx-auto w-full p-12 relative">
-          <div className="max-w-2xl mx-auto text-center space-y-10">
-            <h3 className="text-xl font-semibold mb-6">
-              Growth paths for your core type
-            </h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => handleNavigation('/corefear')}
-                className="cursor-pointer"
-              >
-                <Card className="relative overflow-hidden h-64">
-                  <div className="mb-4">✨</div>
-                  <h4 className="font-semibold mb-2">Core Fear</h4>
-                  <p className="text-xl font-georgia text-gray-700 leading-relaxed">
-                    What drives your deepest anxieties?
-                  </p>
-                  <div className="mt-4">→</div>
-                </Card>
-              </motion.div>
+        {/* Growth Paths Section */}
+        <section className="px-4 py-12 max-w-7xl mx-auto">
+          <h2 className="text-2xl font-semibold mb-8">Growth paths for your core type</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Core Fear Card */}
+            <Link 
+              to={`/core-fear/${user?.dominant_type || '1'}`}
+              className="rounded-2xl shadow-lg overflow-hidden bg-gradient-to-br from-purple-500/10 via-blue-400/10 to-orange-200/10 p-8 transition-transform hover:scale-105"
+            >
+              <div className="flex flex-col h-full">
+                <span className="text-yellow-500 mb-4">✨</span>
+                <h3 className="text-xl font-semibold mb-3">Core Fear</h3>
+                <p className="text-gray-600 mb-6">What drives your deepest anxieties?</p>
+                <ArrowRight className="mt-auto text-gray-400" />
+              </div>
+            </Link>
 
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => handleNavigation('/triggers')}
-                className="cursor-pointer"
-              >
-                <Card className="relative overflow-hidden h-64">
-                  <div className="mb-4">🎯</div>
-                  <h4 className="font-semibold mb-2">Key Triggers</h4>
-                  <p className="text-xl font-georgia text-gray-700 leading-relaxed">
-                    Understanding your reactive patterns
-                  </p>
-                  <div className="mt-4">→</div>
-                </Card>
-              </motion.div>
+            {/* Triggers Card */}
+            <Link 
+              to={`/triggers/${user?.dominant_type || '1'}`}
+              className="rounded-2xl shadow-lg overflow-hidden bg-gradient-to-br from-purple-500/10 via-blue-400/10 to-orange-200/10 p-8 transition-transform hover:scale-105"
+            >
+              <div className="flex flex-col h-full">
+                <span className="text-red-500 mb-4">🎯</span>
+                <h3 className="text-xl font-semibold mb-3">Key Triggers</h3>
+                <p className="text-gray-600 mb-6">Understanding your reactive patterns</p>
+                <ArrowRight className="mt-auto text-gray-400" />
+              </div>
+            </Link>
 
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => handleNavigation('/spiritual-gift')}
-                className="cursor-pointer"
-              >
-                <Card className="relative overflow-hidden h-64">
-                  <div className="mb-4">⚡</div>
-                  <h4 className="font-semibold mb-2">Spiritual Gift</h4>
-                  <p className="text-xl font-georgia text-gray-700 leading-relaxed">
-                    Your unique contribution
-                  </p>
-                  <div className="mt-4">→</div>
-                </Card>
-              </motion.div>
-            </div>
+            {/* Spiritual Gift Card */}
+            <Link 
+              to={`/spiritual-gift/${user?.dominant_type || '1'}`}
+              className="rounded-2xl shadow-lg overflow-hidden bg-gradient-to-br from-purple-500/10 via-blue-400/10 to-orange-200/10 p-8 transition-transform hover:scale-105"
+            >
+              <div className="flex flex-col h-full">
+                <span className="text-orange-500 mb-4">⚡</span>
+                <h3 className="text-xl font-semibold mb-3">Spiritual Gift</h3>
+                <p className="text-gray-600 mb-6">Your unique contribution</p>
+                <ArrowRight className="mt-auto text-gray-400" />
+              </div>
+            </Link>
           </div>
-        </div>
+        </section>
 
         {/* Reflection Prompts Section */}
         <div className="mt-16 max-w-3xl mx-auto">
