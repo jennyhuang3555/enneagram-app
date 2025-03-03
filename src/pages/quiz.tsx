@@ -12,6 +12,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import SignUpForm from "@/components/SignUpForm";
 import { saveQuizResults } from "@/lib/firestore";
+import { ArrowRight } from "lucide-react";
 
 type Step = "introduction" | "questions" | "signup" | "results" | "user-info";
 
@@ -180,10 +181,24 @@ const Quiz = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white relative">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#E5DEFF] from-40% via-[#FDE1D3] via-80% to-[#D3E4FD]/20" />
-      <div className="relative z-10">
-        {renderStep()}
+    <div className="min-h-screen bg-white">
+      <div className="relative">
+        <div className="bg-gradient-to-br from-purple-500 via-blue-400 to-orange-200 py-12 px-4 min-h-screen">
+          <div className="min-h-[calc(100vh-160px)] flex flex-col items-center justify-center p-4">
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-xl max-w-[1000px] mx-auto w-full p-12 relative">
+              {renderStep()}
+              {step === "signup" && (
+                <Button
+                  className="w-[322px] sm:w-auto py-6 group transition-all duration-300 hover:translate-y-[-4px] text-white flex items-center justify-center shadow-lg rounded-lg bg-black hover:bg-gray-800"
+                  onClick={handleSignUpSuccess}
+                >
+                  Sign Up
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

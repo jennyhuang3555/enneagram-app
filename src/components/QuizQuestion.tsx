@@ -28,7 +28,24 @@ const QuizQuestion = ({
   onPrevious,
 }: QuizQuestionProps) => {
   const [selectedScore, setSelectedScore] = useState<number | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<number[]>([]);
   const progress = ((currentQuestion + 1) / totalQuestions) * 100;
+
+  const handleOptionSelect = (score: number) => {
+    if (selectedOrder.includes(score)) {
+      // Remove from selection
+      setSelectedOrder(selectedOrder.filter(s => s !== score));
+    } else {
+      // Add to selection
+      setSelectedOrder([...selectedOrder, score]);
+    }
+    setSelectedScore(score);
+  };
+
+  const getSelectionNumber = (score: number) => {
+    const index = selectedOrder.indexOf(score);
+    return index !== -1 ? index + 1 : null;
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 animate-fade-in">
@@ -41,33 +58,48 @@ const QuizQuestion = ({
             <span>Question {currentQuestion + 1} of {totalQuestions}</span>
             <span>{Math.round(progress)}% Complete</span>
           </div>
-          <Progress value={progress} className="h-2" />
+          <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-gradient-to-r from-purple-500 via-blue-400 to-orange-200 transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         </div>
 
         <h3 className="text-xl font-semibold text-center py-4">{question}</h3>
 
         <div className="grid gap-3">
-          {ANSWER_OPTIONS.map((option) => (
-            <Button
-              key={option.score}
-              variant={selectedScore === option.score ? "default" : "outline"}
-              className={`w-full justify-start p-4 text-left ${
-                selectedScore === option.score
-                  ? "bg-purple-600 text-white"
-                  : "hover:bg-purple-50"
-              }`}
-              onClick={() => setSelectedScore(option.score)}
-            >
-              {option.label}
-            </Button>
-          ))}
+          {ANSWER_OPTIONS.map((option) => {
+            const selectionNumber = getSelectionNumber(option.score);
+            return (
+              <Button
+                key={option.score}
+                variant={selectedScore === option.score ? "default" : "outline"}
+                className={`w-full min-h-[80px] justify-start p-4 text-left text-lg relative ${
+                  selectedOrder.includes(option.score)
+                    ? "bg-black text-white"
+                    : "hover:bg-gray-50 border-blue-400/30 hover:border-blue-400/50"
+                }`}
+                onClick={() => handleOptionSelect(option.score)}
+              >
+                <div className="flex justify-between items-center w-full">
+                  <span className="whitespace-normal pr-8">{option.label}</span>
+                  {selectionNumber !== null && (
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white text-black flex items-center justify-center">
+                      {selectionNumber}
+                    </span>
+                  )}
+                </div>
+              </Button>
+            );
+          })}
         </div>
 
         <div className="flex gap-4 mt-6">
           <Button
             variant="outline"
             onClick={onPrevious}
-            className="flex-1"
+            className="flex-1 bg-gray-100 hover:bg-gray-200 border-gray-200"
             disabled={currentQuestion === 0}
           >
             <ArrowLeft className="mr-2" />
@@ -81,7 +113,7 @@ const QuizQuestion = ({
               }
             }}
             disabled={selectedScore === null}
-            className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 transition-opacity"
+            className="flex-1 bg-black hover:bg-gray-800 text-white transition-colors duration-200"
           >
             Next
             <ArrowRight className="ml-2" />

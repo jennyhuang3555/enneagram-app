@@ -225,12 +225,16 @@ const Questions = ({ onComplete, onBack }: QuestionsProps) => {
   return (
     <Card className="max-w-2xl mx-auto p-6">
       <div className="mb-4">
-        <h3 className="text-xl font-semibold mb-2">Round {currentRound}</h3>
         <div className="flex justify-between text-sm text-gray-600">
           <span>Question {currentQuestion + 1} of {totalQuestions}</span>
           <span>{Math.round(progress)}% Complete</span>
         </div>
-        <progress value={progress} max={100} className="w-full" />
+        <div className="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-gradient-to-r from-purple-500 via-blue-400 to-orange-200 transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
       </div>
 
       <h3 className="text-xl font-semibold mb-4">{currentQ.text}</h3>
@@ -241,23 +245,40 @@ const Questions = ({ onComplete, onBack }: QuestionsProps) => {
             onClick={() => handleOptionSelect(option.id)}
             disabled={selectedOptions.includes(option.id)}
             variant={selectedOptions.includes(option.id) ? "default" : "outline"}
-            className="w-full text-left justify-start p-4"
+            className={`w-full min-h-[80px] justify-start p-4 text-left text-lg relative ${
+              selectedOptions.includes(option.id)
+                ? "bg-blue-600 text-white"
+                : "hover:bg-gray-50 border-blue-400/30 hover:border-blue-400/50"
+            }`}
           >
-            {option.text}
+            <div className="flex justify-between items-center w-full">
+              <span className="whitespace-normal pr-8">{option.text}</span>
+              {selectedOptions.includes(option.id) && (
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white text-black flex items-center justify-center">
+                  {selectedOptions.indexOf(option.id) + 1}
+                </span>
+              )}
+            </div>
           </Button>
         ))}
       </div>
 
-      <div className="mt-6 flex justify-between">
+      <div className="mt-6 flex gap-4">
         <Button 
           variant="outline" 
           onClick={onBack}
+          className="flex-1 bg-gray-100 hover:bg-gray-200 border-gray-200"
           disabled={currentQuestion === 0 && currentRound === 1}
         >
           Back
         </Button>
         <Button 
           onClick={handleNext}
+          className={`flex-1 transition-colors duration-200 ${
+            selectedOptions.length === (currentRound === 3 ? 2 : 3)
+              ? "bg-black hover:bg-gray-800 text-white"
+              : "bg-blue-600 text-white opacity-70"
+          }`}
           disabled={selectedOptions.length !== (currentRound === 3 ? 2 : 3)}
         >
           Next
