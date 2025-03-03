@@ -17,6 +17,8 @@ import GrowthPathPage from '@/pages/growth-path';
 import CoreFear from '@/pages/CoreFear';
 import DeepDive from '@/pages/DeepDive';
 import Landing from '@/pages/landing';
+import Triggers from "@/pages/Triggers";
+import SpiritualGift from "@/pages/SpiritualGift";
 
 // Protected Route wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -88,6 +90,8 @@ function App() {
           <Route path="/corefear" element={<CoreFear />} />
           <Route path="/deep-dive" element={<DeepDive />} />
           <Route path="/deepdive" element={<DeepDive />} />
+          <Route path="/triggers" element={<Triggers />} />
+          <Route path="/spiritual-gift" element={<SpiritualGift />} />
         </Routes>
         <Toaster />
       </AuthProvider>

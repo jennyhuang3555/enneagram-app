@@ -328,7 +328,7 @@ const Dashboard = () => {
                 </Card>
               </Link>
 
-              <Link to={`/growth-paths/triggers/${quizResults?.dominant_type}`}>
+              <Link to="/triggers">
                 <Card className={`p-6 ${cardGradients.blue} cursor-pointer`}>
                   <div className="mb-4">🎯</div>
                   <h4 className="font-semibold mb-2">Key Triggers</h4>
@@ -339,7 +339,7 @@ const Dashboard = () => {
                 </Card>
               </Link>
 
-              <Link to={`/growth-paths/spiritual-gift/${quizResults?.dominant_type}`}>
+              <Link to="/spiritual-gift">
                 <Card className={`p-6 ${cardGradients.pink} cursor-pointer`}>
                   <div className="mb-4">⚡</div>
                   <h4 className="font-semibold mb-2">Spiritual Gift</h4>
