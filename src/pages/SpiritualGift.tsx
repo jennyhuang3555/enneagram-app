@@ -7,12 +7,16 @@ import { useAuth } from "@/contexts/AuthContext";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import AIChat from "@/components/AIChat";
+import { useToast } from "@/hooks/use-toast";
 
 const SpiritualGift = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
   const [content, setContent] = useState(spiritualGiftContent["1"]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchUserType = async () => {
@@ -28,6 +32,27 @@ const SpiritualGift = () => {
 
   const toggleSection = () => {
     setIsExpanded(prev => !prev);
+  };
+
+  const handleSendMessage = async (content: string) => {
+    try {
+      setIsLoading(true);
+      // TODO: Implement OpenAI chat functionality from existing codebase
+      // This should match how it's implemented in the centres page
+      toast({
+        title: "Coming Soon",
+        description: "Chat functionality will be available shortly.",
+      });
+    } catch (error: any) {
+      console.error('Chat error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to get response. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -91,6 +116,20 @@ const SpiritualGift = () => {
             </div>
           </div>
         </motion.section>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4 pb-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+        >
+          <AIChat 
+            onSendMessage={handleSendMessage}
+            isLoading={isLoading}
+          />
+        </motion.div>
       </div>
     </main>
   );

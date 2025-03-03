@@ -1,11 +1,17 @@
-
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { ChevronDown, Calendar, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import AIChatSection from "@/components/AIChatSection";
+import AIChat from "@/components/AIChat";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 const CoreFear = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+  const { user } = useAuth();
 
   const toggleSection = () => {
     setIsExpanded(prev => !prev);
@@ -16,6 +22,27 @@ const CoreFear = () => {
     content: "At your type's core lies a fundamental fear of being inadequate, defective, or somehow fundamentally flawed. This deep-seated belief manifests as a constant underlying anxiety about not being enough or not meeting essential standards. To manage this fear, you've developed sophisticated patterns of preparation, analysis, and self-improvement—always working to shore up your sense of capability and competence.",
     expandedContent: "This core fear often shows up as a relentless inner critic that questions your readiness and capability. You might find yourself constantly gathering information, seeking certainty, and trying to prepare for every possibility. While this can lead to genuine expertise and valuable insights, it can also keep you trapped in cycles of overthinking and hesitation. The avoidance pattern typically manifests as a tendency to withdraw into analysis and preparation rather than taking action, especially in situations where you feel uncertain or exposed. This can look like excessive research, endless planning, or seeking multiple confirmations before moving forward. While these strategies may have served a protective function in the past, they can now limit your ability to engage fully with life and trust your natural capabilities.",
     gradient: "bg-gradient-to-br from-purple-500/10 via-blue-400/10 to-orange-200/10"
+  };
+
+  const handleSendMessage = async (content: string) => {
+    try {
+      setIsLoading(true);
+      // TODO: Implement OpenAI chat functionality from existing codebase
+      // This should match how it's implemented in the centres page
+      toast({
+        title: "Coming Soon",
+        description: "Chat functionality will be available shortly.",
+      });
+    } catch (error: any) {
+      console.error('Chat error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to get response. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -152,6 +179,21 @@ const CoreFear = () => {
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
             </Button>
           </motion.div>
+        </motion.div>
+      </div>
+
+      {/* Add this section at the bottom, before closing main tag */}
+      <div className="max-w-4xl mx-auto px-4 pb-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+        >
+          <AIChat 
+            onSendMessage={handleSendMessage}
+            isLoading={isLoading}
+          />
         </motion.div>
       </div>
     </main>
