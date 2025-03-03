@@ -9,9 +9,16 @@ import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import AIChat from "@/components/AIChat";
 import { useToast } from "@/hooks/use-toast";
+import { sendMessageToOpenAI } from "@/lib/openai-api";
+
+interface Message {
+  role: "user" | "assistant";
+  content: string;
+}
 
 const Triggers = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
   const { user } = useAuth();
   const navigate = useNavigate();
   const [content, setContent] = useState(triggersContent["1"]);
@@ -37,12 +44,29 @@ const Triggers = () => {
   const handleSendMessage = async (content: string) => {
     try {
       setIsLoading(true);
-      // TODO: Implement OpenAI chat functionality from existing codebase
-      // This should match how it's implemented in the centres page
-      toast({
-        title: "Coming Soon",
-        description: "Chat functionality will be available shortly.",
+      
+      const userMessage = { role: "user", content };
+      setMessages(prev => [...prev, userMessage]);
+
+      const stream = await sendMessageToOpenAI([...messages, userMessage], {
+        dominant: user?.dominant_type,
+        secondary: user?.second_type,
+        tertiary: user?.third_type
       });
+
+      let accumulatedResponse = '';
+      
+      for await (const chunk of stream) {
+        if (chunk.choices[0]?.delta?.content) {
+          accumulatedResponse += chunk.choices[0].delta.content;
+        }
+      }
+
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: accumulatedResponse 
+      }]);
+
     } catch (error: any) {
       console.error('Chat error:', error);
       toast({
@@ -126,6 +150,7 @@ const Triggers = () => {
           <AIChat 
             onSendMessage={handleSendMessage}
             isLoading={isLoading}
+            messages={messages}
           />
         </motion.div>
       </div>

@@ -1,17 +1,26 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { ChevronDown, Calendar, ArrowRight } from "lucide-react";
+import { ChevronDown, Calendar, ArrowRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AIChatSection from "@/components/AIChatSection";
 import AIChat from "@/components/AIChat";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { sendMessageToOpenAI } from "@/lib/openai-api";
+
+interface Message {
+  role: "user" | "assistant";
+  content: string;
+}
 
 const CoreFear = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const toggleSection = () => {
     setIsExpanded(prev => !prev);
@@ -27,12 +36,29 @@ const CoreFear = () => {
   const handleSendMessage = async (content: string) => {
     try {
       setIsLoading(true);
-      // TODO: Implement OpenAI chat functionality from existing codebase
-      // This should match how it's implemented in the centres page
-      toast({
-        title: "Coming Soon",
-        description: "Chat functionality will be available shortly.",
+      
+      const userMessage = { role: "user", content };
+      setMessages(prev => [...prev, userMessage]);
+
+      const stream = await sendMessageToOpenAI([...messages, userMessage], {
+        dominant: user?.dominant_type,
+        secondary: user?.second_type,
+        tertiary: user?.third_type
       });
+
+      let accumulatedResponse = '';
+      
+      for await (const chunk of stream) {
+        if (chunk.choices[0]?.delta?.content) {
+          accumulatedResponse += chunk.choices[0].delta.content;
+        }
+      }
+
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: accumulatedResponse 
+      }]);
+
     } catch (error: any) {
       console.error('Chat error:', error);
       toast({
@@ -193,6 +219,7 @@ const CoreFear = () => {
           <AIChat 
             onSendMessage={handleSendMessage}
             isLoading={isLoading}
+            messages={messages}
           />
         </motion.div>
       </div>

@@ -2,13 +2,20 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2, Send } from "lucide-react";
 import { VoiceRecorder } from "@/components/VoiceRecorder";
+import ReactMarkdown from 'react-markdown';
+
+interface Message {
+  role: "user" | "assistant";
+  content: string;
+}
 
 interface AIChatProps {
   onSendMessage: (message: string) => Promise<void>;
   isLoading: boolean;
+  messages?: Message[];
 }
 
-const AIChat = ({ onSendMessage, isLoading }: AIChatProps) => {
+const AIChat = ({ onSendMessage, isLoading, messages = [] }: AIChatProps) => {
   const [currentMessage, setCurrentMessage] = useState("");
 
   const handleSendMessage = async (e?: React.FormEvent) => {
@@ -25,6 +32,27 @@ const AIChat = ({ onSendMessage, isLoading }: AIChatProps) => {
         <h3 className="text-2xl font-georgia text-white">
           Chat with AI Coach
         </h3>
+
+        <div className="space-y-4 mb-4 max-h-[400px] overflow-y-auto">
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`flex ${
+                message.role === 'assistant' ? 'justify-start' : 'justify-end'
+              }`}
+            >
+              <div
+                className={`max-w-[80%] rounded-lg p-4 ${
+                  message.role === 'assistant'
+                    ? 'bg-white'
+                    : 'bg-purple-100'
+                }`}
+              >
+                <ReactMarkdown>{message.content}</ReactMarkdown>
+              </div>
+            </div>
+          ))}
+        </div>
         
         <form onSubmit={handleSendMessage} className="flex gap-2">
           <div className="flex-1 flex gap-2">
