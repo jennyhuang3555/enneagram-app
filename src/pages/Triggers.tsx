@@ -6,7 +6,7 @@ import { triggersContent } from "@/data/triggersContent";
 import { useAuth } from "@/contexts/AuthContext";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AIChat from "@/components/AIChat";
 import { useToast } from "@/hooks/use-toast";
 import { sendMessageToOpenAI } from "@/lib/openai-api";
@@ -17,13 +17,15 @@ interface Message {
 }
 
 const Triggers = () => {
+  const { typeNumber } = useParams();
   const [isExpanded, setIsExpanded] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [content, setContent] = useState(triggersContent["1"]);
-  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const content = triggersContent[typeNumber || "1"];
 
   useEffect(() => {
     const fetchUserType = async () => {

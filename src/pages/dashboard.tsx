@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
-import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
-import { app } from "@/lib/firebase";
+import { getFirestore, collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
+import { app, db } from "@/lib/firebase";
 import { TYPE_NAMES } from "@/lib/constants";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -30,8 +30,6 @@ const TYPE_CENTERS = {
   body: ['9', '1', '8']
 };
 
-const db = getFirestore(app);
-
 const cardGradients = {
   purple: "bg-gradient-to-br from-purple-100/80 to-purple-50/50",
   blue: "bg-gradient-to-br from-blue-100/80 to-blue-50/50",
@@ -48,6 +46,7 @@ const Dashboard = () => {
   const [userProfile, setUserProfile] = useState<any>(null);
   const [quizResults, setQuizResults] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [dominantType, setDominantType] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchQuizResults = async () => {
@@ -63,6 +62,7 @@ const Dashboard = () => {
           const data = querySnapshot.docs[0].data();
           console.log('Fetched quiz results:', data); // Debug log
           setQuizResults(data);
+          setDominantType(data.dominant_type?.toString() || "1");
         } else {
           console.log('No quiz results found for user:', user.uid); // Debug log
         }
@@ -109,6 +109,14 @@ const Dashboard = () => {
 
   const formatCenterTitle = (center: string) => {
     return `${center.charAt(0).toUpperCase() + center.slice(1)} Centre`;
+  };
+
+  const handleNavigation = (path: string) => {
+    if (!dominantType) {
+      console.error("User type not loaded");
+      return;
+    }
+    navigate(`${path}/${dominantType}`);
   };
 
   return (
@@ -317,8 +325,13 @@ const Dashboard = () => {
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Link to="/corefear">
-                <Card className={`p-6 ${cardGradients.purple} cursor-pointer`}>
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => handleNavigation('/corefear')}
+                className="cursor-pointer"
+              >
+                <Card className="relative overflow-hidden h-64">
                   <div className="mb-4">✨</div>
                   <h4 className="font-semibold mb-2">Core Fear</h4>
                   <p className="text-xl font-georgia text-gray-700 leading-relaxed">
@@ -326,10 +339,15 @@ const Dashboard = () => {
                   </p>
                   <div className="mt-4">→</div>
                 </Card>
-              </Link>
+              </motion.div>
 
-              <Link to="/triggers">
-                <Card className={`p-6 ${cardGradients.blue} cursor-pointer`}>
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => handleNavigation('/triggers')}
+                className="cursor-pointer"
+              >
+                <Card className="relative overflow-hidden h-64">
                   <div className="mb-4">🎯</div>
                   <h4 className="font-semibold mb-2">Key Triggers</h4>
                   <p className="text-xl font-georgia text-gray-700 leading-relaxed">
@@ -337,10 +355,15 @@ const Dashboard = () => {
                   </p>
                   <div className="mt-4">→</div>
                 </Card>
-              </Link>
+              </motion.div>
 
-              <Link to="/spiritual-gift">
-                <Card className={`p-6 ${cardGradients.pink} cursor-pointer`}>
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => handleNavigation('/spiritual-gift')}
+                className="cursor-pointer"
+              >
+                <Card className="relative overflow-hidden h-64">
                   <div className="mb-4">⚡</div>
                   <h4 className="font-semibold mb-2">Spiritual Gift</h4>
                   <p className="text-xl font-georgia text-gray-700 leading-relaxed">
@@ -348,7 +371,7 @@ const Dashboard = () => {
                   </p>
                   <div className="mt-4">→</div>
                 </Card>
-              </Link>
+              </motion.div>
             </div>
           </div>
         </div>

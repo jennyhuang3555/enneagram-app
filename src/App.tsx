@@ -87,11 +87,11 @@ function App() {
             path="/growth-paths/spiritual-gift/:typeNumber" 
             element={<GrowthPathPage pathType="spiritual-gift" />} 
           />
-          <Route path="/corefear" element={<CoreFear />} />
+          <Route path="/corefear/:typeNumber" element={<CoreFear />} />
           <Route path="/deep-dive" element={<DeepDive />} />
           <Route path="/deepdive" element={<DeepDive />} />
-          <Route path="/triggers" element={<Triggers />} />
-          <Route path="/spiritual-gift" element={<SpiritualGift />} />
+          <Route path="/triggers/:typeNumber" element={<Triggers />} />
+          <Route path="/spiritual-gift/:typeNumber" element={<SpiritualGift />} />
         </Routes>
         <Toaster />
       </AuthProvider>

@@ -6,8 +6,9 @@ import AIChatSection from "@/components/AIChatSection";
 import AIChat from "@/components/AIChat";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { sendMessageToOpenAI } from "@/lib/openai-api";
+import { coreFearContent } from "@/data/coreFearContent";
 
 interface Message {
   role: "user" | "assistant";
@@ -15,22 +16,19 @@ interface Message {
 }
 
 const CoreFear = () => {
+  const { typeNumber } = useParams();
   const [isExpanded, setIsExpanded] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
   const navigate = useNavigate();
+  
+  // Directly use typeNumber from URL params
+  const content = coreFearContent[typeNumber || "1"];
 
   const toggleSection = () => {
     setIsExpanded(prev => !prev);
-  };
-
-  const section = {
-    title: "Core Fear and Avoidance Pattern",
-    content: "At your type's core lies a fundamental fear of being inadequate, defective, or somehow fundamentally flawed. This deep-seated belief manifests as a constant underlying anxiety about not being enough or not meeting essential standards. To manage this fear, you've developed sophisticated patterns of preparation, analysis, and self-improvement—always working to shore up your sense of capability and competence.",
-    expandedContent: "This core fear often shows up as a relentless inner critic that questions your readiness and capability. You might find yourself constantly gathering information, seeking certainty, and trying to prepare for every possibility. While this can lead to genuine expertise and valuable insights, it can also keep you trapped in cycles of overthinking and hesitation. The avoidance pattern typically manifests as a tendency to withdraw into analysis and preparation rather than taking action, especially in situations where you feel uncertain or exposed. This can look like excessive research, endless planning, or seeking multiple confirmations before moving forward. While these strategies may have served a protective function in the past, they can now limit your ability to engage fully with life and trust your natural capabilities.",
-    gradient: "bg-gradient-to-br from-purple-500/10 via-blue-400/10 to-orange-200/10"
   };
 
   const handleSendMessage = async (content: string) => {
@@ -105,15 +103,15 @@ const CoreFear = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className={`rounded-2xl shadow-lg overflow-hidden ${section.gradient}`}
+          className="rounded-2xl shadow-lg overflow-hidden bg-gradient-to-br from-purple-500/10 via-blue-400/10 to-orange-200/10"
         >
           <div className="p-8 md:p-12 backdrop-blur-sm">
             <h2 className="text-2xl md:text-3xl font-normal mb-6 text-black font-georgia">
-              {section.title}
+              {content.title}
             </h2>
             <div className="space-y-4">
               <p className="text-lg text-black/80 font-georgia leading-relaxed">
-                {section.content}
+                {content.content}
               </p>
               <AnimatePresence initial={false}>
                 {isExpanded && (
@@ -124,7 +122,7 @@ const CoreFear = () => {
                     transition={{ duration: 0.3 }}
                   >
                     <p className="text-lg text-black/80 font-georgia leading-relaxed pt-4">
-                      {section.expandedContent}
+                      {content.expandedContent}
                     </p>
                   </motion.div>
                 )}

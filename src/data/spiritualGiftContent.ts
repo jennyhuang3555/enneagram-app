@@ -12,7 +12,7 @@ export const spiritualGiftContent: Record<string, SpiritualGiftContent> = {
     expandedContent: "This gift goes beyond mere perfectionism to touch a profound wisdom about right action and genuine improvement. When fully expressed, it becomes a powerful force for positive change in the world. You have an innate ability to see the highest potential in situations and people, combined with the practical understanding of how to move toward that potential. This wisdom, when tempered with acceptance and compassion, can help others find their own path to improvement without feeling judged or inadequate.",
     gradient: "bg-gradient-to-br from-purple-500/10 via-blue-400/10 to-orange-200/10"
   },
-  "2": {
+  ["2"]: {
     title: "The Gift of Love",
     content: "Your spiritual gift centers on your capacity for unconditional love and your ability to see and nurture the potential in others. This manifests as a deep understanding of emotional needs and the power of genuine care.",
     expandedContent: "This gift transcends ordinary helping to touch the essence of true love and connection. You have an extraordinary ability to sense what others need and to provide support in ways that foster genuine growth and empowerment. When this gift is fully expressed, it becomes a catalyst for others' self-discovery and development, helping them recognize their own worth and capabilities.",

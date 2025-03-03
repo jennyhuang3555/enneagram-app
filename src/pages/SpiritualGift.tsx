@@ -1,12 +1,10 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ChevronDown, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { spiritualGiftContent } from "@/data/spiritualGiftContent";
 import { useAuth } from "@/contexts/AuthContext";
-import { db } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AIChat from "@/components/AIChat";
 import { useToast } from "@/hooks/use-toast";
 import { sendMessageToOpenAI } from "@/lib/openai-api";
@@ -17,25 +15,16 @@ interface Message {
 }
 
 const SpiritualGift = () => {
+  const { typeNumber } = useParams();
   const [isExpanded, setIsExpanded] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [content, setContent] = useState(spiritualGiftContent["1"]);
-  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-
-  useEffect(() => {
-    const fetchUserType = async () => {
-      if (!user?.uid) return;
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
-        setContent(spiritualGiftContent[userData.dominant_type?.toString() || "1"]);
-      }
-    };
-    fetchUserType();
-  }, [user]);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // Use typeNumber instead of id
+  const content = spiritualGiftContent[typeNumber || "1"];
 
   const toggleSection = () => {
     setIsExpanded(prev => !prev);
